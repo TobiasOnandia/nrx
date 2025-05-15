@@ -18,7 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${satoshi.className} antialiased`}>{children}</body>
+      <body
+        className={`${satoshi.className} antialiased min-h-screen bg-gray-900`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
