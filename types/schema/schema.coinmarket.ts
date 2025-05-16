@@ -45,6 +45,7 @@ export type CoinMarketResponse =
 
 const DataPointSchema = z.tuple([z.number(), z.number()]);
 
+// 2. Define el esquema para los arrays de estos pares
 const PricesSchema = z.array(DataPointSchema);
 const MarketCapsSchema = z.array(DataPointSchema);
 const TotalVolumesSchema = z.array(DataPointSchema);

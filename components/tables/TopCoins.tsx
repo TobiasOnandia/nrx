@@ -12,15 +12,16 @@ export const TopCoins = () => {
     refetchInterval: 300000,
   });
 
-  if (error) {
+  if (!data || error || !data.success) {
+    const errorMessage = error?.message || "Error al cargar datos históricos.";
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
-      </div>
+      <p className="flex justify-center items-center h-screen bg-gray-900 text-red-500">
+        {errorMessage}
+      </p>
     );
   }
 
-  if (!data || !data.success)
+  if (isLoading)
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>

@@ -30,21 +30,22 @@ ChartJS.register(
 export const CryptoDashboard = () => {
   const selectedCoin = useCoinMarketStore((state) => state.selectedCoin);
 
-  const { data, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["marketData"],
     queryFn: () => coinMarket(),
     refetchInterval: 300000,
   });
 
-  if (error) {
+  if (error || !data || !data.success) {
+    const errorMessage = error?.message || "Error al cargar datos históricos.";
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
-      </div>
+      <p className="flex justify-center items-center h-screen bg-gray-900 text-red-500">
+        {errorMessage}
+      </p>
     );
   }
 
-  if (!data || !data.success)
+  if (isLoading)
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
@@ -53,7 +54,6 @@ export const CryptoDashboard = () => {
 
   return (
     <main className=" max-w-7xl mx-auto p-6">
-      {/* Metric Cards */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <MetricCard
           title="Total Market Cap"
