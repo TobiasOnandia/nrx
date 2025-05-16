@@ -15,7 +15,7 @@ export async function addTokenToBlockList(
   }
 
   const nowInSeconds = Math.floor(Date.now() / 1000);
-  const ttl = exp - nowInSeconds; // Tiempo de vida restante en segundos
+  const ttl = exp - nowInSeconds;
 
   if (ttl > 0) {
     await redis.set(`blocked_jwt:${jti}`, "blocked", { ex: ttl });

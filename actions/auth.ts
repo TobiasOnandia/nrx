@@ -8,7 +8,7 @@ import {
 } from "@/types/schema/schema.auth";
 import { addTokenToBlockList } from "@/utils/addTokenToBlockList";
 import bcrypt from "bcryptjs";
-import { JWTPayload, jwtVerify, SignJWT } from "jose";
+import { jwtVerify, SignJWT } from "jose";
 import { JWTExpired, JWTInvalid } from "jose/errors";
 import { nanoid } from "nanoid";
 import { cookies } from "next/headers";
@@ -17,11 +17,6 @@ const JWT_SECRET_STRING = process.env.JWT_SECRET;
 const JWT_SECRET_KEY = new TextEncoder().encode(JWT_SECRET_STRING);
 const JWT_EXPIRATION_TIME = "1h";
 const AUTH_TOKEN_COOKIE_NAME = "auth_token";
-
-interface AuthTokenPayload extends JWTPayload {
-  jti?: string;
-  exp: number;
-}
 
 export async function registerAction(request: {
   email: string;
