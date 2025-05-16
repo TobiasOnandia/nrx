@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import LocalFont from "next/font/local";
+import { Header } from "@/components/layout/Header";
 
 const satoshi = LocalFont({
   src: "../public/font/Satoshi.ttf",
-}); 
+});
 
 export const metadata: Metadata = {
   title: "Nrx",
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body
         className={`${satoshi.className} antialiased min-h-screen bg-gray-900`}
       >
+        <Header />
         {children}
       </body>
     </html>
