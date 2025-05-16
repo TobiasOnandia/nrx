@@ -1,4 +1,4 @@
-import { coinMarket, coinMarketHistory } from "@/actions/coinMarket";
+import { coinMarketHistory } from "@/actions/coinMarket";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Line } from "react-chartjs-2";
@@ -10,7 +10,7 @@ export const PriceChart = () => {
 
   const {
     data: coinHistory,
-    isLoading: coinHistoryLoading,
+    isLoading,
     error: coinHistoryError,
   } = useQuery({
     queryKey: ["coinHistory", timeRange, selectedCoin],
@@ -18,15 +18,17 @@ export const PriceChart = () => {
     enabled: !!selectedCoin,
   });
 
-  if (coinHistoryError) {
+  if (coinHistoryError || !coinHistory?.success) {
+    const errorMessage =
+      coinHistoryError?.message || "Error al cargar datos históricos.";
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
-      </div>
+      <p className="flex justify-center items-center h-screen bg-gray-900 text-red-500">
+        {errorMessage}
+      </p>
     );
   }
 
-  if (!coinHistory || !coinHistory.success)
+  if (isLoading)
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
@@ -53,7 +55,6 @@ export const PriceChart = () => {
       </section>
       <div className="h-84">
         <Line
-          className=""
           data={{
             labels:
               coinHistory?.data?.prices?.map(([timestamp]) =>
