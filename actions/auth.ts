@@ -16,7 +16,8 @@ import { cookies } from "next/headers";
 const JWT_SECRET_STRING = process.env.JWT_SECRET;
 const JWT_SECRET_KEY = new TextEncoder().encode(JWT_SECRET_STRING);
 const JWT_EXPIRATION_TIME = "1h";
-const AUTH_TOKEN_COOKIE_NAME = "auth_token";
+// The name of the cookie used to store the authentication token, retrieved from environment variables.
+const AUTH_TOKEN_COOKIE_NAME = process.env.AUTH_TOKEN_COOKIE_NAME!;
 
 export async function registerAction(request: {
   email: string;

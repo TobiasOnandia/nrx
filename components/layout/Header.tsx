@@ -1,5 +1,5 @@
 "use client";
-import { Search, Settings } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ProfileDropdown } from "@/components/auh/ProfileDropwon";
 

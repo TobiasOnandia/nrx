@@ -1,23 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { LogOut, Settings, User } from "lucide-react";
-import { logoutAction } from "@/actions/auth";
-import { toast } from "sonner";
+import { Settings, User } from "lucide-react";
+import { Session } from "./Session";
 
 export const ProfileDropdown = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  const handleLogout = async () => {
-    setShowDropdown(false);
-    const response = await logoutAction();
-    if (!response.success) {
-      toast.error("Logout failed");
-      console.error("Logout failed", response.message);
-      return;
-    }
-    toast.success("Logout successful");
-  };
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -72,15 +60,9 @@ export const ProfileDropdown = () => {
             <span>Configuración</span>
           </button>
 
-          <div className="border-t border-gray-700 my-1"></div>
-
-          <button
-            className="w-full px-4 py-2.5 text-left text-red-400 hover:bg-red-900/50 transition-colors flex items-center space-x-2"
-            onClick={() => handleLogout}
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Cerrar sesión</span>
-          </button>
+          <div className="border-t border-gray-700 my-1">
+            <Session />
+          </div>
         </section>
       )}
     </div>
