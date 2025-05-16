@@ -15,4 +15,14 @@ model User {
   password  String
   createAt  DateTime @default(now())
   updateAt  DateTime @default(now())
+  dashboards Dashboard[]
+}
+
+model Dashboard {
+  id String @id @default(uuid())
+  name String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now())
 }

@@ -1,0 +1,110 @@
+import { coinMarket, coinMarketHistory } from "@/actions/coinMarket";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Line } from "react-chartjs-2";
+
+export const PriceChart = () => {
+  const [timeRange, setTimeRange] = useState(1);
+  const [selectedCoin, setSelectedCoin] = useState<string>("bitcoin");
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["marketData"],
+    queryFn: () => coinMarket(),
+    refetchInterval: 300000,
+  });
+
+  const {
+    data: coinHistory,
+    isLoading: coinHistoryLoading,
+    error: coinHistoryError,
+  } = useQuery({
+    queryKey: ["coinHistory", timeRange, selectedCoin],
+    queryFn: () => coinMarketHistory(timeRange, selectedCoin),
+    enabled: !!selectedCoin,
+  });
+
+  if (coinHistoryError || isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
+      </div>
+    );
+  }
+
+  if (!data || !data.success || !coinHistory || !coinHistory.success)
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
+      </div>
+    );
+
+  return (
+    <article className="bg-gray-800 p-6 rounded-xl mb-8">
+      <section className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-semibold">
+          {selectedCoin
+            ? data?.data.find((coin) => coin.id === selectedCoin)?.name
+            : "BTC"}{" "}
+          Price Chart
+        </h2>
+        <div className="flex gap-2">
+          {[1, 7, 30, 90, 365].map((range) => (
+            <button
+              key={range}
+              onClick={() => setTimeRange(range)}
+              className={`px-3 py-1 rounded-lg ${
+                timeRange === range ? "bg-emerald-600" : "bg-gray-700"
+              }`}
+            >
+              {range}D
+            </button>
+          ))}
+        </div>
+      </section>
+      <div className="h-64">
+        <Line
+          data={{
+            labels:
+              coinHistory?.data?.prices?.map(([timestamp]) =>
+                new Date(timestamp).toLocaleDateString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  day: "numeric",
+                  month: "short",
+                })
+              ) || [],
+            datasets: [
+              {
+                label: selectedCoin
+                  ? data?.data.find((coin) => coin.id === selectedCoin)?.name
+                  : "BTC Price",
+                data:
+                  coinHistory?.data?.prices?.map(([_, price]) => price) || [],
+                borderColor: "#10B981",
+                tension: 0.4,
+                fill: false,
+              },
+            ],
+          }}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+            },
+            scales: {
+              x: {
+                grid: { color: "#374151" },
+                ticks: { color: "#9CA3AF" },
+              },
+              y: {
+                grid: { color: "#374151" },
+                ticks: { color: "#9CA3AF" },
+              },
+            },
+          }}
+        />
+      </div>
+    </article>
+  );
+};

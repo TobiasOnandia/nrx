@@ -4,7 +4,7 @@ import LocalFont from "next/font/local";
 
 const satoshi = LocalFont({
   src: "../public/font/Satoshi.ttf",
-});
+}); 
 
 export const metadata: Metadata = {
   title: "Nrx",
