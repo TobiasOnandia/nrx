@@ -2,16 +2,11 @@ import { coinMarket, coinMarketHistory } from "@/actions/coinMarket";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Line } from "react-chartjs-2";
+import { useCoinMarketStore } from "@/store/coinmarket.store";
 
 export const PriceChart = () => {
   const [timeRange, setTimeRange] = useState(1);
-  const [selectedCoin, setSelectedCoin] = useState<string>("bitcoin");
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["marketData"],
-    queryFn: () => coinMarket(),
-    refetchInterval: 300000,
-  });
+  const selectedCoin = useCoinMarketStore((state) => state.selectedCoin);
 
   const {
     data: coinHistory,
@@ -23,7 +18,7 @@ export const PriceChart = () => {
     enabled: !!selectedCoin,
   });
 
-  if (coinHistoryError || isLoading) {
+  if (coinHistoryError) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
@@ -31,7 +26,7 @@ export const PriceChart = () => {
     );
   }
 
-  if (!data || !data.success || !coinHistory || !coinHistory.success)
+  if (!coinHistory || !coinHistory.success)
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
@@ -39,14 +34,9 @@ export const PriceChart = () => {
     );
 
   return (
-    <article className="bg-gray-800 p-6 rounded-xl mb-8">
+    <article className="bg-gray-800  p-6 rounded-xl mb-8">
       <section className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">
-          {selectedCoin
-            ? data?.data.find((coin) => coin.id === selectedCoin)?.name
-            : "BTC"}{" "}
-          Price Chart
-        </h2>
+        <h2 className="text-xl font-semibold">{selectedCoin} Price Chart</h2>
         <div className="flex gap-2">
           {[1, 7, 30, 90, 365].map((range) => (
             <button
@@ -61,8 +51,9 @@ export const PriceChart = () => {
           ))}
         </div>
       </section>
-      <div className="h-64">
+      <div className="h-84">
         <Line
+          className=""
           data={{
             labels:
               coinHistory?.data?.prices?.map(([timestamp]) =>
@@ -75,9 +66,7 @@ export const PriceChart = () => {
               ) || [],
             datasets: [
               {
-                label: selectedCoin
-                  ? data?.data.find((coin) => coin.id === selectedCoin)?.name
-                  : "BTC Price",
+                label: selectedCoin,
                 data:
                   coinHistory?.data?.prices?.map(([_, price]) => price) || [],
                 borderColor: "#10B981",

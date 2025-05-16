@@ -1,10 +1,11 @@
 import { ArrowDown, ArrowUp, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useCoinMarketStore } from "@/store/coinmarket.store";
 import { useQuery } from "@tanstack/react-query";
 import { coinMarket } from "@/actions/coinMarket";
 
 export const TopCoins = () => {
-  const [selectedCoin, setSelectedCoin] = useState<string>("bitcoin");
+  const selectedCoin = useCoinMarketStore((state) => state.selectedCoin);
+  const setSelectedCoin = useCoinMarketStore((state) => state.setSelectedCoin);
   const { data, isLoading, error } = useQuery({
     queryKey: ["marketData"],
     queryFn: () => coinMarket(),

@@ -1,16 +1,5 @@
 "use client";
-import {
-  ArrowDown,
-  ArrowUp,
-  DollarSign,
-  Eye,
-  EyeOff,
-  PieChart,
-  RefreshCw,
-  Star,
-} from "lucide-react";
-import { useState, useEffect } from "react";
-import { Line, Bar } from "react-chartjs-2";
+import { DollarSign, PieChart, Star } from "lucide-react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,11 +10,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { coinMarket, coinMarketHistory } from "@/actions/coinMarket";
+import { coinMarket } from "@/actions/coinMarket";
 import { useQuery } from "@tanstack/react-query";
 import { MetricCard } from "@/components/MetricCard";
 import { PriceChart } from "@/components/graphics/PriceChart";
 import { TopCoins } from "@/components/tables/TopCoins";
+import { useCoinMarketStore } from "@/store/coinmarket.store";
 
 ChartJS.register(
   CategoryScale,
@@ -38,6 +28,8 @@ ChartJS.register(
 );
 
 export const CryptoDashboard = () => {
+  const selectedCoin = useCoinMarketStore((state) => state.selectedCoin);
+
   const { data, error } = useQuery({
     queryKey: ["marketData"],
     queryFn: () => coinMarket(),
@@ -61,6 +53,7 @@ export const CryptoDashboard = () => {
 
   return (
     <main className=" max-w-7xl mx-auto p-6">
+      {/* Metric Cards */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <MetricCard
           title="Total Market Cap"
@@ -90,14 +83,19 @@ export const CryptoDashboard = () => {
           title="BTC Dominance"
           value={
             (
-              data?.data.reduce((acc) => acc, 0) /
-              data?.data.reduce((acc) => acc, 0)
+              data?.data.reduce((acc, coin) => {
+                if (coin.id === selectedCoin) {
+                  return acc + coin.market_cap;
+                }
+                return acc;
+              }, 0) / data?.data.reduce((acc, coin) => acc + coin.market_cap, 0)
             ).toFixed(2) + "%"
           }
           icon={<Star className="text-3xl text-emerald-500" />}
         />
       </section>
       <PriceChart />
+
       <TopCoins />
     </main>
   );
