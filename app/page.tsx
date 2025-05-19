@@ -1,5 +1,5 @@
 "use client";
-import { CryptoDashboard } from "@/components/Dashboard";
+import { CryptoDashboard } from "@/components/dashboard/Dashboard";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function Home() {
