@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { coinMarket } from "@/actions/coinMarket";
+import { coinMarket } from "@/app/actions/coinMarket";
 import { useQuery } from "@tanstack/react-query";
 import { MetricCard } from "@/components/MetricCard";
 import { PriceChart } from "@/components/graphics/PriceChart";

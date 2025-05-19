@@ -6,7 +6,7 @@ import { useDebouncedCallback } from "use-debounce";
 export const Header = () => {
   const searchParams = new URLSearchParams()
   const router = useRouter()
-  
+ 
 
   const handleSearch = useDebouncedCallback((term:string) => {
     const params = new URLSearchParams(searchParams)

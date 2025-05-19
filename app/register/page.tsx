@@ -1,5 +1,5 @@
 "use client";
-import { registerAction } from "@/actions/auth";
+import { registerAction } from "@/app/actions/auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useActionState } from "react";

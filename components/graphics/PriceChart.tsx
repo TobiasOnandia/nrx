@@ -1,4 +1,4 @@
-import { coinMarketHistory } from "@/actions/coinMarket";
+import { coinMarketHistory } from "@/app/actions/coinMarket";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Line } from "react-chartjs-2";

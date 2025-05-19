@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowUp, Eye, EyeOff } from "lucide-react";
 import { useCoinMarketStore } from "@/store/coinmarket.store";
 import { useQuery } from "@tanstack/react-query";
-import { coinMarket } from "@/actions/coinMarket";
+import { coinMarket } from "@/app/actions/coinMarket";
 import {  useSearchParams } from "next/navigation";
 
 export const TopCoins = () => {

@@ -3,8 +3,7 @@ import "./globals.css";
 import LocalFont from "next/font/local";
 import { Header } from "@/components/layout/Header";
 import { getCurrentUser } from "@/helper/getCurrentUser";
-import { useAuthStore } from "@/store/authStore";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "@/context/AuthProvider";
 
 const satoshi = LocalFont({
   src: "../public/font/Satoshi.ttf",
@@ -20,13 +19,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const currentUser = await getCurrentUser()
+
+  console.log(currentUser)
+
   return (
     <html lang="es">
       <body
         className={`${satoshi.className} antialiased min-h-screen bg-gray-900`}
       >
+        <AuthProvider user={currentUser}>
         <Header />
         {children}
+        </AuthProvider>
       </body>
     </html>
   );
