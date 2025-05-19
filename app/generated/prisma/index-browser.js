@@ -129,10 +129,28 @@ exports.Prisma.UserScalarFieldEnum = {
   updateAt: 'updateAt'
 };
 
+exports.Prisma.WidgetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  userId: 'userId',
+  config: 'config',
+  layout: 'layout',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+};
+
 exports.Prisma.DashboardScalarFieldEnum = {
   id: 'id',
   name: 'name',
   userId: 'userId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+};
+
+exports.Prisma.DashboardWidgetScalarFieldEnum = {
+  id: 'id',
+  dashboardId: 'dashboardId',
+  widgetId: 'widgetId',
   createAt: 'createAt',
   updateAt: 'updateAt'
 };
@@ -150,7 +168,9 @@ exports.Prisma.QueryMode = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Dashboard: 'Dashboard'
+  Widget: 'Widget',
+  Dashboard: 'Dashboard',
+  DashboardWidget: 'DashboardWidget'
 };
 
 /**

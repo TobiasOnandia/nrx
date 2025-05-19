@@ -24,7 +24,7 @@ export const Session = () => {
       {user?.id ? (
         <button
           className="w-full cursor-pointer px-4 py-2.5 text-left text-red-400 hover:bg-red-900/50 transition-colors flex items-center space-x-2"
-          onClick={() => handleLogout}
+          onClick={handleLogout}
         >
           <LogOut className="w-4 h-4" />
           <span>Cerrar sesión</span>
@@ -32,7 +32,7 @@ export const Session = () => {
       ) : (
         <Link
           href="/login"
-          className="w-full px-4 py-2.5  text-left bg-gray-800 hover:bg-gray-700 transition-colors flex items-center space-x-2"
+          className="w-full cursor-pointer px-4 py-2.5  text-left bg-gray-800 hover:bg-gray-700 transition-colors flex items-center space-x-2"
         >
           <LogOut className="w-4 h-4" />
           <span>Iniciar sesión</span>

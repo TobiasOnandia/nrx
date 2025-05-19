@@ -16,6 +16,19 @@ model User {
   createAt  DateTime @default(now())
   updateAt  DateTime @default(now())
   dashboards Dashboard[]
+  widgets Widget[]
+}
+
+model Widget {
+  id String @id @default(uuid())
+  name String
+  userId String
+  config String
+  layout String
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  dashboardWidgets DashboardWidget[]
 }
 
 model Dashboard {
@@ -25,4 +38,17 @@ model Dashboard {
   user User @relation(fields: [userId], references: [id])
   createAt DateTime @default(now())
   updateAt DateTime @default(now())
+  dashboardWidgets DashboardWidget[]
+}
+
+model DashboardWidget {
+  id String @id @default(uuid()) 
+  dashboardId String
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
+  widgetId String
+  widget    Widget @relation(fields: [widgetId], references: [id])
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now())
+  
+  @@unique([dashboardId, widgetId])
 }
