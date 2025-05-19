@@ -1,15 +1,14 @@
 "use client";
 import { Search } from "lucide-react";
-import { useState, useEffect } from "react";
 import { ProfileDropdown } from "@/components/auh/ProfileDropwon";
 import { useRouter } from "next/navigation";
-
+import { useDebouncedCallback } from "use-debounce";
 export const Header = () => {
   const searchParams = new URLSearchParams()
   const router = useRouter()
   
 
-  const handleSearch = (term:string) => {
+  const handleSearch = useDebouncedCallback((term:string) => {
     const params = new URLSearchParams(searchParams)
 
     if(term) {
@@ -19,7 +18,7 @@ export const Header = () => {
     }
 
     router.replace(`?${params}`)
-  }
+  },600)
 
   return (
     <header className="bg-gray-900 max-w-7xl mx-auto px-4 flex items-center justify-between h-16 sm:px-6 lg:px-8 ">
