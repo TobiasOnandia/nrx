@@ -2,9 +2,13 @@ import { ArrowDown, ArrowUp, Eye, EyeOff } from "lucide-react";
 import { useCoinMarketStore } from "@/store/coinmarket.store";
 import { useQuery } from "@tanstack/react-query";
 import { coinMarket } from "@/actions/coinMarket";
+import {  useSearchParams } from "next/navigation";
 
 export const TopCoins = () => {
   const selectedCoin = useCoinMarketStore((state) => state.selectedCoin);
+  const searchParams = useSearchParams()
+  const query = searchParams.get("search")
+
   const setSelectedCoin = useCoinMarketStore((state) => state.setSelectedCoin);
   const { data, isLoading, error } = useQuery({
     queryKey: ["marketData"],
@@ -12,6 +16,8 @@ export const TopCoins = () => {
     refetchInterval: 300000,
   });
 
+
+  
   if (!data || error || !data.success) {
     const errorMessage = error?.message || "Error al cargar datos históricos.";
     return (
@@ -20,14 +26,15 @@ export const TopCoins = () => {
       </p>
     );
   }
-
+  
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-900">
+  <div className="flex justify-center items-center h-screen bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-emerald-500"></div>
       </div>
     );
-
+    const coinFiltered = query ? data.data.filter(coin => coin.name.toLowerCase().includes(query.toLowerCase())) : data.data
+    
   return (
     <table className="w-full bg-gray-800 rounded-xl overflow-hidden">
       <thead className="bg-gray-700">
@@ -40,7 +47,7 @@ export const TopCoins = () => {
         </tr>
       </thead>
       <tbody>
-        {data.data.map((coin) => (
+        {coinFiltered.map((coin) => (
           <tr
             key={coin.id}
             className="border-b border-gray-700 hover:bg-gray-750 transition-colors"
