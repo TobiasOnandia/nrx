@@ -2,8 +2,12 @@
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ProfileDropdown } from "@/components/auh/ProfileDropwon";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
+  const searchParams = new URLSearchParams()
+  const router = useRouter()
+  
   const [livePrices, setLivePrices] = useState({
     btc: 63421.5,
     eth: 4321.75,
@@ -21,6 +25,18 @@ export const Header = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleSearch = (term:string) => {
+    const params = new URLSearchParams(searchParams)
+
+    if(term) {
+      params.set("search",term)
+    }else {
+      params.delete("search", term)
+    }
+
+    router.replace(`?${params}`)
+  }
 
   return (
     <header className="bg-gray-900 max-w-7xl mx-auto px-4 flex items-center justify-between h-16 sm:px-6 lg:px-8 ">
@@ -56,16 +72,13 @@ export const Header = () => {
         <p className="text-emerald-500">${livePrices.marketCap.toFixed(2)}T</p>
       </section>
 
-      <form>
-        <label htmlFor="search" className="relative">
           <input
             type="search"
             placeholder="Search coin..."
+            onChange={(event) => {handleSearch(event.target.value)}}
             className="bg-gray-800 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 w-64"
           />
           <Search className="absolute left-2 top-0 text-gray-400" />
-        </label>
-      </form>
 
       <ProfileDropdown />
     </header>
