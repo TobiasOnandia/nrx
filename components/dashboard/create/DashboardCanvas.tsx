@@ -1,6 +1,7 @@
 "use client";
 import { EmptyWidget } from "@/components/empty/WidgetEmpty";
 import { getWidgetInfoById } from "@/lib/widgets";
+import { useWidgetsStore } from "@/store/widgets.store";
 import { useRef } from "react";
 import {  WidthProvider } from "react-grid-layout"; 
 import GridLayout from "react-grid-layout";
@@ -12,7 +13,7 @@ const ROW_HEIGHT_PX = 30; // Altura de cada fila en píxeles
 
 const ResponsiveGridLayout = WidthProvider(GridLayout);
 
-interface DashboardWidget {
+export interface DashboardWidget {
   id: string;
   typeId: string; 
   x: number; 
@@ -23,12 +24,12 @@ interface DashboardWidget {
 }
 
 interface DashboardCanvasProps {
-  widgets: DashboardWidget[]; 
   onLayoutChange: (layout: DashboardWidget[]) => void; 
 }
 
-export default function DashboardCanvas({ widgets, onLayoutChange }: DashboardCanvasProps) {
+export default function DashboardCanvas({  onLayoutChange }: DashboardCanvasProps) {
    const canvasContainerRef = useRef<HTMLDivElement>(null);
+   const widgets = useWidgetsStore(state => state.widgets)
 
   const layout = widgets.map(widget => ({
     i: widget.id,
