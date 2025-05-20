@@ -19,7 +19,7 @@ const ResponsiveGridLayout = WidthProvider(GridLayout);
 
 export interface DashboardWidget {
   id: string;
-  typeId: string;
+  types: string[]; // ¡Cambiado de typeId a types: string[]!
   x: number;
   y: number;
   w: number;
@@ -83,20 +83,38 @@ export const DashboardCanvas = () => {
                 handleLayoutChange(updatedWidgets);
               }}
             >
-              {widgets.map((widgetInstance) => (
-                <div
-                  key={widgetInstance.id}
-                  data-grid={{
-                    i: widgetInstance.id,
-                    x: widgetInstance.x,
-                    y: widgetInstance.y,
-                    w: widgetInstance.w,
-                    h: widgetInstance.h,
-                  }}
-                >
-                  <VolumeChart config={widgetInstance.config} />
-                </div>
-              ))}
+              {widgets.map((widgetInstance) => {
+                let WidgetComponent;
+
+                if (widgetInstance.types.includes("price-chart")) {
+                  WidgetComponent = PriceChart;
+                } else if (widgetInstance.types.includes("volume-chart")) {
+                  WidgetComponent = VolumeChart;
+                } else {
+                  WidgetComponent = () => (
+                    <div className="flex justify-center items-center h-full text-red-400">
+                      Tipo de widget desconocido o no soportado:{" "}
+                      {widgetInstance.types.join(", ")}
+                    </div>
+                  );
+                }
+
+                return (
+                  <div
+                    key={widgetInstance.id}
+                    data-grid={{
+                      i: widgetInstance.id,
+                      x: widgetInstance.x,
+                      y: widgetInstance.y,
+                      w: widgetInstance.w,
+                      h: widgetInstance.h,
+                    }}
+                    className="relative w-full h-full"
+                  >
+                    <WidgetComponent config={widgetInstance.config} />
+                  </div>
+                );
+              })}
             </ResponsiveGridLayout>
           )}
         </div>

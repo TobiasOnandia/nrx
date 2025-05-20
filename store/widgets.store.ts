@@ -1,14 +1,5 @@
+import { DashboardWidget } from "@/components/dashboard/create/DashboardCanvas";
 import { create } from "zustand";
-
-interface DashboardWidget {
-  id: string;
-  typeId: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  config?: any;
-}
 
 interface WidgetsStore {
   widgets: DashboardWidget[];

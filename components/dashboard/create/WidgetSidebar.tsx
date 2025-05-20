@@ -26,7 +26,7 @@ export function WidgetsSidebar({
 
     addWidget({
       id: newWidgetInstanceId,
-      typeId: widgetId,
+      types: [widgetId],
       x: newX,
       y: newY,
       w: DEFAULT_WIDGET_GRID_W,
@@ -65,7 +65,7 @@ export function WidgetsSidebar({
               <button
                 type="button"
                 className="group w-full text-left  p-4 bg-gray-750 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors border border-gray-700 hover:border-gray-600"
-                onClick={() => handleAddWidget(widget.id)}
+                onClick={() => handleAddWidget(widget.types?.[0] || "")}
                 aria-label={`Añadir widget ${widget.title}`}
               >
                 <h3 className="font-medium group-hover:text-white transition-colors">
