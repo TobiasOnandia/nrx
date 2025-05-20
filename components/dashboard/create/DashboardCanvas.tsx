@@ -24,15 +24,17 @@ export interface DashboardWidget {
   config?: any;
 }
 
-interface DashboardCanvasProps {
-  onLayoutChange: (layout: DashboardWidget[]) => void;
-}
-
-export default function DashboardCanvas({
-  onLayoutChange,
-}: DashboardCanvasProps) {
+export default function DashboardCanvas() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const widgets = useWidgetsStore((state) => state.widgets);
+
+  const updateWidgetsLayout = useWidgetsStore(
+    (state) => state.updateWidgetsLayout
+  );
+
+  const handleLayoutChange = (newLayout: DashboardWidget[]) => {
+    updateWidgetsLayout(newLayout);
+  };
 
   const layout = widgets.map((widget) => ({
     i: widget.id,
@@ -70,7 +72,7 @@ export default function DashboardCanvas({
                   } as DashboardWidget;
                 }
               );
-              onLayoutChange(updatedWidgets);
+              handleLayoutChange(updatedWidgets);
             }}
           >
             {widgets.map((widgetInstance) => {

@@ -5,8 +5,8 @@ interface DashboardWidget {
   typeId: string;
   x: number;
   y: number;
-  w: number; 
-  h: number; 
+  w: number;
+  h: number;
   config?: any;
 }
 
@@ -18,10 +18,10 @@ interface WidgetsStore {
 }
 
 export const useWidgetsStore = create<WidgetsStore>((set) => ({
-  widgets: [], 
+  widgets: [],
   addWidget: (widget) =>
     set((state) => ({
-      widgets: [...state.widgets, widget], 
+      widgets: [...state.widgets, widget],
     })),
 
   updateWidgetsLayout: (newLayout) =>
@@ -31,6 +31,6 @@ export const useWidgetsStore = create<WidgetsStore>((set) => ({
 
   removeWidget: (id) =>
     set((state) => ({
-      widgets: state.widgets.filter((w) => w.id !== id), 
+      widgets: state.widgets.filter((w) => w.id !== id),
     })),
 }));

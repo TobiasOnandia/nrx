@@ -1,11 +1,35 @@
-import { availableWidgets } from "@/lib/widgets";
+import { availableWidgets, getWidgetInfoById } from "@/lib/widgets";
 import { AddCoin } from "./AddCoin";
+import { useWidgetsStore } from "@/store/widgets.store";
 
-interface WidgetsSidebarProps {
-  onAddWidget: (widgetTypeId: string) => void;
-}
+const DEFAULT_WIDGET_GRID_W = 4;
+const DEFAULT_WIDGET_GRID_H = 6;
 
-export function WidgetsSidebar({ onAddWidget }: WidgetsSidebarProps) {
+export function WidgetsSidebar() {
+  const addWidget = useWidgetsStore((state) => state.addWidget);
+
+  const handleAddWidget = (widgetTypeId: string) => {
+    const newWidgetInstanceId = `${widgetTypeId}-${Date.now()}`;
+
+    let newX = 0;
+    let newY = 0;
+
+    addWidget({
+      id: newWidgetInstanceId,
+      typeId: widgetTypeId,
+      x: newX,
+      y: newY,
+      w: DEFAULT_WIDGET_GRID_W,
+      h: DEFAULT_WIDGET_GRID_H,
+      config: {},
+    });
+
+    console.log(
+      `Nuevo Widget '${
+        getWidgetInfoById(widgetTypeId)?.title
+      }' añadido al dashboard.`
+    );
+  };
   return (
     <aside
       className="w-72 bg-gray-800 h-full p-4 rounded overflow-y-auto"
@@ -25,7 +49,7 @@ export function WidgetsSidebar({ onAddWidget }: WidgetsSidebarProps) {
               <button
                 type="button"
                 className="group w-full text-left  p-4 bg-gray-750 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors border border-gray-700 hover:border-gray-600"
-                onClick={() => onAddWidget(widget.id)}
+                onClick={() => handleAddWidget(widget.id)}
                 aria-label={`Añadir widget ${widget.title}`}
               >
                 <h3 className="font-medium group-hover:text-white transition-colors">
