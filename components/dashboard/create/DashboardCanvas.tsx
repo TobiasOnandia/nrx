@@ -1,63 +1,86 @@
-// components/dashboard/create/DashboardCanvas.tsx
 "use client";
-import { Droppable } from "@/components/dnd/Droppable";
-import { Draggable } from "@/components/dnd/Draggable"; // <--- Asegúrate de importar Draggable
 import { EmptyWidget } from "@/components/empty/WidgetEmpty";
 import { getWidgetInfoById } from "@/lib/widgets";
+import { useRef } from "react";
+import {  WidthProvider } from "react-grid-layout"; 
+import GridLayout from "react-grid-layout";
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';   
+
+const GRID_COLS = 12; // Número de columnas en tu cuadrícula
+const ROW_HEIGHT_PX = 30; // Altura de cada fila en píxeles
+
+const ResponsiveGridLayout = WidthProvider(GridLayout);
 
 interface DashboardWidget {
   id: string;
-  typeId: string;
-  x: number; // Estas deben ser obligatorias ahora
-  y: number;
-  width: number;
-  height: number;
+  typeId: string; 
+  x: number; 
+  y: number; 
+  w: number; 
+  h: number; 
   config?: any;
 }
 
 interface DashboardCanvasProps {
-  widgets: DashboardWidget[];
+  widgets: DashboardWidget[]; 
+  onLayoutChange: (layout: DashboardWidget[]) => void; 
 }
 
-export default function DashboardCanvas({ widgets }: DashboardCanvasProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+export default function DashboardCanvas({ widgets, onLayoutChange }: DashboardCanvasProps) {
+   const canvasContainerRef = useRef<HTMLDivElement>(null);
+
+  const layout = widgets.map(widget => ({
+    i: widget.id,
+    x: widget.x,
+    y: widget.y,
+    w: widget.w,
+    h: widget.h,
+  }));
+
   return (
     <section className="flex-1 p-6 bg-gray-900/50 overflow-y-auto">
-      <Droppable id="dashboard-dropzone">
-        {/* El div que contiene los Draggables DEBE tener 'position: relative' */}
-        <div className="max-w-7xl mx-auto h-full min-h-[calc(100vh-100px)] relative border border-dashed border-gray-700 rounded-xl p-4">
-          {widgets.length === 0 && <EmptyWidget />}
-
-          {widgets.map((widgetInstance) => {
-            const widgetInfo = getWidgetInfoById(widgetInstance.typeId);
-            return (
-              <Draggable
-                key={widgetInstance.id}
-                id={widgetInstance.id}
-                x={widgetInstance.x}
-                y={widgetInstance.y}
-                width={widgetInstance.width}
-                height={widgetInstance.height}
-                hideOriginal={false} // No ocultar el original en el canvas
-                isPositionedAbsolute={true} // Posicionar absolutamente en el canvas
-              >
-                {/* El contenido del Draggable debe llenar su contenedor */}
-                <article className="bg-gray-700 p-4 rounded-lg shadow-lg w-full h-full">
+      <div ref={canvasContainerRef} className="max-w-7xl mx-auto h-full min-h-[calc(100vh-100px)] relative border border-dashed border-gray-700 rounded-xl p-4">
+        {widgets.length === 0 ? (
+          <EmptyWidget />
+        ) : (
+          <ResponsiveGridLayout
+            className="layout"
+            layout={layout} 
+            cols={GRID_COLS} 
+            rowHeight={ROW_HEIGHT_PX} 
+            onLayoutChange={(newLayout) => {
+              const updatedWidgets: DashboardWidget[] = newLayout.map((item: any) => {
+                const originalWidget = widgets.find(w => w.id === item.i); 
+                return {
+                  ...originalWidget, 
+                  id: item.i,
+                  x: item.x,
+                  y: item.y,
+                  w: item.w,
+                  h: item.h,
+                } as DashboardWidget;
+              });
+              onLayoutChange(updatedWidgets); 
+            }}
+          >
+            {widgets.map((widgetInstance) => {
+              const widgetInfo = getWidgetInfoById(widgetInstance.typeId);
+              return (
+                <article key={widgetInstance.id} className="bg-gray-700 p-4 rounded-lg shadow-lg">
                   <h4 className="font-semibold text-lg">
                     {widgetInfo?.title || "Widget desconocido"}
                   </h4>
-                  <p className="text-sm text-gray-400">
-                    {widgetInfo?.description}
-                  </p>
-                  <div className="absolute top-2 right-2 text-xs text-gray-500">
+                  <p className="text-sm text-gray-400">{widgetInfo?.description}</p>
+                  <p className="absolute top-2 right-2 text-xs text-gray-500">
                     ID: {widgetInstance.id.substring(0, 8)}...
-                  </div>
+                  </p>
                 </article>
-              </Draggable>
-            );
-          })}
-        </div>
-      </Droppable>
+              );
+            })}
+          </ResponsiveGridLayout>
+        )}
+      </div>
     </section>
   );
 }
