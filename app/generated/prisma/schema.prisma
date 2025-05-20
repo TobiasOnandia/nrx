@@ -52,3 +52,11 @@ model DashboardWidget {
 
   @@unique([dashboardId, widgetId])
 }
+
+model WidgetTemplates {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  types       String[]
+  createAt    DateTime @default(now())
+}

@@ -1,7 +1,4 @@
-"use client";
 import { availableWidgets } from "@/lib/widgets";
-import { X } from "lucide-react";
-import { useState } from "react";
 import { AddCoin } from "./AddCoin";
 
 interface WidgetsSidebarProps {
@@ -9,7 +6,6 @@ interface WidgetsSidebarProps {
 }
 
 export function WidgetsSidebar({ onAddWidget }: WidgetsSidebarProps) {
-
   return (
     <aside
       className="w-72 bg-gray-800 h-full p-4 rounded overflow-y-auto"
@@ -23,11 +19,7 @@ export function WidgetsSidebar({ onAddWidget }: WidgetsSidebarProps) {
       </header>
 
       <section aria-labelledby="widgets-list">
-        <ul
-          id="widgets-list"
-          className="space-y-3"
-          role="list"
-        >
+        <ul id="widgets-list" className="space-y-3" role="list">
           {availableWidgets.map((widget) => (
             <li key={widget.id}>
               <button
@@ -36,37 +28,37 @@ export function WidgetsSidebar({ onAddWidget }: WidgetsSidebarProps) {
                 onClick={() => onAddWidget(widget.id)}
                 aria-label={`Añadir widget ${widget.title}`}
               >
-                    <h3 className="font-medium group-hover:text-white transition-colors">
-                      {widget.title}
-                    </h3>
-                    <p className="text-sm text-gray-400">{widget.description}</p>
-                    {widget.types && (
-                      <p className="mt-2 flex flex-wrap gap-1">
-                        {widget.types.map((type) => (
-                          <span
-                            key={type}
-                            className="px-2 py-1 text-xs bg-gray-700 rounded-md"
-                          >
-                            {type}
-                          </span>
-                        ))}
-                      </p>
-                    )}
-                    {widget.metrics && (
-                      <>
-                        <p className="text-xs text-gray-500">Incluye:</p>
-                        <p className="flex flex-wrap gap-1 mt-1">
-                          {widget.metrics.map((metric) => (
-                            <span
-                              key={metric}
-                              className="px-2 py-1 text-xs bg-gray-700 rounded-md"
-                            >
-                              {metric}
-                            </span>
-                          ))}
-                        </p>
-                      </>
-                    )}
+                <h3 className="font-medium group-hover:text-white transition-colors">
+                  {widget.title}
+                </h3>
+                <p className="text-sm text-gray-400">{widget.description}</p>
+                {widget.types && (
+                  <p className="mt-2 flex flex-wrap gap-1">
+                    {widget.types.map((type) => (
+                      <span
+                        key={type}
+                        className="px-2 py-1 text-xs bg-gray-700 rounded-md"
+                      >
+                        {type}
+                      </span>
+                    ))}
+                  </p>
+                )}
+                {widget.metrics && (
+                  <>
+                    <p className="text-xs text-gray-500">Incluye:</p>
+                    <p className="flex flex-wrap gap-1 mt-1">
+                      {widget.metrics.map((metric) => (
+                        <span
+                          key={metric}
+                          className="px-2 py-1 text-xs bg-gray-700 rounded-md"
+                        >
+                          {metric}
+                        </span>
+                      ))}
+                    </p>
+                  </>
+                )}
               </button>
             </li>
           ))}
@@ -74,7 +66,6 @@ export function WidgetsSidebar({ onAddWidget }: WidgetsSidebarProps) {
       </section>
 
       <AddCoin />
-      
     </aside>
   );
 }

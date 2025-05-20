@@ -33,6 +33,11 @@ export type Dashboard = $Result.DefaultSelection<Prisma.$DashboardPayload>
  * 
  */
 export type DashboardWidget = $Result.DefaultSelection<Prisma.$DashboardWidgetPayload>
+/**
+ * Model WidgetTemplates
+ * 
+ */
+export type WidgetTemplates = $Result.DefaultSelection<Prisma.$WidgetTemplatesPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -198,6 +203,16 @@ export class PrismaClient<
     * ```
     */
   get dashboardWidget(): Prisma.DashboardWidgetDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.widgetTemplates`: Exposes CRUD operations for the **WidgetTemplates** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WidgetTemplates
+    * const widgetTemplates = await prisma.widgetTemplates.findMany()
+    * ```
+    */
+  get widgetTemplates(): Prisma.WidgetTemplatesDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -641,7 +656,8 @@ export namespace Prisma {
     User: 'User',
     Widget: 'Widget',
     Dashboard: 'Dashboard',
-    DashboardWidget: 'DashboardWidget'
+    DashboardWidget: 'DashboardWidget',
+    WidgetTemplates: 'WidgetTemplates'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -660,7 +676,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "widget" | "dashboard" | "dashboardWidget"
+      modelProps: "user" | "widget" | "dashboard" | "dashboardWidget" | "widgetTemplates"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -960,6 +976,80 @@ export namespace Prisma {
           }
         }
       }
+      WidgetTemplates: {
+        payload: Prisma.$WidgetTemplatesPayload<ExtArgs>
+        fields: Prisma.WidgetTemplatesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WidgetTemplatesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WidgetTemplatesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload>
+          }
+          findFirst: {
+            args: Prisma.WidgetTemplatesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WidgetTemplatesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload>
+          }
+          findMany: {
+            args: Prisma.WidgetTemplatesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload>[]
+          }
+          create: {
+            args: Prisma.WidgetTemplatesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload>
+          }
+          createMany: {
+            args: Prisma.WidgetTemplatesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WidgetTemplatesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload>[]
+          }
+          delete: {
+            args: Prisma.WidgetTemplatesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload>
+          }
+          update: {
+            args: Prisma.WidgetTemplatesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload>
+          }
+          deleteMany: {
+            args: Prisma.WidgetTemplatesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WidgetTemplatesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WidgetTemplatesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload>[]
+          }
+          upsert: {
+            args: Prisma.WidgetTemplatesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WidgetTemplatesPayload>
+          }
+          aggregate: {
+            args: Prisma.WidgetTemplatesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWidgetTemplates>
+          }
+          groupBy: {
+            args: Prisma.WidgetTemplatesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WidgetTemplatesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WidgetTemplatesCountArgs<ExtArgs>
+            result: $Utils.Optional<WidgetTemplatesCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1048,6 +1138,7 @@ export namespace Prisma {
     widget?: WidgetOmit
     dashboard?: DashboardOmit
     dashboardWidget?: DashboardWidgetOmit
+    widgetTemplates?: WidgetTemplatesOmit
   }
 
   /* Types for Logging */
@@ -5623,6 +5714,997 @@ export namespace Prisma {
 
 
   /**
+   * Model WidgetTemplates
+   */
+
+  export type AggregateWidgetTemplates = {
+    _count: WidgetTemplatesCountAggregateOutputType | null
+    _min: WidgetTemplatesMinAggregateOutputType | null
+    _max: WidgetTemplatesMaxAggregateOutputType | null
+  }
+
+  export type WidgetTemplatesMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    createAt: Date | null
+  }
+
+  export type WidgetTemplatesMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    createAt: Date | null
+  }
+
+  export type WidgetTemplatesCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    types: number
+    createAt: number
+    _all: number
+  }
+
+
+  export type WidgetTemplatesMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    createAt?: true
+  }
+
+  export type WidgetTemplatesMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    createAt?: true
+  }
+
+  export type WidgetTemplatesCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    types?: true
+    createAt?: true
+    _all?: true
+  }
+
+  export type WidgetTemplatesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WidgetTemplates to aggregate.
+     */
+    where?: WidgetTemplatesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WidgetTemplates to fetch.
+     */
+    orderBy?: WidgetTemplatesOrderByWithRelationInput | WidgetTemplatesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WidgetTemplatesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WidgetTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WidgetTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WidgetTemplates
+    **/
+    _count?: true | WidgetTemplatesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WidgetTemplatesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WidgetTemplatesMaxAggregateInputType
+  }
+
+  export type GetWidgetTemplatesAggregateType<T extends WidgetTemplatesAggregateArgs> = {
+        [P in keyof T & keyof AggregateWidgetTemplates]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWidgetTemplates[P]>
+      : GetScalarType<T[P], AggregateWidgetTemplates[P]>
+  }
+
+
+
+
+  export type WidgetTemplatesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WidgetTemplatesWhereInput
+    orderBy?: WidgetTemplatesOrderByWithAggregationInput | WidgetTemplatesOrderByWithAggregationInput[]
+    by: WidgetTemplatesScalarFieldEnum[] | WidgetTemplatesScalarFieldEnum
+    having?: WidgetTemplatesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WidgetTemplatesCountAggregateInputType | true
+    _min?: WidgetTemplatesMinAggregateInputType
+    _max?: WidgetTemplatesMaxAggregateInputType
+  }
+
+  export type WidgetTemplatesGroupByOutputType = {
+    id: string
+    title: string
+    description: string
+    types: string[]
+    createAt: Date
+    _count: WidgetTemplatesCountAggregateOutputType | null
+    _min: WidgetTemplatesMinAggregateOutputType | null
+    _max: WidgetTemplatesMaxAggregateOutputType | null
+  }
+
+  type GetWidgetTemplatesGroupByPayload<T extends WidgetTemplatesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WidgetTemplatesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WidgetTemplatesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WidgetTemplatesGroupByOutputType[P]>
+            : GetScalarType<T[P], WidgetTemplatesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WidgetTemplatesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    types?: boolean
+    createAt?: boolean
+  }, ExtArgs["result"]["widgetTemplates"]>
+
+  export type WidgetTemplatesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    types?: boolean
+    createAt?: boolean
+  }, ExtArgs["result"]["widgetTemplates"]>
+
+  export type WidgetTemplatesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    types?: boolean
+    createAt?: boolean
+  }, ExtArgs["result"]["widgetTemplates"]>
+
+  export type WidgetTemplatesSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    types?: boolean
+    createAt?: boolean
+  }
+
+  export type WidgetTemplatesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "types" | "createAt", ExtArgs["result"]["widgetTemplates"]>
+
+  export type $WidgetTemplatesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WidgetTemplates"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      description: string
+      types: string[]
+      createAt: Date
+    }, ExtArgs["result"]["widgetTemplates"]>
+    composites: {}
+  }
+
+  type WidgetTemplatesGetPayload<S extends boolean | null | undefined | WidgetTemplatesDefaultArgs> = $Result.GetResult<Prisma.$WidgetTemplatesPayload, S>
+
+  type WidgetTemplatesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WidgetTemplatesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WidgetTemplatesCountAggregateInputType | true
+    }
+
+  export interface WidgetTemplatesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WidgetTemplates'], meta: { name: 'WidgetTemplates' } }
+    /**
+     * Find zero or one WidgetTemplates that matches the filter.
+     * @param {WidgetTemplatesFindUniqueArgs} args - Arguments to find a WidgetTemplates
+     * @example
+     * // Get one WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WidgetTemplatesFindUniqueArgs>(args: SelectSubset<T, WidgetTemplatesFindUniqueArgs<ExtArgs>>): Prisma__WidgetTemplatesClient<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WidgetTemplates that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WidgetTemplatesFindUniqueOrThrowArgs} args - Arguments to find a WidgetTemplates
+     * @example
+     * // Get one WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WidgetTemplatesFindUniqueOrThrowArgs>(args: SelectSubset<T, WidgetTemplatesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WidgetTemplatesClient<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WidgetTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WidgetTemplatesFindFirstArgs} args - Arguments to find a WidgetTemplates
+     * @example
+     * // Get one WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WidgetTemplatesFindFirstArgs>(args?: SelectSubset<T, WidgetTemplatesFindFirstArgs<ExtArgs>>): Prisma__WidgetTemplatesClient<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WidgetTemplates that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WidgetTemplatesFindFirstOrThrowArgs} args - Arguments to find a WidgetTemplates
+     * @example
+     * // Get one WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WidgetTemplatesFindFirstOrThrowArgs>(args?: SelectSubset<T, WidgetTemplatesFindFirstOrThrowArgs<ExtArgs>>): Prisma__WidgetTemplatesClient<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WidgetTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WidgetTemplatesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.findMany()
+     * 
+     * // Get first 10 WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const widgetTemplatesWithIdOnly = await prisma.widgetTemplates.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WidgetTemplatesFindManyArgs>(args?: SelectSubset<T, WidgetTemplatesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WidgetTemplates.
+     * @param {WidgetTemplatesCreateArgs} args - Arguments to create a WidgetTemplates.
+     * @example
+     * // Create one WidgetTemplates
+     * const WidgetTemplates = await prisma.widgetTemplates.create({
+     *   data: {
+     *     // ... data to create a WidgetTemplates
+     *   }
+     * })
+     * 
+     */
+    create<T extends WidgetTemplatesCreateArgs>(args: SelectSubset<T, WidgetTemplatesCreateArgs<ExtArgs>>): Prisma__WidgetTemplatesClient<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WidgetTemplates.
+     * @param {WidgetTemplatesCreateManyArgs} args - Arguments to create many WidgetTemplates.
+     * @example
+     * // Create many WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WidgetTemplatesCreateManyArgs>(args?: SelectSubset<T, WidgetTemplatesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WidgetTemplates and returns the data saved in the database.
+     * @param {WidgetTemplatesCreateManyAndReturnArgs} args - Arguments to create many WidgetTemplates.
+     * @example
+     * // Create many WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WidgetTemplates and only return the `id`
+     * const widgetTemplatesWithIdOnly = await prisma.widgetTemplates.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WidgetTemplatesCreateManyAndReturnArgs>(args?: SelectSubset<T, WidgetTemplatesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WidgetTemplates.
+     * @param {WidgetTemplatesDeleteArgs} args - Arguments to delete one WidgetTemplates.
+     * @example
+     * // Delete one WidgetTemplates
+     * const WidgetTemplates = await prisma.widgetTemplates.delete({
+     *   where: {
+     *     // ... filter to delete one WidgetTemplates
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WidgetTemplatesDeleteArgs>(args: SelectSubset<T, WidgetTemplatesDeleteArgs<ExtArgs>>): Prisma__WidgetTemplatesClient<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WidgetTemplates.
+     * @param {WidgetTemplatesUpdateArgs} args - Arguments to update one WidgetTemplates.
+     * @example
+     * // Update one WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WidgetTemplatesUpdateArgs>(args: SelectSubset<T, WidgetTemplatesUpdateArgs<ExtArgs>>): Prisma__WidgetTemplatesClient<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WidgetTemplates.
+     * @param {WidgetTemplatesDeleteManyArgs} args - Arguments to filter WidgetTemplates to delete.
+     * @example
+     * // Delete a few WidgetTemplates
+     * const { count } = await prisma.widgetTemplates.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WidgetTemplatesDeleteManyArgs>(args?: SelectSubset<T, WidgetTemplatesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WidgetTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WidgetTemplatesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WidgetTemplatesUpdateManyArgs>(args: SelectSubset<T, WidgetTemplatesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WidgetTemplates and returns the data updated in the database.
+     * @param {WidgetTemplatesUpdateManyAndReturnArgs} args - Arguments to update many WidgetTemplates.
+     * @example
+     * // Update many WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WidgetTemplates and only return the `id`
+     * const widgetTemplatesWithIdOnly = await prisma.widgetTemplates.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WidgetTemplatesUpdateManyAndReturnArgs>(args: SelectSubset<T, WidgetTemplatesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WidgetTemplates.
+     * @param {WidgetTemplatesUpsertArgs} args - Arguments to update or create a WidgetTemplates.
+     * @example
+     * // Update or create a WidgetTemplates
+     * const widgetTemplates = await prisma.widgetTemplates.upsert({
+     *   create: {
+     *     // ... data to create a WidgetTemplates
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WidgetTemplates we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WidgetTemplatesUpsertArgs>(args: SelectSubset<T, WidgetTemplatesUpsertArgs<ExtArgs>>): Prisma__WidgetTemplatesClient<$Result.GetResult<Prisma.$WidgetTemplatesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WidgetTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WidgetTemplatesCountArgs} args - Arguments to filter WidgetTemplates to count.
+     * @example
+     * // Count the number of WidgetTemplates
+     * const count = await prisma.widgetTemplates.count({
+     *   where: {
+     *     // ... the filter for the WidgetTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends WidgetTemplatesCountArgs>(
+      args?: Subset<T, WidgetTemplatesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WidgetTemplatesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WidgetTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WidgetTemplatesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WidgetTemplatesAggregateArgs>(args: Subset<T, WidgetTemplatesAggregateArgs>): Prisma.PrismaPromise<GetWidgetTemplatesAggregateType<T>>
+
+    /**
+     * Group by WidgetTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WidgetTemplatesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WidgetTemplatesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WidgetTemplatesGroupByArgs['orderBy'] }
+        : { orderBy?: WidgetTemplatesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WidgetTemplatesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWidgetTemplatesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WidgetTemplates model
+   */
+  readonly fields: WidgetTemplatesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WidgetTemplates.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WidgetTemplatesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WidgetTemplates model
+   */
+  interface WidgetTemplatesFieldRefs {
+    readonly id: FieldRef<"WidgetTemplates", 'String'>
+    readonly title: FieldRef<"WidgetTemplates", 'String'>
+    readonly description: FieldRef<"WidgetTemplates", 'String'>
+    readonly types: FieldRef<"WidgetTemplates", 'String[]'>
+    readonly createAt: FieldRef<"WidgetTemplates", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WidgetTemplates findUnique
+   */
+  export type WidgetTemplatesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * Filter, which WidgetTemplates to fetch.
+     */
+    where: WidgetTemplatesWhereUniqueInput
+  }
+
+  /**
+   * WidgetTemplates findUniqueOrThrow
+   */
+  export type WidgetTemplatesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * Filter, which WidgetTemplates to fetch.
+     */
+    where: WidgetTemplatesWhereUniqueInput
+  }
+
+  /**
+   * WidgetTemplates findFirst
+   */
+  export type WidgetTemplatesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * Filter, which WidgetTemplates to fetch.
+     */
+    where?: WidgetTemplatesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WidgetTemplates to fetch.
+     */
+    orderBy?: WidgetTemplatesOrderByWithRelationInput | WidgetTemplatesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WidgetTemplates.
+     */
+    cursor?: WidgetTemplatesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WidgetTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WidgetTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WidgetTemplates.
+     */
+    distinct?: WidgetTemplatesScalarFieldEnum | WidgetTemplatesScalarFieldEnum[]
+  }
+
+  /**
+   * WidgetTemplates findFirstOrThrow
+   */
+  export type WidgetTemplatesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * Filter, which WidgetTemplates to fetch.
+     */
+    where?: WidgetTemplatesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WidgetTemplates to fetch.
+     */
+    orderBy?: WidgetTemplatesOrderByWithRelationInput | WidgetTemplatesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WidgetTemplates.
+     */
+    cursor?: WidgetTemplatesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WidgetTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WidgetTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WidgetTemplates.
+     */
+    distinct?: WidgetTemplatesScalarFieldEnum | WidgetTemplatesScalarFieldEnum[]
+  }
+
+  /**
+   * WidgetTemplates findMany
+   */
+  export type WidgetTemplatesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * Filter, which WidgetTemplates to fetch.
+     */
+    where?: WidgetTemplatesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WidgetTemplates to fetch.
+     */
+    orderBy?: WidgetTemplatesOrderByWithRelationInput | WidgetTemplatesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WidgetTemplates.
+     */
+    cursor?: WidgetTemplatesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WidgetTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WidgetTemplates.
+     */
+    skip?: number
+    distinct?: WidgetTemplatesScalarFieldEnum | WidgetTemplatesScalarFieldEnum[]
+  }
+
+  /**
+   * WidgetTemplates create
+   */
+  export type WidgetTemplatesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * The data needed to create a WidgetTemplates.
+     */
+    data: XOR<WidgetTemplatesCreateInput, WidgetTemplatesUncheckedCreateInput>
+  }
+
+  /**
+   * WidgetTemplates createMany
+   */
+  export type WidgetTemplatesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WidgetTemplates.
+     */
+    data: WidgetTemplatesCreateManyInput | WidgetTemplatesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WidgetTemplates createManyAndReturn
+   */
+  export type WidgetTemplatesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * The data used to create many WidgetTemplates.
+     */
+    data: WidgetTemplatesCreateManyInput | WidgetTemplatesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WidgetTemplates update
+   */
+  export type WidgetTemplatesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * The data needed to update a WidgetTemplates.
+     */
+    data: XOR<WidgetTemplatesUpdateInput, WidgetTemplatesUncheckedUpdateInput>
+    /**
+     * Choose, which WidgetTemplates to update.
+     */
+    where: WidgetTemplatesWhereUniqueInput
+  }
+
+  /**
+   * WidgetTemplates updateMany
+   */
+  export type WidgetTemplatesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WidgetTemplates.
+     */
+    data: XOR<WidgetTemplatesUpdateManyMutationInput, WidgetTemplatesUncheckedUpdateManyInput>
+    /**
+     * Filter which WidgetTemplates to update
+     */
+    where?: WidgetTemplatesWhereInput
+    /**
+     * Limit how many WidgetTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WidgetTemplates updateManyAndReturn
+   */
+  export type WidgetTemplatesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * The data used to update WidgetTemplates.
+     */
+    data: XOR<WidgetTemplatesUpdateManyMutationInput, WidgetTemplatesUncheckedUpdateManyInput>
+    /**
+     * Filter which WidgetTemplates to update
+     */
+    where?: WidgetTemplatesWhereInput
+    /**
+     * Limit how many WidgetTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WidgetTemplates upsert
+   */
+  export type WidgetTemplatesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * The filter to search for the WidgetTemplates to update in case it exists.
+     */
+    where: WidgetTemplatesWhereUniqueInput
+    /**
+     * In case the WidgetTemplates found by the `where` argument doesn't exist, create a new WidgetTemplates with this data.
+     */
+    create: XOR<WidgetTemplatesCreateInput, WidgetTemplatesUncheckedCreateInput>
+    /**
+     * In case the WidgetTemplates was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WidgetTemplatesUpdateInput, WidgetTemplatesUncheckedUpdateInput>
+  }
+
+  /**
+   * WidgetTemplates delete
+   */
+  export type WidgetTemplatesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+    /**
+     * Filter which WidgetTemplates to delete.
+     */
+    where: WidgetTemplatesWhereUniqueInput
+  }
+
+  /**
+   * WidgetTemplates deleteMany
+   */
+  export type WidgetTemplatesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WidgetTemplates to delete
+     */
+    where?: WidgetTemplatesWhereInput
+    /**
+     * Limit how many WidgetTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WidgetTemplates without action
+   */
+  export type WidgetTemplatesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WidgetTemplates
+     */
+    select?: WidgetTemplatesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WidgetTemplates
+     */
+    omit?: WidgetTemplatesOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -5681,6 +6763,17 @@ export namespace Prisma {
   };
 
   export type DashboardWidgetScalarFieldEnum = (typeof DashboardWidgetScalarFieldEnum)[keyof typeof DashboardWidgetScalarFieldEnum]
+
+
+  export const WidgetTemplatesScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    types: 'types',
+    createAt: 'createAt'
+  };
+
+  export type WidgetTemplatesScalarFieldEnum = (typeof WidgetTemplatesScalarFieldEnum)[keyof typeof WidgetTemplatesScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -5997,6 +7090,58 @@ export namespace Prisma {
     updateAt?: DateTimeWithAggregatesFilter<"DashboardWidget"> | Date | string
   }
 
+  export type WidgetTemplatesWhereInput = {
+    AND?: WidgetTemplatesWhereInput | WidgetTemplatesWhereInput[]
+    OR?: WidgetTemplatesWhereInput[]
+    NOT?: WidgetTemplatesWhereInput | WidgetTemplatesWhereInput[]
+    id?: StringFilter<"WidgetTemplates"> | string
+    title?: StringFilter<"WidgetTemplates"> | string
+    description?: StringFilter<"WidgetTemplates"> | string
+    types?: StringNullableListFilter<"WidgetTemplates">
+    createAt?: DateTimeFilter<"WidgetTemplates"> | Date | string
+  }
+
+  export type WidgetTemplatesOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    types?: SortOrder
+    createAt?: SortOrder
+  }
+
+  export type WidgetTemplatesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: WidgetTemplatesWhereInput | WidgetTemplatesWhereInput[]
+    OR?: WidgetTemplatesWhereInput[]
+    NOT?: WidgetTemplatesWhereInput | WidgetTemplatesWhereInput[]
+    title?: StringFilter<"WidgetTemplates"> | string
+    description?: StringFilter<"WidgetTemplates"> | string
+    types?: StringNullableListFilter<"WidgetTemplates">
+    createAt?: DateTimeFilter<"WidgetTemplates"> | Date | string
+  }, "id">
+
+  export type WidgetTemplatesOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    types?: SortOrder
+    createAt?: SortOrder
+    _count?: WidgetTemplatesCountOrderByAggregateInput
+    _max?: WidgetTemplatesMaxOrderByAggregateInput
+    _min?: WidgetTemplatesMinOrderByAggregateInput
+  }
+
+  export type WidgetTemplatesScalarWhereWithAggregatesInput = {
+    AND?: WidgetTemplatesScalarWhereWithAggregatesInput | WidgetTemplatesScalarWhereWithAggregatesInput[]
+    OR?: WidgetTemplatesScalarWhereWithAggregatesInput[]
+    NOT?: WidgetTemplatesScalarWhereWithAggregatesInput | WidgetTemplatesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WidgetTemplates"> | string
+    title?: StringWithAggregatesFilter<"WidgetTemplates"> | string
+    description?: StringWithAggregatesFilter<"WidgetTemplates"> | string
+    types?: StringNullableListFilter<"WidgetTemplates">
+    createAt?: DateTimeWithAggregatesFilter<"WidgetTemplates"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -6254,6 +7399,62 @@ export namespace Prisma {
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WidgetTemplatesCreateInput = {
+    id?: string
+    title: string
+    description: string
+    types?: WidgetTemplatesCreatetypesInput | string[]
+    createAt?: Date | string
+  }
+
+  export type WidgetTemplatesUncheckedCreateInput = {
+    id?: string
+    title: string
+    description: string
+    types?: WidgetTemplatesCreatetypesInput | string[]
+    createAt?: Date | string
+  }
+
+  export type WidgetTemplatesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    types?: WidgetTemplatesUpdatetypesInput | string[]
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WidgetTemplatesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    types?: WidgetTemplatesUpdatetypesInput | string[]
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WidgetTemplatesCreateManyInput = {
+    id?: string
+    title: string
+    description: string
+    types?: WidgetTemplatesCreatetypesInput | string[]
+    createAt?: Date | string
+  }
+
+  export type WidgetTemplatesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    types?: WidgetTemplatesUpdatetypesInput | string[]
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WidgetTemplatesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    types?: WidgetTemplatesUpdatetypesInput | string[]
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -6465,6 +7666,36 @@ export namespace Prisma {
     widgetId?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type WidgetTemplatesCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    types?: SortOrder
+    createAt?: SortOrder
+  }
+
+  export type WidgetTemplatesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    createAt?: SortOrder
+  }
+
+  export type WidgetTemplatesMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    createAt?: SortOrder
   }
 
   export type DashboardCreateNestedManyWithoutUserInput = {
@@ -6697,6 +7928,15 @@ export namespace Prisma {
     upsert?: WidgetUpsertWithoutDashboardWidgetsInput
     connect?: WidgetWhereUniqueInput
     update?: XOR<XOR<WidgetUpdateToOneWithWhereWithoutDashboardWidgetsInput, WidgetUpdateWithoutDashboardWidgetsInput>, WidgetUncheckedUpdateWithoutDashboardWidgetsInput>
+  }
+
+  export type WidgetTemplatesCreatetypesInput = {
+    set: string[]
+  }
+
+  export type WidgetTemplatesUpdatetypesInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {

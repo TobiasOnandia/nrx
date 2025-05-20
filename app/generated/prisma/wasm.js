@@ -155,6 +155,14 @@ exports.Prisma.DashboardWidgetScalarFieldEnum = {
   updateAt: 'updateAt'
 };
 
+exports.Prisma.WidgetTemplatesScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  types: 'types',
+  createAt: 'createAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -170,7 +178,8 @@ exports.Prisma.ModelName = {
   User: 'User',
   Widget: 'Widget',
   Dashboard: 'Dashboard',
-  DashboardWidget: 'DashboardWidget'
+  DashboardWidget: 'DashboardWidget',
+  WidgetTemplates: 'WidgetTemplates'
 };
 
 /**
