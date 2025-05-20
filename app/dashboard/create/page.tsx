@@ -1,138 +1,60 @@
-// app/dashboard/create/DashboardCustomizer.tsx
 "use client";
 import DashboardCanvas from "@/components/dashboard/create/DashboardCanvas";
 import { WidgetsSidebar } from "@/components/dashboard/create/WidgetSidebar";
-import {
-  DndContext,
-  DragEndEvent,
-  DragStartEvent,
-  DragOverlay,
-} from "@dnd-kit/core";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { getWidgetInfoById } from "@/lib/widgets";
+
+const GRID_COLS = 12;
+const ROW_HEIGHT_PX = 30;
+const DEFAULT_WIDGET_GRID_W = 4;
+const DEFAULT_WIDGET_GRID_H = 6;
 
 interface DashboardWidget {
   id: string;
   typeId: string;
   x: number;
   y: number;
-  width: number;
-  height: number;
-  config?: any;
+  w: number; 
+  h: number;   config?: any;
 }
 
-export default function DashboardCustomizer() {
-  const [dashboardWidgets, setDashboardWidgets] = useState<DashboardWidget[]>(
-    []
-  );
-  const [activeDraggableId, setActiveDraggableId] = useState<string | null>(
-    null
-  );
+export default function DashboardCustomizerPage() {
+  const [dashboardLayout, setDashboardLayout] = useState<DashboardWidget[]>([]);
 
-  const isExistingWidgetInstance = (id: string) =>
-    dashboardWidgets.some((w) => w.id === id);
-  const isNewWidgetType = (id: string) => getWidgetInfoById(id) !== undefined;
 
-  const handleDragStart = (event: DragStartEvent) => {
-    setActiveDraggableId(String(event.active.id));
-  };
+  const handleAddWidgetFromSidebar = useCallback((widgetTypeId: string) => {
+    const newWidgetInstanceId = `${widgetTypeId}-${Date.now()}`;
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over, delta } = event;
-    const draggedId = String(active.id);
-    const droppedOnId = over?.id;
+    let newX = 0;
+    let newY = 0;
 
-    if (droppedOnId === "dashboard-dropzone" && isNewWidgetType(draggedId)) {
-      const newWidgetInstanceId = `${draggedId}-${Date.now()}`;
+    setDashboardLayout((prevLayout) => [
+      ...prevLayout,
+      {
+        id: newWidgetInstanceId,
+        typeId: widgetTypeId,
+        x: newX,
+        y: newY,
+        w: DEFAULT_WIDGET_GRID_W,
+        h: DEFAULT_WIDGET_GRID_H,
+        config: {},
+      },
+    ]);
+    console.log(`Nuevo Widget '${getWidgetInfoById(widgetTypeId)?.title}' añadido al dashboard.`);
+  }, []);
 
-      setDashboardWidgets((prevWidgets) => [
-        ...prevWidgets,
-        {
-          id: newWidgetInstanceId,
-          typeId: draggedId,
-          x: 0,
-          y: 0,
-          width: 300,
-          height: 200,
-          config: {},
-        },
-      ]);
-      console.log(
-        `Nuevo Widget '${
-          getWidgetInfoById(draggedId)?.title
-        }' añadido al dashboard.`
-      );
-    }
-    // Caso 2: Arrastro un widget YA EXISTENTE dentro del canvas para moverlo
-    else if (isExistingWidgetInstance(draggedId)) {
-      setDashboardWidgets((prevWidgets) =>
-        prevWidgets.map((widget) => {
-          if (widget.id === draggedId) {
-            // Actualiza la posición del widget sumando el delta a su posición actual
-            return {
-              ...widget,
-              x: widget.x + delta.x,
-              y: widget.y + delta.y,
-            };
-          }
-          return widget;
-        })
-      );
-      console.log(
-        `Widget '${
-          getWidgetInfoById(draggedId)?.title || "Existente"
-        }' movido dentro del dashboard.`
-      );
-    }
+  const handleLayoutChange = useCallback((newLayout: DashboardWidget[]) => {
+    setDashboardLayout(newLayout);
+  }, []);
 
-    setActiveDraggableId(null); // Limpiar el ID del elemento arrastrado al finalizar
-  };
-
-  const handleDragCancel = () => {
-    setActiveDraggableId(null);
-  };
-
-  // Obtener la información del widget activo para mostrar en el DragOverlay
-  // Esto es para la representación de "copia" que flota
-  const activeWidgetInfo = activeDraggableId
-    ? getWidgetInfoById(activeDraggableId)
-    : null;
 
   return (
-    <div className="min-h-screen flex mx-auto bg-gray-900 text-gray-100 p-6">
-      <DndContext
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        onDragCancel={handleDragCancel}
-      >
-        {/* Sidebar para arrastrar nuevos widgets */}
-        <WidgetsSidebar activeDraggableId={activeDraggableId} />
-
-        {/* Canvas donde se ubican y mueven los widgets */}
-        <DashboardCanvas widgets={dashboardWidgets} />
-
-        {/* DragOverlay para la representación visual del arrastre */}
-        <DragOverlay>
-          {activeWidgetInfo ? (
-            <div
-              className="group p-4 bg-gray-600/80 rounded-lg shadow-xl cursor-grabbing transition-colors border border-gray-500 flex items-start space-x-3 opacity-90"
-              style={{ width: 300, height: 200 }}
-            >
-              <div className="p-2 bg-gray-600 rounded-lg">
-                {activeWidgetInfo.icon}
-              </div>
-              <div>
-                <h3 className="font-medium text-white">
-                  {activeWidgetInfo.title} (Arrastrando)
-                </h3>
-                <p className="text-sm text-gray-300">
-                  {activeWidgetInfo.description}
-                </p>
-              </div>
-            </div>
-          ) : null}
-        </DragOverlay>
-      </DndContext>
-    </div>
+    <main className="min-h-screen flex mx-auto bg-gray-900 text-gray-100 p-6">
+      <WidgetsSidebar onAddWidget={handleAddWidgetFromSidebar} />
+      <DashboardCanvas
+        widgets={dashboardLayout}
+        onLayoutChange={handleLayoutChange}
+      />
+    </main>
   );
 }
