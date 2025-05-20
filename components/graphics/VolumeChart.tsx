@@ -2,6 +2,8 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import {
+  TooltipItem,
+  ScriptableContext,
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -61,7 +63,7 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
       {
         label: "Volumen (24h)",
         data: mockData.map((d) => d.volume),
-        backgroundColor: (context) => {
+        backgroundColor: (context: ScriptableContext<"bar">) => {
           const ctx = context.chart.ctx;
           const gradient = ctx.createLinearGradient(0, 0, 0, 400);
           gradient.addColorStop(0, "rgba(124, 58, 237, 0.8)");
@@ -90,7 +92,7 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
         borderColor: "#374151",
         borderWidth: 1,
         callbacks: {
-          title: (context) => {
+          title: (context: TooltipItem<"bar">[]) => {
             const date = new Date(mockData[context[0].dataIndex].timestamp);
             return date.toLocaleString("es-ES", {
               weekday: "long",
@@ -100,7 +102,7 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
               minute: "2-digit",
             });
           },
-          label: (context) => {
+          label: (context: TooltipItem<"bar">) => {
             return `Volumen: $${context.parsed.y.toLocaleString()}`;
           },
         },
@@ -124,7 +126,7 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
         },
         ticks: {
           color: "#9CA3AF",
-          callback: (value) => `$${Number(value) / 1000}K`,
+          callback: (value: string | number) => `$${Number(value) / 1000}K`,
         },
       },
     },
