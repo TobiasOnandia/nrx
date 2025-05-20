@@ -1,11 +1,17 @@
+"use client";
 import { availableWidgets, getWidgetInfoById } from "@/lib/widgets";
 import { AddCoin } from "./AddCoin";
 import { useWidgetsStore } from "@/store/widgets.store";
+import { WidgetTemplate } from "@/app/dashboard/create/[id]/page";
 
 const DEFAULT_WIDGET_GRID_W = 4;
 const DEFAULT_WIDGET_GRID_H = 6;
 
-export function WidgetsSidebar() {
+export function WidgetsSidebar({
+  availableWidgets,
+}: {
+  availableWidgets: WidgetTemplate[];
+}) {
   const addWidget = useWidgetsStore((state) => state.addWidget);
 
   const handleAddWidget = (widgetTypeId: string) => {
@@ -67,21 +73,6 @@ export function WidgetsSidebar() {
                       </span>
                     ))}
                   </p>
-                )}
-                {widget.metrics && (
-                  <>
-                    <p className="text-xs text-gray-500">Incluye:</p>
-                    <p className="flex flex-wrap gap-1 mt-1">
-                      {widget.metrics.map((metric) => (
-                        <span
-                          key={metric}
-                          className="px-2 py-1 text-xs bg-gray-700 rounded-md"
-                        >
-                          {metric}
-                        </span>
-                      ))}
-                    </p>
-                  </>
                 )}
               </button>
             </li>

@@ -24,7 +24,7 @@ export interface DashboardWidget {
   config?: any;
 }
 
-export default function DashboardCanvas() {
+export const DashboardCanvas = () => {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const widgets = useWidgetsStore((state) => state.widgets);
 
@@ -108,4 +108,4 @@ export default function DashboardCanvas() {
       </button>
     </section>
   );
-}
+};
