@@ -14,25 +14,35 @@ export function WidgetsSidebar({
 }) {
   const addWidget = useWidgetsStore((state) => state.addWidget);
 
-  const handleAddWidget = (widgetTypeId: string) => {
-    const newWidgetInstanceId = `${widgetTypeId}-${Date.now()}`;
+  const handleAddWidget = (widgetId: string) => {
+    const newWidgetInstanceId = `${widgetId}-${Date.now()}`;
+
+    const widgetTemplate = availableWidgets.find(
+      (widget) => widget.id === widgetId
+    );
 
     let newX = 0;
     let newY = 0;
 
     addWidget({
       id: newWidgetInstanceId,
-      typeId: widgetTypeId,
+      typeId: widgetId,
       x: newX,
       y: newY,
       w: DEFAULT_WIDGET_GRID_W,
       h: DEFAULT_WIDGET_GRID_H,
-      config: {},
+      config: {
+        chartType: "Lineal",
+        coinId: "bitcoin",
+        timeRange: "24h",
+        showGrid: true,
+        showLegend: false,
+      },
     });
 
     console.log(
       `Nuevo Widget '${
-        getWidgetInfoById(widgetTypeId)?.title
+        getWidgetInfoById(widgetId)?.title
       }' añadido al dashboard.`
     );
   };

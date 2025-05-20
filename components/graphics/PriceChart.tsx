@@ -1,8 +1,31 @@
+"use client";
 import { coinMarketHistory } from "@/app/actions/coinMarket";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Line } from "react-chartjs-2";
 import { useCoinMarketStore } from "@/store/coinmarket.store";
+
+// --- ¡Inicio de la solución! ---
+// Importa y registra los elementos necesarios de Chart.js
+import {
+  Chart as ChartJS,
+  CategoryScale, // Para el eje X con etiquetas de categoría (tus fechas/horas)
+  LinearScale, // Para el eje Y con valores numéricos (tus precios)
+  PointElement, // Para los puntos de datos en la línea
+  LineElement, // Para la línea del gráfico
+  Tooltip, // Para los tooltips al pasar el ratón
+  Legend, // Si alguna vez quieres mostrar una leyenda (aunque la tienes en display: false)
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend
+);
+// --- ¡Fin de la solución! ---
 
 export const PriceChart = () => {
   const [timeRange, setTimeRange] = useState(1);
@@ -36,7 +59,7 @@ export const PriceChart = () => {
     );
 
   return (
-    <article className="bg-gray-800  p-6 rounded-xl mb-8">
+    <article className="bg-gray-800 p-6 rounded-xl mb-8">
       <section className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">{selectedCoin} Price Chart</h2>
         <div className="flex gap-2">
@@ -84,10 +107,15 @@ export const PriceChart = () => {
             },
             scales: {
               x: {
+                // Asegúrate de que el tipo de escala sea reconocido
+                // Chart.js por defecto usa 'category' si no se especifica y los labels son strings
+                // O puedes especificarlo explícitamente: type: 'category',
                 grid: { color: "#374151" },
                 ticks: { color: "#9CA3AF" },
               },
               y: {
+                // También es buena práctica especificar el tipo si no es el por defecto
+                type: "linear", // O 'logarithmic' si tus datos varían mucho en magnitud
                 grid: { color: "#374151" },
                 ticks: { color: "#9CA3AF" },
               },

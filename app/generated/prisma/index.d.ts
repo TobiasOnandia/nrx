@@ -5727,6 +5727,8 @@ export namespace Prisma {
     id: string | null
     title: string | null
     description: string | null
+    defaultConfig: string | null
+    defaultLayout: string | null
     createAt: Date | null
   }
 
@@ -5734,6 +5736,8 @@ export namespace Prisma {
     id: string | null
     title: string | null
     description: string | null
+    defaultConfig: string | null
+    defaultLayout: string | null
     createAt: Date | null
   }
 
@@ -5742,6 +5746,8 @@ export namespace Prisma {
     title: number
     description: number
     types: number
+    defaultConfig: number
+    defaultLayout: number
     createAt: number
     _all: number
   }
@@ -5751,6 +5757,8 @@ export namespace Prisma {
     id?: true
     title?: true
     description?: true
+    defaultConfig?: true
+    defaultLayout?: true
     createAt?: true
   }
 
@@ -5758,6 +5766,8 @@ export namespace Prisma {
     id?: true
     title?: true
     description?: true
+    defaultConfig?: true
+    defaultLayout?: true
     createAt?: true
   }
 
@@ -5766,6 +5776,8 @@ export namespace Prisma {
     title?: true
     description?: true
     types?: true
+    defaultConfig?: true
+    defaultLayout?: true
     createAt?: true
     _all?: true
   }
@@ -5847,6 +5859,8 @@ export namespace Prisma {
     title: string
     description: string
     types: string[]
+    defaultConfig: string
+    defaultLayout: string
     createAt: Date
     _count: WidgetTemplatesCountAggregateOutputType | null
     _min: WidgetTemplatesMinAggregateOutputType | null
@@ -5872,6 +5886,8 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     types?: boolean
+    defaultConfig?: boolean
+    defaultLayout?: boolean
     createAt?: boolean
   }, ExtArgs["result"]["widgetTemplates"]>
 
@@ -5880,6 +5896,8 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     types?: boolean
+    defaultConfig?: boolean
+    defaultLayout?: boolean
     createAt?: boolean
   }, ExtArgs["result"]["widgetTemplates"]>
 
@@ -5888,6 +5906,8 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     types?: boolean
+    defaultConfig?: boolean
+    defaultLayout?: boolean
     createAt?: boolean
   }, ExtArgs["result"]["widgetTemplates"]>
 
@@ -5896,10 +5916,12 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     types?: boolean
+    defaultConfig?: boolean
+    defaultLayout?: boolean
     createAt?: boolean
   }
 
-  export type WidgetTemplatesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "types" | "createAt", ExtArgs["result"]["widgetTemplates"]>
+  export type WidgetTemplatesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "types" | "defaultConfig" | "defaultLayout" | "createAt", ExtArgs["result"]["widgetTemplates"]>
 
   export type $WidgetTemplatesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "WidgetTemplates"
@@ -5909,6 +5931,8 @@ export namespace Prisma {
       title: string
       description: string
       types: string[]
+      defaultConfig: string
+      defaultLayout: string
       createAt: Date
     }, ExtArgs["result"]["widgetTemplates"]>
     composites: {}
@@ -6337,6 +6361,8 @@ export namespace Prisma {
     readonly title: FieldRef<"WidgetTemplates", 'String'>
     readonly description: FieldRef<"WidgetTemplates", 'String'>
     readonly types: FieldRef<"WidgetTemplates", 'String[]'>
+    readonly defaultConfig: FieldRef<"WidgetTemplates", 'String'>
+    readonly defaultLayout: FieldRef<"WidgetTemplates", 'String'>
     readonly createAt: FieldRef<"WidgetTemplates", 'DateTime'>
   }
     
@@ -6770,6 +6796,8 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     types: 'types',
+    defaultConfig: 'defaultConfig',
+    defaultLayout: 'defaultLayout',
     createAt: 'createAt'
   };
 
@@ -7098,6 +7126,8 @@ export namespace Prisma {
     title?: StringFilter<"WidgetTemplates"> | string
     description?: StringFilter<"WidgetTemplates"> | string
     types?: StringNullableListFilter<"WidgetTemplates">
+    defaultConfig?: StringFilter<"WidgetTemplates"> | string
+    defaultLayout?: StringFilter<"WidgetTemplates"> | string
     createAt?: DateTimeFilter<"WidgetTemplates"> | Date | string
   }
 
@@ -7106,6 +7136,8 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     types?: SortOrder
+    defaultConfig?: SortOrder
+    defaultLayout?: SortOrder
     createAt?: SortOrder
   }
 
@@ -7117,6 +7149,8 @@ export namespace Prisma {
     title?: StringFilter<"WidgetTemplates"> | string
     description?: StringFilter<"WidgetTemplates"> | string
     types?: StringNullableListFilter<"WidgetTemplates">
+    defaultConfig?: StringFilter<"WidgetTemplates"> | string
+    defaultLayout?: StringFilter<"WidgetTemplates"> | string
     createAt?: DateTimeFilter<"WidgetTemplates"> | Date | string
   }, "id">
 
@@ -7125,6 +7159,8 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     types?: SortOrder
+    defaultConfig?: SortOrder
+    defaultLayout?: SortOrder
     createAt?: SortOrder
     _count?: WidgetTemplatesCountOrderByAggregateInput
     _max?: WidgetTemplatesMaxOrderByAggregateInput
@@ -7139,6 +7175,8 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"WidgetTemplates"> | string
     description?: StringWithAggregatesFilter<"WidgetTemplates"> | string
     types?: StringNullableListFilter<"WidgetTemplates">
+    defaultConfig?: StringWithAggregatesFilter<"WidgetTemplates"> | string
+    defaultLayout?: StringWithAggregatesFilter<"WidgetTemplates"> | string
     createAt?: DateTimeWithAggregatesFilter<"WidgetTemplates"> | Date | string
   }
 
@@ -7404,6 +7442,8 @@ export namespace Prisma {
     title: string
     description: string
     types?: WidgetTemplatesCreatetypesInput | string[]
+    defaultConfig: string
+    defaultLayout: string
     createAt?: Date | string
   }
 
@@ -7412,6 +7452,8 @@ export namespace Prisma {
     title: string
     description: string
     types?: WidgetTemplatesCreatetypesInput | string[]
+    defaultConfig: string
+    defaultLayout: string
     createAt?: Date | string
   }
 
@@ -7420,6 +7462,8 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     types?: WidgetTemplatesUpdatetypesInput | string[]
+    defaultConfig?: StringFieldUpdateOperationsInput | string
+    defaultLayout?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7428,6 +7472,8 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     types?: WidgetTemplatesUpdatetypesInput | string[]
+    defaultConfig?: StringFieldUpdateOperationsInput | string
+    defaultLayout?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7436,6 +7482,8 @@ export namespace Prisma {
     title: string
     description: string
     types?: WidgetTemplatesCreatetypesInput | string[]
+    defaultConfig: string
+    defaultLayout: string
     createAt?: Date | string
   }
 
@@ -7444,6 +7492,8 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     types?: WidgetTemplatesUpdatetypesInput | string[]
+    defaultConfig?: StringFieldUpdateOperationsInput | string
+    defaultLayout?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7452,6 +7502,8 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     types?: WidgetTemplatesUpdatetypesInput | string[]
+    defaultConfig?: StringFieldUpdateOperationsInput | string
+    defaultLayout?: StringFieldUpdateOperationsInput | string
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7681,6 +7733,8 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     types?: SortOrder
+    defaultConfig?: SortOrder
+    defaultLayout?: SortOrder
     createAt?: SortOrder
   }
 
@@ -7688,6 +7742,8 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    defaultConfig?: SortOrder
+    defaultLayout?: SortOrder
     createAt?: SortOrder
   }
 
@@ -7695,6 +7751,8 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
+    defaultConfig?: SortOrder
+    defaultLayout?: SortOrder
     createAt?: SortOrder
   }
 

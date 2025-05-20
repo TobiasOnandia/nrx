@@ -160,6 +160,8 @@ exports.Prisma.WidgetTemplatesScalarFieldEnum = {
   title: 'title',
   description: 'description',
   types: 'types',
+  defaultConfig: 'defaultConfig',
+  defaultLayout: 'defaultLayout',
   createAt: 'createAt'
 };
 

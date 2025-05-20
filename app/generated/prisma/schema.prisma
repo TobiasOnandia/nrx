@@ -54,9 +54,11 @@ model DashboardWidget {
 }
 
 model WidgetTemplates {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  types       String[]
-  createAt    DateTime @default(now())
+  id            String   @id @default(uuid())
+  title         String
+  description   String
+  types         String[]
+  defaultConfig String
+  defaultLayout String
+  createAt      DateTime @default(now())
 }

@@ -1,10 +1,16 @@
-interface WidgetInfo {
+// lib/widgets.ts
+
+// Asegúrate de que esta interfaz esté definida para incluir 'defaultConfig'
+export interface WidgetInfo {
   id: string;
   title: string;
   description: string;
   types?: string[];
   metrics?: string[];
-  icon: React.ReactNode;
+  icon: JSX.Element; // O un tipo más específico para tu SVG
+  defaultConfig: { [key: string]: any }; // Añade esta línea para la configuración por defecto
+  // Puedes añadir un defaultLayout aquí también si los layouts iniciales varían por widget.
+  // defaultLayout?: { x: number; y: number; w: number; h: number; };
 }
 
 export const availableWidgets: WidgetInfo[] = [
@@ -28,6 +34,14 @@ export const availableWidgets: WidgetInfo[] = [
         />
       </svg>
     ),
+    // Configuración por defecto para el gráfico de precios
+    defaultConfig: {
+      chartType: "Lineal",
+      coinId: "bitcoin",
+      timeRange: "24h",
+      showGrid: true,
+      showLegend: false,
+    },
   },
   {
     id: "market-table",
@@ -48,6 +62,13 @@ export const availableWidgets: WidgetInfo[] = [
         />
       </svg>
     ),
+    // Configuración por defecto para la tabla de mercado
+    defaultConfig: {
+      columns: ["price", "24h_change", "market_cap"], // Columnas visibles por defecto
+      pageSize: 10, // Número de filas por página
+      sortBy: "market_cap",
+      sortOrder: "desc",
+    },
   },
   {
     id: "metrics-card",
@@ -69,6 +90,11 @@ export const availableWidgets: WidgetInfo[] = [
         />
       </svg>
     ),
+    // Configuración por defecto para las métricas clave
+    defaultConfig: {
+      selectedMetrics: ["Cap. de Mercado", "Volumen 24h"], // Métricas a mostrar por defecto
+      refreshInterval: 60, // Intervalo de actualización en segundos
+    },
   },
   {
     id: "portfolio-summary",
@@ -89,6 +115,11 @@ export const availableWidgets: WidgetInfo[] = [
         />
       </svg>
     ),
+    // Configuración por defecto para el resumen de portafolio
+    defaultConfig: {
+      currency: "USD", // Moneda base por defecto
+      showAllocationChart: true, // Mostrar gráfico de distribución
+    },
   },
   {
     id: "coin-selector",
@@ -109,9 +140,14 @@ export const availableWidgets: WidgetInfo[] = [
         />
       </svg>
     ),
+    // Configuración por defecto para el selector de monedas
+    defaultConfig: {
+      selectedCoins: [], // Inicialmente sin monedas seleccionadas
+      enableSearch: true,
+    },
   },
 ];
 
-export const getWidgetInfoById = (id: string) => {
+export function getWidgetInfoById(id: string): WidgetInfo | undefined {
   return availableWidgets.find((widget) => widget.id === id);
-};
+}

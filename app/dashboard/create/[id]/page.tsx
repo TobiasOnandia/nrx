@@ -7,6 +7,7 @@ export interface WidgetTemplate {
   title: string;
   description: string;
   types?: string[];
+  defaultConfig: string;
 }
 
 export default async function DashboardCustomizerPage() {

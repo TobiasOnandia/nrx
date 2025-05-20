@@ -59,5 +59,7 @@ model WidgetTemplates {
   title String
   description String
   types String[]
+  defaultConfig String
+  defaultLayout String
   createAt DateTime @default(now())
 }
