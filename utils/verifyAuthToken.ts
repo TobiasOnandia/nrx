@@ -1,21 +1,38 @@
-import { jwtVerify } from "jose";
+import { JWTPayload, jwtVerify } from "jose";
 
 const JWT_SECRET_STRING = process.env.JWT_SECRET;
 const JWT_SECRET_KEY = new TextEncoder().encode(JWT_SECRET_STRING);
 
+interface MyJwtPayload extends JWTPayload {
+  userId: string;
+}
+
+interface AuthResponse {
+  success: boolean;
+  payload?: MyJwtPayload;
+  message?: string;
+}
+
 export async function verifyAuthToken(
   token: string | undefined
-): Promise<{ success: boolean; payload?: any; message?: string }> {
+): Promise<AuthResponse> {
   if (!token) {
     return { success: false, message: "Authentication token missing" };
   }
 
   try {
-    const payload = await jwtVerify(token, JWT_SECRET_KEY, {
+    const { payload } = await jwtVerify(token, JWT_SECRET_KEY, {
       algorithms: ["HS256"],
     });
 
-    return { success: true, payload };
+    if (typeof payload.userId !== "string" || !payload.userId) {
+      return {
+        success: false,
+        message: "Invalid token payload: userId missing or invalid",
+      };
+    }
+
+    return { success: true, payload: payload as MyJwtPayload };
   } catch (error) {
     console.error("Toekn verification failed: ", error);
     let message = "Invalid token";

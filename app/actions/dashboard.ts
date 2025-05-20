@@ -8,7 +8,7 @@ import {
 import { verifyAuthToken } from "@/utils/verifyAuthToken";
 import { cookies } from "next/headers";
 
-const AUTH_TOKEN_COOKIE_NAME = process.env.AUTH_TOKEN_COOKIE_NAME!;
+const AUTH_TOKEN_COOKIE_NAME = "auth_token";
 
 export async function createDashboard(request: {
   name: string;
@@ -44,13 +44,20 @@ export async function createDashboard(request: {
     return { success: false, message: authPayload.message || "Invalid token" };
   }
 
+  if (!authPayload.payload?.userId) {
+    return {
+      success: false,
+      message: "User ID not found in token payload",
+    };
+  }
+
   const userId = authPayload.payload.userId;
 
   try {
     const dashboard = await prisma.dashboard.create({
       data: {
         name: dashboardName,
-        userId,
+        userId: userId,
       },
     });
     return {
