@@ -2,6 +2,7 @@
 import { EmptyWidget } from "@/components/empty/WidgetEmpty";
 import { PriceChart } from "@/components/graphics/PriceChart";
 import { VolumeChart } from "@/components/graphics/VolumeChart";
+import { MetricCard } from "@/components/MetricCard";
 import { getWidgetInfoById } from "@/lib/widgets";
 import { useWidgetsStore } from "@/store/widgets.store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -90,6 +91,8 @@ export const DashboardCanvas = () => {
                   WidgetComponent = PriceChart;
                 } else if (widgetInstance.types.includes("volume-chart")) {
                   WidgetComponent = VolumeChart;
+                } else if (widgetInstance.types.includes("metric-card")) {
+                  WidgetComponent = MetricCard;
                 } else {
                   WidgetComponent = () => (
                     <div className="flex justify-center items-center h-full text-red-400">
@@ -111,7 +114,12 @@ export const DashboardCanvas = () => {
                     }}
                     className="relative w-full h-full"
                   >
-                    <WidgetComponent config={widgetInstance.config} />
+                    <WidgetComponent
+                      config={widgetInstance.config}
+                      title={widgetInstance.config.title}
+                      value={widgetInstance.config.value}
+                      icon={widgetInstance.config.icon}
+                    />
                   </div>
                 );
               })}
