@@ -5,8 +5,8 @@ import prisma from "@/lib/prisma";
 import {
   DashboardSchema,
   ResponseCreateDashboard,
+  SaveDashboardLayoutRequestSchema,
 } from "@/types/schema/schema.dashboard";
-import { z } from "zod";
 
 export async function createDashboard(request: {
   name: string;
@@ -59,28 +59,6 @@ export async function createDashboard(request: {
     };
   }
 }
-
-const WidgetSaveSchema = z.object({
-  id: z.string().uuid(), // ID del DashboardWidget (el que está en la DB)
-  typeId: z.string(), // El typeId del widget (ej. 'price-chart')
-  x: z.number().int().min(0),
-  y: z.number().int().min(0),
-  w: z.number().int().min(1),
-  h: z.number().int().min(1),
-  config: z.any().optional(), // Configuración del widget, puede ser un JSON (se stringifica)
-});
-
-// Esquema para la validación de la solicitud completa de guardado
-const SaveDashboardLayoutRequestSchema = z.object({
-  dashboardId: z.string().uuid(),
-  widgets: z.array(WidgetSaveSchema),
-});
-
-type ResponseSaveDashboardLayout = {
-  success: boolean;
-  message: string;
-  errors?: z.ZodIssue[];
-};
 
 export async function addWidgetToDashboard(request: {
   dashboardId: string;

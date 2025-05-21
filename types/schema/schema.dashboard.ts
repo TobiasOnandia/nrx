@@ -55,7 +55,11 @@ export const SaveDashboardLayoutRequestSchema = z.object({
 });
 
 export type SaveDashboardLayoutResponse =
-  | { success: true; message: string; data: any[] }
+  | {
+      success: true;
+      message?: string;
+      data: z.infer<typeof SaveDashboardLayoutRequestSchema>;
+    }
   | {
       success: false;
       message: string;
