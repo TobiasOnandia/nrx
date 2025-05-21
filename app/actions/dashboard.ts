@@ -7,21 +7,19 @@ import {
   ResponseCreateDashboard,
   SaveDashboardLayoutRequestSchema,
 } from "@/types/schema/schema.dashboard";
+import { verifyDashboardOwnership } from "@/utils/dashboardUtils";
+import { validateAndExtract } from "@/utils/validationUtils";
 
 export async function createDashboard(request: {
   name: string;
 }): Promise<ResponseCreateDashboard> {
-  const validationResult = DashboardSchema.safeParse(request);
+  const validationResult = validateAndExtract(DashboardSchema, request);
 
   if (!validationResult.success) {
-    const errorMessages = validationResult.error.errors
-      .map((err) => err.message)
-      .join(", ");
-    const errors = validationResult.error.flatten().fieldErrors;
     return {
       success: false,
-      message: errorMessages,
-      errors,
+      message: validationResult.message,
+      errors: validationResult.errors,
     };
   }
 
@@ -64,17 +62,37 @@ export async function addWidgetToDashboard(request: {
   dashboardId: string;
   widgetTypeId: string;
 }) {
-  const validationResult = SaveDashboardLayoutRequestSchema.safeParse(request);
+  const validationResult = validateAndExtract(
+    SaveDashboardLayoutRequestSchema,
+    request
+  );
 
   if (!validationResult.success) {
-    const errorMessages = validationResult.error.errors
-      .map((err) => err.message)
-      .join(", ");
-    const errors = validationResult.error.flatten().fieldErrors;
     return {
       success: false,
-      message: errorMessages,
-      errors,
+      message: validationResult.message,
+      errors: validationResult.errors,
+    };
+  }
+
+  const { dashboardId } = validationResult.data;
+
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return {
+      success: false,
+      message: "User not found",
+    };
+  }
+
+  const userId = currentUser.id;
+
+  const isOwner = await verifyDashboardOwnership(dashboardId, userId);
+  if (!isOwner) {
+    return {
+      success: false,
+      message: "Dashboard not found or not owned by user",
     };
   }
 }

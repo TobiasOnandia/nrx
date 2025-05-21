@@ -5,8 +5,6 @@ import {
   CoinMarketResponse,
 } from "@/types/schema/schema.coinmarket";
 
-const COINGECKO_API_KEY = `${process.env.COINGECKO_API_KEY}`;
-
 export async function coinMarket(): Promise<CoinMarketResponse> {
   const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd";
 

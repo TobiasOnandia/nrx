@@ -1,27 +1,4 @@
 import prisma from "@/lib/prisma";
-import { z } from "zod";
-import {
-  SaveDashboardLayoutRequestSchema,
-  SaveDashboardLayoutResponse,
-} from "@/types/schema/schema.dashboard";
-
-export function validateDashboardLayoutRequest(
-  request: z.infer<typeof SaveDashboardLayoutRequestSchema>
-): SaveDashboardLayoutResponse {
-  const validation = SaveDashboardLayoutRequestSchema.safeParse(request);
-  if (!validation.success) {
-    console.error("Validation failed:", validation.error.flatten().fieldErrors);
-    return {
-      success: false,
-      errors: validation.error.flatten().fieldErrors,
-      message: "Invalid dashboard layout data",
-    };
-  }
-  return {
-    success: true,
-    data: validation.data,
-  };
-}
 
 export async function verifyDashboardOwnership(
   dashboardId: string,

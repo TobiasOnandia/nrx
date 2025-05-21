@@ -1,24 +1,26 @@
 "use server";
 
-import { getCurrentUser } from "@/helper/getCurrentUser"; // Asegúrate que la ruta sea correcta
+import { getCurrentUser } from "@/helper/getCurrentUser";
 import {
   SaveDashboardLayoutRequestSchema,
   SaveDashboardLayoutResponse,
 } from "@/types/schema/schema.dashboard";
 import {
-  validateDashboardLayoutRequest,
   verifyDashboardOwnership,
   processIncomingWidgets,
   prepareDashboardWidgetOperations,
-} from "@/utils/dashboardUtils"; // Importa las nuevas funciones
+} from "@/utils/dashboardUtils";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
+import { validateAndExtract } from "@/utils/validationUtils";
 
 export async function saveDashboardLayout(
   request: z.infer<typeof SaveDashboardLayoutRequestSchema>
 ): Promise<SaveDashboardLayoutResponse> {
-  const validationResult = validateDashboardLayoutRequest(request);
-
+  const validationResult = validateAndExtract(
+    SaveDashboardLayoutRequestSchema,
+    request
+  );
   if (!validationResult.success) {
     return {
       success: false,
@@ -38,7 +40,6 @@ export async function saveDashboardLayout(
   }
   const userId = currentUser.id;
 
-  // Verificación de propiedad del dashboard
   const isOwner = await verifyDashboardOwnership(dashboardId, userId);
   if (!isOwner) {
     return {
@@ -47,7 +48,6 @@ export async function saveDashboardLayout(
     };
   }
 
-  // Obtener IDs de widgets existentes en el dashboard
   let existingWidgetIdsInDashboardWidget: string[] = [];
   try {
     existingWidgetIdsInDashboardWidget = (
@@ -64,7 +64,6 @@ export async function saveDashboardLayout(
     };
   }
 
-  // Procesar widgets entrantes (crear/obtener existentes)
   const { map: templateIdToWidgetIdMap, error: widgetProcessError } =
     await processIncomingWidgets(widgets, userId);
 
@@ -72,7 +71,6 @@ export async function saveDashboardLayout(
     return { success: false, message: widgetProcessError };
   }
 
-  // Preparar datos para DashboardWidget
   const incomingDashboardWidgetData = widgets.map((w) => ({
     widgetId: templateIdToWidgetIdMap.get(w.id)!,
     dashboardId: dashboardId,
@@ -83,7 +81,6 @@ export async function saveDashboardLayout(
     instanceConfig: w.config,
   }));
 
-  // Preparar operaciones de base de datos
   const operations = prepareDashboardWidgetOperations(
     dashboardId,
     incomingDashboardWidgetData,

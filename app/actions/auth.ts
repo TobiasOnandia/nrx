@@ -7,6 +7,7 @@ import {
   ResponseAuth,
 } from "@/types/schema/schema.auth";
 import { addTokenToBlockList } from "@/utils/addTokenToBlockList";
+import { validateAndExtract } from "@/utils/validationUtils";
 import bcrypt from "bcryptjs";
 import { jwtVerify, SignJWT } from "jose";
 import { JWTExpired, JWTInvalid } from "jose/errors";
@@ -23,16 +24,13 @@ export async function registerAction(request: {
   password: string;
   name: string;
 }): Promise<ResponseAuth> {
-  const validationResult = RegisterSchema.safeParse(request);
+  const validationResult = validateAndExtract(RegisterSchema, request);
 
   if (!validationResult.success) {
-    const errorMessages = validationResult.error.errors
-      .map((err) => err.message)
-      .join(", ");
     return {
       success: false,
-      message: errorMessages,
-      errors: validationResult.error.flatten().fieldErrors,
+      message: validationResult.message,
+      errors: validationResult.errors,
     };
   }
 
@@ -78,16 +76,13 @@ export async function loginAction(request: {
   email: string;
   password: string;
 }): Promise<ResponseAuth> {
-  const validationResult = LoginSchema.safeParse(request);
+  const validationResult = validateAndExtract(LoginSchema, request);
 
   if (!validationResult.success) {
-    const errorMessages = validationResult.error.errors
-      .map((err) => err.message)
-      .join(", ");
     return {
       success: false,
-      message: errorMessages,
-      errors: validationResult.error.flatten().fieldErrors,
+      message: validationResult.message,
+      errors: validationResult.errors,
     };
   }
 
