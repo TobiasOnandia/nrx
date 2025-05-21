@@ -42,14 +42,18 @@ model Dashboard {
 }
 
 model DashboardWidget {
-  id String @id @default(uuid()) 
+  id          String   @id @default(uuid())
   dashboardId String
   dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
-  widgetId String
-  widget    Widget @relation(fields: [widgetId], references: [id])
-  createAt DateTime @default(now())
-  updateAt DateTime @default(now())
-  
+  widgetId    String
+  widget      Widget   @relation(fields: [widgetId], references: [id])
+  x           Int      
+  y           Int     
+  w           Int     
+  h           Int      
+  instanceConfig Json?
+  createAt    DateTime @default(now())
+  updateAt    DateTime @default(now())
   @@unique([dashboardId, widgetId])
 }
 
