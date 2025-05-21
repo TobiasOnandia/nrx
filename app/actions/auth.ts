@@ -16,7 +16,6 @@ import { cookies } from "next/headers";
 const JWT_SECRET_STRING = process.env.JWT_SECRET;
 const JWT_SECRET_KEY = new TextEncoder().encode(JWT_SECRET_STRING);
 const JWT_EXPIRATION_TIME = "1h";
-// The name of the cookie used to store the authentication token, retrieved from environment variables.
 const AUTH_TOKEN_COOKIE_NAME = process.env.AUTH_TOKEN_COOKIE_NAME!;
 
 export async function registerAction(request: {
@@ -118,7 +117,7 @@ export async function loginAction(request: {
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
       .setJti(nanoid())
-      .setExpirationTime(JWT_EXPIRATION_TIME) // Por ejemplo, '1h'
+      .setExpirationTime(JWT_EXPIRATION_TIME)
       .sign(JWT_SECRET_KEY);
 
     const ONE_HOUR_IN_ECONDS = 60 * 60;

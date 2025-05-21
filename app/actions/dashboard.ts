@@ -1,15 +1,12 @@
 "use server";
 
+import { getCurrentUser } from "@/helper/getCurrentUser";
 import prisma from "@/lib/prisma";
 import {
   DashboardSchema,
   ResponseCreateDashboard,
 } from "@/types/schema/schema.dashboard";
-import { verifyAuthToken } from "@/utils/verifyAuthToken";
-import { cookies } from "next/headers";
 import { z } from "zod";
-
-const AUTH_TOKEN_COOKIE_NAME = "auth_token";
 
 export async function createDashboard(request: {
   name: string;
@@ -31,28 +28,16 @@ export async function createDashboard(request: {
   const validatedData = validationResult.data;
   const dashboardName = validatedData.name;
 
-  let authPayload;
-  try {
-    const cookiesStore = await cookies();
-    const token = cookiesStore.get(AUTH_TOKEN_COOKIE_NAME);
-    authPayload = await verifyAuthToken(token?.value);
-  } catch (error) {
-    console.error("Token verification failed: ", error);
-    return { success: false, message: "Invalid token" };
-  }
+  const currentUser = await getCurrentUser();
 
-  if (!authPayload.success) {
-    return { success: false, message: authPayload.message || "Invalid token" };
-  }
-
-  if (!authPayload.payload?.userId) {
+  if (!currentUser) {
     return {
       success: false,
-      message: "User ID not found in token payload",
+      message: "User not found",
     };
   }
 
-  const userId = authPayload.payload.userId;
+  const userId = currentUser.id;
 
   try {
     const dashboard = await prisma.dashboard.create({

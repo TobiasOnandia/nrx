@@ -1,15 +1,12 @@
 "use server";
 
+import { getCurrentUser } from "@/helper/getCurrentUser";
 import prisma from "@/lib/prisma";
 import {
   SaveDashboardLayoutRequestSchema,
   SaveDashboardLayoutResponse,
 } from "@/types/schema/schema.dashboard";
-import { verifyAuthToken } from "@/utils/verifyAuthToken";
-import { cookies } from "next/headers";
 import { z } from "zod";
-
-const AUTH_TOKEN_COOKIE_NAME = "auth_token";
 
 export async function saveDashboardLayout(
   request: z.infer<typeof SaveDashboardLayoutRequestSchema>
@@ -26,24 +23,16 @@ export async function saveDashboardLayout(
 
   const { widgets, dashboardId } = validation.data;
 
-  let authPayload;
-  try {
-    const cookiesStore = await cookies();
-    const token = cookiesStore.get(AUTH_TOKEN_COOKIE_NAME);
-    authPayload = await verifyAuthToken(token?.value);
-  } catch (error) {
-    console.error("Token verification failed:", error);
-    return { success: false, message: "Invalid token" };
-  }
+  const currentUser = await getCurrentUser();
 
-  if (!authPayload.success || !authPayload.payload?.userId) {
+  if (!currentUser) {
     return {
       success: false,
-      message: authPayload.message || "User ID not found in token",
+      message: "User not found",
     };
   }
 
-  const userId = authPayload.payload.userId;
+  const userId = currentUser.id;
 
   try {
     const existingDashboard = await prisma.dashboard.findUnique({
