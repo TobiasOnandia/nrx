@@ -3,6 +3,7 @@ import { EmptyWidget } from "@/components/empty/WidgetEmpty";
 import { PriceChart } from "@/components/graphics/PriceChart";
 import { VolumeChart } from "@/components/graphics/VolumeChart";
 import { MetricCard } from "@/components/MetricCard";
+import { TopCoins } from "@/components/tables/TopCoins";
 import { getWidgetInfoById } from "@/lib/widgets";
 import { useWidgetsStore } from "@/store/widgets.store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -20,7 +21,7 @@ const ResponsiveGridLayout = WidthProvider(GridLayout);
 
 export interface DashboardWidget {
   id: string;
-  types: string[]; // ¡Cambiado de typeId a types: string[]!
+  types: string[]; 
   x: number;
   y: number;
   w: number;
@@ -47,6 +48,11 @@ export const DashboardCanvas = () => {
     w: widget.w,
     h: widget.h,
   }));
+
+  const handleClick = () => {
+
+  }
+
 
   return (
     <QueryClientProvider client={clientQuery}>
@@ -93,7 +99,12 @@ export const DashboardCanvas = () => {
                   WidgetComponent = VolumeChart;
                 } else if (widgetInstance.types.includes("metric-card")) {
                   WidgetComponent = MetricCard;
-                } else {
+                 
+                }
+                else if (widgetInstance.types.includes("top-coins")){
+                  WidgetComponent = TopCoins
+                }
+                else {
                   WidgetComponent = () => (
                     <div className="flex justify-center items-center h-full text-red-400">
                       Tipo de widget desconocido o no soportado:{" "}
@@ -127,14 +138,6 @@ export const DashboardCanvas = () => {
           )}
         </div>
 
-        <button
-          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition-all duration-200 flex items-center justify-end space-x-2 disabled:opacity-70 disabled:cursor-not-allowed"
-          title="Save current dashboard configuration"
-          aria-label="Save dashboard"
-        >
-          <Save className="w-5 h-5" />
-          <span>Save Dashboard</span>
-        </button>
       </section>
     </QueryClientProvider>
   );
