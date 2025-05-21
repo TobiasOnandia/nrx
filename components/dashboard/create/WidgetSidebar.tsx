@@ -1,5 +1,5 @@
 "use client";
-import { availableWidgets, getWidgetInfoById } from "@/lib/widgets";
+import { getWidgetInfoById } from "@/lib/widgets";
 import { AddCoin } from "./AddCoin";
 import { useWidgetsStore } from "@/store/widgets.store";
 import { WidgetTemplate } from "@/app/dashboard/create/[id]/page";
@@ -13,20 +13,14 @@ export function WidgetsSidebar({
   availableWidgets: WidgetTemplate[];
 }) {
   const addWidget = useWidgetsStore((state) => state.addWidget);
-
-  const handleAddWidget = (widgetId: string) => {
-    const newWidgetInstanceId = `${widgetId}-${Date.now()}`;
-
-    const widgetTemplate = availableWidgets.find(
-      (widget) => widget.id === widgetId
-    );
-
+  const handleAddWidget = (widget: WidgetTemplate) => {
+    console.log(widget.id);
     let newX = 0;
     let newY = 0;
 
     addWidget({
-      id: newWidgetInstanceId,
-      types: [widgetId],
+      id: widget.id,
+      types: [widget.types?.[0] as string],
       x: newX,
       y: newY,
       w: DEFAULT_WIDGET_GRID_W,
@@ -41,9 +35,7 @@ export function WidgetsSidebar({
     });
 
     console.log(
-      `Nuevo Widget '${
-        getWidgetInfoById(widgetId)?.title
-      }' añadido al dashboard.`
+      `Nuevo Widget '${getWidgetInfoById(widget.id)}' añadido al dashboard.`
     );
   };
   return (
@@ -65,7 +57,7 @@ export function WidgetsSidebar({
               <button
                 type="button"
                 className="group w-full text-left  p-4 bg-gray-750 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors border border-gray-700 hover:border-gray-600"
-                onClick={() => handleAddWidget(widget.types?.[0] || "")}
+                onClick={() => handleAddWidget(widget)}
                 aria-label={`Añadir widget ${widget.title}`}
               >
                 <h3 className="font-medium group-hover:text-white transition-colors">

@@ -39,3 +39,27 @@ export type ResponseDashboardWidget = {
     z.infer<typeof DashboardWidgetSchema>
   >["formErrors"]["fieldErrors"];
 };
+
+export const WidgetDataSchema = z.object({
+  id: z.string().uuid(),
+  x: z.number().int().min(0),
+  y: z.number().int().min(0),
+  w: z.number().int().min(1),
+  h: z.number().int().min(1),
+  config: z.any().optional(),
+});
+
+export const SaveDashboardLayoutRequestSchema = z.object({
+  widgets: z.array(WidgetDataSchema),
+  dashboardId: z.string().uuid(),
+});
+
+export type SaveDashboardLayoutResponse =
+  | { success: true; message: string; data: any[] }
+  | {
+      success: false;
+      message: string;
+      errors?: z.ZodError<
+        z.infer<typeof SaveDashboardLayoutRequestSchema>
+      >["formErrors"]["fieldErrors"];
+    };

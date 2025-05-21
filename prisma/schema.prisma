@@ -20,15 +20,28 @@ model User {
 }
 
 model Widget {
-  id String @id @default(uuid())
-  name String
-  userId String
-  config String
-  layout String
-  createAt DateTime @default(now())
-  updateAt DateTime @default(now())
-  user User @relation(fields: [userId], references: [id])
+  id               String @id @default(uuid())
+  name             String
+  userId           String
+  config           String // La configuración para esta instancia específica del widget
+  layout           String // El layout para esta instancia específica (puede ser derivado del template o sobreescrito)
+  templateId       String? // Campo nuevo: Enlace al modelo WidgetTemplates
+  createAt         DateTime @default(now())
+  updateAt         DateTime @default(now())
+  user             User @relation(fields: [userId], references: [id])
   dashboardWidgets DashboardWidget[]
+  widgetTemplate   WidgetTemplates? @relation(fields: [templateId], references: [id], onDelete: Cascade, name: "WidgetTemplate") // Nueva relación
+}
+
+model WidgetTemplates {
+  id String @id @default(uuid())
+  title String
+  description String
+  types String[]
+  defaultConfig String
+  defaultLayout String
+  createAt DateTime @default(now())
+  widgets Widget[] @relation("WidgetTemplate")
 }
 
 model Dashboard {
@@ -58,12 +71,3 @@ model DashboardWidget {
 }
 
 
-model WidgetTemplates {
-  id String @id @default(uuid())
-  title String
-  description String
-  types String[]
-  defaultConfig String
-  defaultLayout String
-  createAt DateTime @default(now())
-}

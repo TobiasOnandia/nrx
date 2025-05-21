@@ -23,12 +23,25 @@ model Widget {
   id               String            @id @default(uuid())
   name             String
   userId           String
-  config           String
-  layout           String
+  config           String // La configuración para esta instancia específica del widget
+  layout           String // El layout para esta instancia específica (puede ser derivado del template o sobreescrito)
+  templateId       String? // Campo nuevo: Enlace al modelo WidgetTemplates
   createAt         DateTime          @default(now())
   updateAt         DateTime          @default(now())
   user             User              @relation(fields: [userId], references: [id])
   dashboardWidgets DashboardWidget[]
+  widgetTemplate   WidgetTemplates?  @relation(fields: [templateId], references: [id], onDelete: Cascade, name: "WidgetTemplate") // Nueva relación
+}
+
+model WidgetTemplates {
+  id            String   @id @default(uuid())
+  title         String
+  description   String
+  types         String[]
+  defaultConfig String
+  defaultLayout String
+  createAt      DateTime @default(now())
+  widgets       Widget[] @relation("WidgetTemplate")
 }
 
 model Dashboard {
@@ -42,23 +55,18 @@ model Dashboard {
 }
 
 model DashboardWidget {
-  id          String    @id @default(uuid())
-  dashboardId String
-  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
-  widgetId    String
-  widget      Widget    @relation(fields: [widgetId], references: [id])
-  createAt    DateTime  @default(now())
-  updateAt    DateTime  @default(now())
+  id             String    @id @default(uuid())
+  dashboardId    String
+  dashboard      Dashboard @relation(fields: [dashboardId], references: [id])
+  widgetId       String
+  widget         Widget    @relation(fields: [widgetId], references: [id])
+  x              Int
+  y              Int
+  w              Int
+  h              Int
+  instanceConfig Json?
+  createAt       DateTime  @default(now())
+  updateAt       DateTime  @default(now())
 
   @@unique([dashboardId, widgetId])
-}
-
-model WidgetTemplates {
-  id            String   @id @default(uuid())
-  title         String
-  description   String
-  types         String[]
-  defaultConfig String
-  defaultLayout String
-  createAt      DateTime @default(now())
 }

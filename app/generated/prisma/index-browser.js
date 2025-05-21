@@ -135,22 +135,7 @@ exports.Prisma.WidgetScalarFieldEnum = {
   userId: 'userId',
   config: 'config',
   layout: 'layout',
-  createAt: 'createAt',
-  updateAt: 'updateAt'
-};
-
-exports.Prisma.DashboardScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  userId: 'userId',
-  createAt: 'createAt',
-  updateAt: 'updateAt'
-};
-
-exports.Prisma.DashboardWidgetScalarFieldEnum = {
-  id: 'id',
-  dashboardId: 'dashboardId',
-  widgetId: 'widgetId',
+  templateId: 'templateId',
   createAt: 'createAt',
   updateAt: 'updateAt'
 };
@@ -165,9 +150,35 @@ exports.Prisma.WidgetTemplatesScalarFieldEnum = {
   createAt: 'createAt'
 };
 
+exports.Prisma.DashboardScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  userId: 'userId',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+};
+
+exports.Prisma.DashboardWidgetScalarFieldEnum = {
+  id: 'id',
+  dashboardId: 'dashboardId',
+  widgetId: 'widgetId',
+  x: 'x',
+  y: 'y',
+  w: 'w',
+  h: 'h',
+  instanceConfig: 'instanceConfig',
+  createAt: 'createAt',
+  updateAt: 'updateAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -175,13 +186,24 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
   Widget: 'Widget',
+  WidgetTemplates: 'WidgetTemplates',
   Dashboard: 'Dashboard',
-  DashboardWidget: 'DashboardWidget',
-  WidgetTemplates: 'WidgetTemplates'
+  DashboardWidget: 'DashboardWidget'
 };
 
 /**

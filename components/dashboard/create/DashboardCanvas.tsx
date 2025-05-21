@@ -21,7 +21,7 @@ const ResponsiveGridLayout = WidthProvider(GridLayout);
 
 export interface DashboardWidget {
   id: string;
-  types: string[]; 
+  types: string[];
   x: number;
   y: number;
   w: number;
@@ -48,11 +48,6 @@ export const DashboardCanvas = () => {
     w: widget.w,
     h: widget.h,
   }));
-
-  const handleClick = () => {
-
-  }
-
 
   return (
     <QueryClientProvider client={clientQuery}>
@@ -99,12 +94,9 @@ export const DashboardCanvas = () => {
                   WidgetComponent = VolumeChart;
                 } else if (widgetInstance.types.includes("metric-card")) {
                   WidgetComponent = MetricCard;
-                 
-                }
-                else if (widgetInstance.types.includes("top-coins")){
-                  WidgetComponent = TopCoins
-                }
-                else {
+                } else if (widgetInstance.types.includes("top-coins")) {
+                  WidgetComponent = TopCoins;
+                } else {
                   WidgetComponent = () => (
                     <div className="flex justify-center items-center h-full text-red-400">
                       Tipo de widget desconocido o no soportado:{" "}
@@ -137,7 +129,6 @@ export const DashboardCanvas = () => {
             </ResponsiveGridLayout>
           )}
         </div>
-
       </section>
     </QueryClientProvider>
   );

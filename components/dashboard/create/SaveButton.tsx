@@ -6,12 +6,9 @@ import { useWidgetsStore } from "@/store/widgets.store";
 import { useParams } from "next/navigation"; // Para obtener el dashboardId
 import { saveDashboardLayout } from "@/app/actions/widget";
 
-
 export const SaveButton = () => {
   const { id } = useParams();
   const widgets = useWidgetsStore((state) => state.widgets);
-  const hasUnsavedChanges = useWidgetsStore((state) => state.hasUnsavedChanges);
-  const setHasUnsavedChanges = useWidgetsStore((state) => state.setHasUnsavedChanges);
 
   const handleSave = useCallback(async () => {
     if (!id) {
@@ -19,28 +16,32 @@ export const SaveButton = () => {
       return;
     }
 
-    const widgetsToSave = widgets.map(widget => ({
-      id: widget.id,
-      x: widget.x,
-      y: widget.y,
-      w: widget.w,
-      h: widget.h,
-      config: widget.config,
-    }));
-
+    const widgetsToSave = widgets.map((widget) => {
+      return {
+        id: widget.id,
+        x: widget.x,
+        y: widget.y,
+        w: widget.w,
+        h: widget.h,
+        config: widget.config,
+      };
+    });
 
     const response = await saveDashboardLayout({
-      dashboardId: id as string,
+      dashboardId: id?.toString(),
       widgets: widgetsToSave,
     });
 
     if (response.success) {
-      setHasUnsavedChanges(false); 
       console.log("Dashboard saved successfully!");
     } else {
-      console.error("Failed to save dashboard:", response.message, response.errors);
+      console.error(
+        "Failed to save dashboard:",
+        response.message,
+        response.errors
+      );
     }
-  }, [id, widgets, hasUnsavedChanges, setHasUnsavedChanges]);
+  }, [id, widgets]);
 
   return (
     <button
@@ -52,7 +53,7 @@ export const SaveButton = () => {
       aria-label="Save dashboard"
     >
       <Save className="w-5 h-5 inline-block mr-2" />
-      <span>{hasUnsavedChanges ? "Guardar Cambios" : "Dashboard Guardado"}</span>
+      <span>Guardar Cambios</span>
     </button>
   );
 };

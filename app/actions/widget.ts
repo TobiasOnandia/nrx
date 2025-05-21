@@ -1,35 +1,19 @@
-// app/actions/dashboardActions.ts
 "use server";
 
 import prisma from "@/lib/prisma";
+import {
+  SaveDashboardLayoutRequestSchema,
+  SaveDashboardLayoutResponse,
+} from "@/types/schema/schema.dashboard";
 import { verifyAuthToken } from "@/utils/verifyAuthToken";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
 const AUTH_TOKEN_COOKIE_NAME = "auth_token";
 
-const WidgetDataSchema = z.object({
-  id: z.string().uuid(),
-  x: z.number().int().min(0),
-  y: z.number().int().min(0),
-  w: z.number().int().min(1),
-  h: z.number().int().min(1),
-  config: z.any().optional(),
-});
-
-const SaveDashboardLayoutRequestSchema = z.object({
-  widgets: z.array(WidgetDataSchema),
-  dashboardId: z.string().uuid(),
-});
-
-type SaveDashboardLayoutResponse =
-  | { success: true; message: string; data: any[] }
-  | { success: false; message: string; errors?: z.ZodError };
-
 export async function saveDashboardLayout(
   request: z.infer<typeof SaveDashboardLayoutRequestSchema>
 ): Promise<SaveDashboardLayoutResponse> {
-  // 1. Validar la solicitud
   const validation = SaveDashboardLayoutRequestSchema.safeParse(request);
   if (!validation.success) {
     console.error("Validation failed:", validation.error.flatten().fieldErrors);
@@ -66,79 +50,131 @@ export async function saveDashboardLayout(
       where: { id: dashboardId, userId: userId },
     });
     if (!existingDashboard) {
-      return { success: false, message: "Dashboard not found or not owned by user" };
+      return {
+        success: false,
+        message: "Dashboard not found or not owned by user",
+      };
     }
   } catch (error) {
     console.error("Error verifying dashboard ownership:", error);
     return { success: false, message: "Failed to verify dashboard ownership" };
   }
 
-  let existingWidgetIds: string[] = [];
+  let existingWidgetIdsInDashboardWidget: string[] = [];
   try {
-    existingWidgetIds = (
+    existingWidgetIdsInDashboardWidget = (
       await prisma.dashboardWidget.findMany({
         where: { dashboardId },
-        select: { id: true },
+        select: { widgetId: true },
       })
-    ).map((w) => w.id);
+    ).map((w) => w.widgetId);
   } catch (error) {
-    console.error("Error fetching existing widget IDs:", error);
-    return { success: false, message: "Failed to fetch existing widget IDs" };
+    console.error("Error fetching existing DashboardWidget IDs:", error);
+    return {
+      success: false,
+      message: "Failed to fetch existing DashboardWidget IDs",
+    };
   }
 
-  const widgetsToCreate = widgets.filter((w) => !existingWidgetIds.includes(w.id));
-  const widgetsToUpdate = widgets.filter((w) => existingWidgetIds.includes(w.id));
+  const templateIdToWidgetIdMap = new Map<string, string>();
+
+  const uniqueTemplateIds = new Set(widgets.map((w) => w.id));
+
+  for (const templateId of Array.from(uniqueTemplateIds)) {
+    const existingWidgetForTemplate = await prisma.widget.findFirst({
+      where: { templateId: templateId, userId: userId },
+    });
+
+    if (existingWidgetForTemplate) {
+      templateIdToWidgetIdMap.set(templateId, existingWidgetForTemplate.id);
+    } else {
+      const template = await prisma.widgetTemplates.findUnique({
+        where: { id: templateId },
+      });
+
+      if (!template) {
+        console.error(`Widget template con ID ${templateId} no encontrado.`);
+        return {
+          success: false,
+          message: `Widget template con ID ${templateId} no encontrado.`,
+        };
+      }
+
+      const newWidget = await prisma.widget.create({
+        data: {
+          name: template.title,
+          userId: userId,
+          config: template.defaultConfig,
+          layout: template.defaultLayout,
+          templateId: template.id,
+        },
+      });
+      templateIdToWidgetIdMap.set(templateId, newWidget.id);
+    }
+  }
+
+  const incomingDashboardWidgetData = widgets.map((w) => ({
+    widgetId: templateIdToWidgetIdMap.get(w.id)!,
+    dashboardId: dashboardId,
+    x: w.x,
+    y: w.y,
+    w: w.w,
+    h: w.h,
+    instanceConfig: w.config,
+  }));
+
+  const dashboardWidgetsToCreate = incomingDashboardWidgetData.filter(
+    (dw) => !existingWidgetIdsInDashboardWidget.includes(dw.widgetId)
+  );
+  const dashboardWidgetsToUpdate = incomingDashboardWidgetData.filter((dw) =>
+    existingWidgetIdsInDashboardWidget.includes(dw.widgetId)
+  );
 
   try {
     const operations: any[] = [];
 
-    if (widgetsToCreate.length > 0) {
+    if (dashboardWidgetsToCreate.length > 0) {
       operations.push(
         prisma.dashboardWidget.createMany({
-          data: widgetsToCreate.map((widget) => ({
-            id: widget.id, 
-            dashboardId,
-            widgetId: widget.id,  
-            x: widget.x,
-            y: widget.y,
-            w: widget.w,
-            h: widget.h,
-            config: widget.config, 
-          })),
+          data: dashboardWidgetsToCreate,
           skipDuplicates: true,
         })
       );
     }
 
-    if (widgetsToUpdate.length > 0) {
-      operations.push(
-        prisma.dashboardWidget.updateMany({
-          where: {
-            id: { in: widgetsToUpdate.map((w) => w.id) },
-            dashboardId,
-          },
-          data: widgetsToUpdate.map((widget) => ({
-            x: widget.x,
-            y: widget.y,
-            w: widget.w,
-            h: widget.h,
-            config: widget.config, // No es necesario stringificar con Prisma
-          })),
-        })
-      );
+    if (dashboardWidgetsToUpdate.length > 0) {
+      for (const widgetData of dashboardWidgetsToUpdate) {
+        operations.push(
+          prisma.dashboardWidget.updateMany({
+            where: {
+              dashboardId: widgetData.dashboardId,
+              widgetId: widgetData.widgetId,
+            },
+            data: {
+              x: widgetData.x,
+              y: widgetData.y,
+              w: widgetData.w,
+              h: widgetData.h,
+              instanceConfig: widgetData.instanceConfig,
+            },
+          })
+        );
+      }
     }
 
-    // 6c. Eliminar widgets que ya no están en el layout
-    const widgetsToDelete = existingWidgetIds.filter(dbId => !widgets.some(w => w.id === dbId));
+    const widgetsToDelete = existingWidgetIdsInDashboardWidget.filter(
+      (dbWidgetId) =>
+        !incomingDashboardWidgetData.some((w) => w.widgetId === dbWidgetId)
+    );
     if (widgetsToDelete.length > 0) {
-        operations.push(
-            prisma.dashboardWidget.deleteMany({
-                where: {
-                    id: { in: widgetsToDelete },
-                    dashboardId
-                }
-            })
-        );
+      operations.push(
+        prisma.dashboardWidget.deleteMany({
+          where: {
+            widgetId: { in: widgetsToDelete },
+            dashboardId,
+          },
+        })
+      );
     }
 
     const results = await prisma.$transaction(operations);
@@ -153,7 +189,6 @@ export async function saveDashboardLayout(
     return {
       success: false,
       message: "Failed to save dashboard layout",
-      // Puedes añadir más detalles del error si es necesario
     };
   }
 }
