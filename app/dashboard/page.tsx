@@ -8,5 +8,5 @@ export default async function DashboardListPage() {
     },
   });
 
-  return <DashboardList dashboards={dashboards as any} />;
+  return <DashboardList dashboards={dashboards} />;
 }

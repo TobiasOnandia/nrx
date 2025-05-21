@@ -9,7 +9,11 @@ type DashboardWithWidgets = Dashboard & {
   dashboardWidgets: DashboardWidget[];
 };
 
-export const DashboardList = ({ dashboards }: { dashboards: DashboardWithWidgets[] }) => {
+export const DashboardList = ({
+  dashboards,
+}: {
+  dashboards: DashboardWithWidgets[];
+}) => {
   const router = useRouter();
 
   const handleCreateDashboard = async () => {
@@ -72,9 +76,7 @@ export const DashboardList = ({ dashboards }: { dashboards: DashboardWithWidgets
                 <h3 className="text-xl font-semibold mb-1">{dashboard.name}</h3>
                 <p className="text-sm text-gray-400">
                   Last updated:
-                  <span className="text-gray-200 ml-1">
-                    {dashboard.updateAt.toLocaleDateString()}
-                  </span>
+                  {dashboard.updateAt.toISOString().split("T")[0]}
                 </p>
               </div>
               <span className="text-xs bg-gray-700 px-2 py-1 rounded-full">
@@ -87,13 +89,14 @@ export const DashboardList = ({ dashboards }: { dashboards: DashboardWithWidgets
             </p>
 
             <footer className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
-              <button
+              <a
+                href={`/dashboard/edit/${dashboard.id}`}
                 className="p-2 cursor-pointer bg-gray-700 hover:bg-gray-600 rounded-lg"
                 title="Edit"
                 aria-label={`Edit dashboard ${dashboard.name}`}
               >
                 <Edit2 className="w-4 h-4" />
-              </button>
+              </a>
               <button
                 className="p-2 cursor-pointer bg-emerald-600 hover:bg-emerald-500 rounded-lg"
                 title="Use"

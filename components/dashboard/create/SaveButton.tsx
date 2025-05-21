@@ -23,7 +23,7 @@ export const SaveButton = () => {
         y: widget.y,
         w: widget.w,
         h: widget.h,
-        config: widget.config,
+        config: widget.instanceConfig,
       };
     });
 

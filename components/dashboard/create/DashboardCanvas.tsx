@@ -1,3 +1,4 @@
+// components/dashboard/create/DashboardCanvas.tsx
 "use client";
 import { EmptyWidget } from "@/components/empty/WidgetEmpty";
 import { PriceChart } from "@/components/graphics/PriceChart";
@@ -5,39 +6,63 @@ import { VolumeChart } from "@/components/graphics/VolumeChart";
 import { MetricCard } from "@/components/MetricCard";
 import { TopCoins } from "@/components/tables/TopCoins";
 import { useWidgetsStore } from "@/store/widgets.store";
+import type { DashboardWidgetData } from "@/store/widgets.store"; // Importa la interfaz correcta
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Save } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react"; // Necesitas useEffect
 import { WidthProvider } from "react-grid-layout";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
-const GRID_COLS = 12; // Número de columnas en tu cuadrícula
-const ROW_HEIGHT_PX = 30; // Altura de cada fila en píxeles
+const GRID_COLS = 12;
+const ROW_HEIGHT_PX = 30;
 
 const ResponsiveGridLayout = WidthProvider(GridLayout);
 
-export interface DashboardWidget {
-  id: string;
-  types: string[];
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  config?: any;
-}
-
-export const DashboardCanvas = () => {
+export const DashboardCanvas = ({
+  initialWidgets,
+}: {
+  initialWidgets?: DashboardWidgetData[]; // Puede ser opcional si el dashboard está vacío
+}) => {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const widgets = useWidgetsStore((state) => state.widgets);
+  const setWidgets = useWidgetsStore((state) => state.setWidgets); // Para inicializar el store
   const clientQuery = new QueryClient();
   const updateWidgetsLayout = useWidgetsStore(
     (state) => state.updateWidgetsLayout
   );
 
-  const handleLayoutChange = (newLayout: DashboardWidget[]) => {
-    updateWidgetsLayout(newLayout);
+  // Usa useEffect para inicializar el store de Zustand con los widgets cargados desde el servidor
+  useEffect(() => {
+    // Solo inicializa si el store de Zustand está vacío y hay widgets iniciales
+    // (o si quieres re-inicializar si cambian, lo cual es menos común para el estado inicial)
+    if (initialWidgets && initialWidgets.length > 0 && widgets.length === 0) {
+      setWidgets(initialWidgets);
+    } else if (
+      initialWidgets &&
+      initialWidgets.length === 0 &&
+      widgets.length > 0
+    ) {
+      // Si el servidor dice que no hay widgets pero Zustand sí, resetea Zustand.
+      // Esto es crucial para un dashboard "vacío" o recién creado.
+      setWidgets([]);
+    }
+  }, [initialWidgets, setWidgets, widgets.length]);
+
+  const handleLayoutChange = (newLayout: any[]) => {
+    const updatedWidgets: DashboardWidgetData[] = newLayout.map((item: any) => {
+      const originalWidget = widgets.find((w) => w.id === item.i);
+      // Asegúrate de preservar todas las propiedades originales (widgetId, types, instanceConfig)
+      return {
+        ...originalWidget,
+        id: item.i,
+        x: item.x,
+        y: item.y,
+        w: item.w,
+        h: item.h,
+      } as DashboardWidgetData;
+    });
+    updateWidgetsLayout(updatedWidgets);
   };
 
   const layout = widgets.map((widget) => ({
@@ -67,26 +92,12 @@ export const DashboardCanvas = () => {
               isResizable={true}
               compactType="vertical"
               preventCollision={true}
-              onLayoutChange={(newLayout) => {
-                const updatedWidgets: DashboardWidget[] = newLayout.map(
-                  (item: any) => {
-                    const originalWidget = widgets.find((w) => w.id === item.i);
-                    return {
-                      ...originalWidget,
-                      id: item.i,
-                      x: item.x,
-                      y: item.y,
-                      w: item.w,
-                      h: item.h,
-                    } as DashboardWidget;
-                  }
-                );
-                handleLayoutChange(updatedWidgets);
-              }}
+              onLayoutChange={handleLayoutChange}
             >
               {widgets.map((widgetInstance) => {
                 let WidgetComponent;
 
+                // Ahora usas widgetInstance.types para el renderizado
                 if (widgetInstance.types.includes("price-chart")) {
                   WidgetComponent = PriceChart;
                 } else if (widgetInstance.types.includes("volume-chart")) {
@@ -117,10 +128,12 @@ export const DashboardCanvas = () => {
                     className="relative w-full h-full"
                   >
                     <WidgetComponent
-                      config={widgetInstance.config}
-                      title={widgetInstance.config.title}
-                      value={widgetInstance.config.value}
-                      icon={widgetInstance.config.icon}
+                      // Asegúrate de que los componentes de widget esperan 'instanceConfig'
+                      // o mapea 'instanceConfig' a 'config' si tus componentes lo esperan así.
+                      config={widgetInstance.instanceConfig}
+                      title={widgetInstance.instanceConfig?.title}
+                      value={widgetInstance.instanceConfig?.value}
+                      icon={widgetInstance.instanceConfig?.icon}
                     />
                   </div>
                 );
