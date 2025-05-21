@@ -4,7 +4,6 @@ import { PriceChart } from "@/components/graphics/PriceChart";
 import { VolumeChart } from "@/components/graphics/VolumeChart";
 import { MetricCard } from "@/components/MetricCard";
 import { TopCoins } from "@/components/tables/TopCoins";
-import { getWidgetInfoById } from "@/lib/widgets";
 import { useWidgetsStore } from "@/store/widgets.store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Save } from "lucide-react";

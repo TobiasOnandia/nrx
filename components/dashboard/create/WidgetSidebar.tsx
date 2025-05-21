@@ -1,5 +1,4 @@
 "use client";
-import { getWidgetInfoById } from "@/lib/widgets";
 import { AddCoin } from "./AddCoin";
 import { useWidgetsStore } from "@/store/widgets.store";
 import { WidgetTemplate } from "@/app/dashboard/create/[id]/page";
@@ -33,10 +32,6 @@ export function WidgetsSidebar({
         showLegend: false,
       },
     });
-
-    console.log(
-      `Nuevo Widget '${getWidgetInfoById(widget.id)}' añadido al dashboard.`
-    );
   };
   return (
     <aside
