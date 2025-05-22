@@ -1,4 +1,3 @@
-// components/dashboard/create/DashboardCanvas.tsx
 "use client";
 import { EmptyWidget } from "@/components/empty/WidgetEmpty";
 import { PriceChart } from "@/components/graphics/PriceChart";
@@ -6,9 +5,9 @@ import { VolumeChart } from "@/components/graphics/VolumeChart";
 import { MetricCard } from "@/components/MetricCard";
 import { TopCoins } from "@/components/tables/TopCoins";
 import { useWidgetsStore } from "@/store/widgets.store";
-import type { DashboardWidgetData } from "@/store/widgets.store"; // Importa la interfaz correcta
+import type { DashboardWidgetData } from "@/store/widgets.store"; 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useRef } from "react"; // Necesitas useEffect
+import { useEffect, useRef } from "react"; 
 import { WidthProvider } from "react-grid-layout";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
@@ -22,20 +21,20 @@ const ResponsiveGridLayout = WidthProvider(GridLayout);
 export const DashboardCanvas = ({
   initialWidgets,
 }: {
-  initialWidgets?: DashboardWidgetData[]; // Puede ser opcional si el dashboard está vacío
+  initialWidgets?: DashboardWidgetData[]; 
 }) => {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const widgets = useWidgetsStore((state) => state.widgets);
-  const setWidgets = useWidgetsStore((state) => state.setWidgets); // Para inicializar el store
+  const setWidgets = useWidgetsStore((state) => state.setWidgets); 
   const clientQuery = new QueryClient();
   const updateWidgetsLayout = useWidgetsStore(
     (state) => state.updateWidgetsLayout
   );
 
-  // Usa useEffect para inicializar el store de Zustand con los widgets cargados desde el servidor
+
+  console.log(initialWidgets)
+
   useEffect(() => {
-    // Solo inicializa si el store de Zustand está vacío y hay widgets iniciales
-    // (o si quieres re-inicializar si cambian, lo cual es menos común para el estado inicial)
     if (initialWidgets && initialWidgets.length > 0 && widgets.length === 0) {
       setWidgets(initialWidgets);
     } else if (
@@ -43,8 +42,6 @@ export const DashboardCanvas = ({
       initialWidgets.length === 0 &&
       widgets.length > 0
     ) {
-      // Si el servidor dice que no hay widgets pero Zustand sí, resetea Zustand.
-      // Esto es crucial para un dashboard "vacío" o recién creado.
       setWidgets([]);
     }
   }, [initialWidgets, setWidgets, widgets.length]);
@@ -52,7 +49,6 @@ export const DashboardCanvas = ({
   const handleLayoutChange = (newLayout: any[]) => {
     const updatedWidgets: DashboardWidgetData[] = newLayout.map((item: any) => {
       const originalWidget = widgets.find((w) => w.id === item.i);
-      // Asegúrate de preservar todas las propiedades originales (widgetId, types, instanceConfig)
       return {
         ...originalWidget,
         id: item.i,
@@ -96,14 +92,11 @@ export const DashboardCanvas = ({
             >
               {widgets.map((widgetInstance) => {
                 let WidgetComponent;
-
                 // Ahora usas widgetInstance.types para el renderizado
                 if (widgetInstance.types.includes("price-chart")) {
                   WidgetComponent = PriceChart;
                 } else if (widgetInstance.types.includes("volume-chart")) {
                   WidgetComponent = VolumeChart;
-                } else if (widgetInstance.types.includes("metric-card")) {
-                  WidgetComponent = MetricCard;
                 } else if (widgetInstance.types.includes("top-coins")) {
                   WidgetComponent = TopCoins;
                 } else {
@@ -128,12 +121,7 @@ export const DashboardCanvas = ({
                     className="relative w-full h-full"
                   >
                     <WidgetComponent
-                      // Asegúrate de que los componentes de widget esperan 'instanceConfig'
-                      // o mapea 'instanceConfig' a 'config' si tus componentes lo esperan así.
-                      config={widgetInstance.instanceConfig}
-                      title={widgetInstance.instanceConfig?.title}
-                      value={widgetInstance.instanceConfig?.value}
-                      icon={widgetInstance.instanceConfig?.icon}
+                      id={widgetInstance.id}
                     />
                   </div>
                 );
