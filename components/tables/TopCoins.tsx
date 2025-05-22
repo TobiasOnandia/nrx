@@ -1,13 +1,16 @@
-import { ArrowDown, ArrowUp, Eye, EyeOff } from "lucide-react";
+import { ArrowDown, ArrowUp, Eye, EyeOff, X } from "lucide-react";
 import { useCoinMarketStore } from "@/store/coinmarket.store";
 import { useQuery } from "@tanstack/react-query";
 import { coinMarket } from "@/app/actions/coinMarket";
 import {  useSearchParams } from "next/navigation";
+import { useWidgetsStore } from "@/store/widgets.store";
 
-export const TopCoins = () => {
+export const TopCoins = ({id}: {id: string}) => {
   const selectedCoin = useCoinMarketStore((state) => state.selectedCoin);
   const searchParams = useSearchParams()
   const query = searchParams.get("search")
+
+  const removeWidget = useWidgetsStore((state) => state.removeWidget)
 
   const setSelectedCoin = useCoinMarketStore((state) => state.setSelectedCoin);
   const { data, isLoading, error } = useQuery({
@@ -44,6 +47,10 @@ export const TopCoins = () => {
           <th className="px-6 py-4 text-right">Price</th>
           <th className="px-6 py-4 text-right">24h Change</th>
           <th className="px-6 py-4 text-right">Market Cap</th>
+          <th className="px-6 py-4 text-right">
+            <button onClick={() => removeWidget(id)}><X/></button>
+          </th>
+
         </tr>
       </thead>
       <tbody>
