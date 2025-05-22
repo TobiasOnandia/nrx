@@ -15,6 +15,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useCoinMarketStore } from "@/store/coinmarket.store";
 import { coinMarketHistory } from "@/app/actions/coinMarket";
+import { X } from "lucide-react";
+import { useWidgetsStore } from "@/store/widgets.store";
 
 Chart.register(
   CategoryScale,
@@ -40,22 +42,20 @@ interface VolumeChartConfig {
   cryptocurrencies: string[];
 }
 
-interface VolumeChartProps {
-  config: VolumeChartConfig;
-}
+
 
 const getDaysFromLabel = (label: TimeFrameLabel): number => {
   return TIME_FRAME_OPTIONS.find(opt => opt.label === label)?.days || 1;
 };
 
-export const VolumeChart = ({ config }: VolumeChartProps) => {
-  const [timeRange, setTimeRange] = useState(() => getDaysFromLabel(config.timeFrame));
+export const VolumeChart = ({id}: {id: string}) => {
+  const [timeRange, setTimeRange] = useState(() => getDaysFromLabel("1M"));
   const selectedCoin = useCoinMarketStore((state) => state.selectedCoin);
-
+  const removeWidget = useWidgetsStore(state => state.removeWidget)
   const { data: coinVolume, isLoading, error } = useQuery({
     queryKey: ["volume-coin", timeRange, selectedCoin],
     queryFn: () => coinMarketHistory(timeRange, selectedCoin),
-    enabled: !!selectedCoin, // Only run query if a coin is selected
+    enabled: !!selectedCoin,
   });
 
   const renderContent = () => {
@@ -76,7 +76,7 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
     }
 
     if (error || !coinVolume?.success) {
-      const apiErrorMessage = (coinVolume as any)?.message; // Attempt to get message from API response if success is false
+      const apiErrorMessage = (coinVolume as any)?.message; 
       const errorMessage = (error as Error)?.message || apiErrorMessage || "Error al cargar datos históricos.";
       return (
         <div className="flex items-center justify-center h-full">
@@ -85,7 +85,6 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
       );
     }
     
-    // Assuming coinVolume.data.total_volumes is an array of [timestamp, volume]
     const chartDataPoints = coinVolume.data?.total_volumes;
 
     if (!chartDataPoints || chartDataPoints.length === 0) {
@@ -101,13 +100,12 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
         new Date(d[0]).toLocaleDateString("es-ES", {
           day: "numeric",
           month: "short",
-          // Only show hour for 24H view or if data is granular enough
           ...(timeRange === 1 && { hour: "2-digit" }), 
         })
       ),
       datasets: [
         {
-          label: "Volumen", // Simplified label
+          label: "Volumen",
           data: chartDataPoints.map((d: [number, number]) => d[1]),
           backgroundColor: (context: ScriptableContext<"bar">) => {
             const ctx = context.chart.ctx;
@@ -132,14 +130,13 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
           display: false,
         },
         tooltip: {
-          backgroundColor: "#1F2937", // gray-800
-          titleColor: "#E5E7EB",    // gray-200
-          bodyColor: "#D1D5DB",     // gray-300
-          borderColor: "#374151",   // gray-700
+          backgroundColor: "#1F2937", 
+          titleColor: "#E5E7EB",    
+          bodyColor: "#D1D5DB",     
+          borderColor: "#374151",   
           borderWidth: 1,
           callbacks: {
             title: (tooltipItems: TooltipItem<"bar">[]) => {
-              // chartDataPoints is guaranteed to be populated here
               const item = tooltipItems[0];
               if (!chartDataPoints || !chartDataPoints[item.dataIndex]) return '';
               const date = new Date(chartDataPoints[item.dataIndex][0]);
@@ -163,18 +160,18 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
             display: false,
           },
           ticks: {
-            color: "#9CA3AF", // gray-400
+            color: "#9CA3AF", 
             maxRotation: 0,
             autoSkip: true,
-            maxTicksLimit: timeRange === 1 ? 12 : 7, // More ticks for 24h view
+            maxTicksLimit: timeRange === 1 ? 12 : 7, 
           },
         },
         y: {
           grid: {
-            color: "#374151", // gray-700
+            color: "#374151",
           },
           ticks: {
-            color: "#9CA3AF", // gray-400
+            color: "#9CA3AF",
             callback: (value: string | number) => `$${(Number(value) / 1000).toFixed(0)}K`,
           },
         },
@@ -182,8 +179,8 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
     };
 
     return (
-      <div className="relative h-64"> {/* Chart container with fixed height */}
-        <Bar data={dataForChart} options={optionsForChart as any} /> {/* Added 'as any' for options due to complex Chart.js types */}
+      <div className="relative h-64">
+        <Bar data={dataForChart} options={optionsForChart as any} /> 
       </div>
     );
   };
@@ -194,6 +191,7 @@ export const VolumeChart = ({ config }: VolumeChartProps) => {
         <h5 className="text-xl font-bold text-purple-300 mb-2 sm:mb-0">
           Volumen de Mercado {selectedCoin ? `(${selectedCoin.charAt(0).toUpperCase() + selectedCoin.slice(1)})` : ''}
         </h5>
+        <button onClick={() => removeWidget(id)}><X /> </button>
         <div className="flex space-x-1 sm:space-x-2">
           {TIME_FRAME_OPTIONS.map((option) => (
             <button

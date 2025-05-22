@@ -4,18 +4,19 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Line } from "react-chartjs-2";
 import { useCoinMarketStore } from "@/store/coinmarket.store";
-
-// --- ¡Inicio de la solución! ---
-// Importa y registra los elementos necesarios de Chart.js
 import {
   Chart as ChartJS,
-  CategoryScale, // Para el eje X con etiquetas de categoría (tus fechas/horas)
-  LinearScale, // Para el eje Y con valores numéricos (tus precios)
-  PointElement, // Para los puntos de datos en la línea
-  LineElement, // Para la línea del gráfico
-  Tooltip, // Para los tooltips al pasar el ratón
-  Legend, // Si alguna vez quieres mostrar una leyenda (aunque la tienes en display: false)
+  CategoryScale,
+  LinearScale, 
+  PointElement, 
+  LineElement, 
+  Tooltip,
+  Legend, 
 } from "chart.js";
+import { X } from "lucide-react";
+import { useWidgetsStore } from "@/store/widgets.store";
+import { DeleteWidget } from "@/app/actions/dashboard";
+import { toast } from "sonner";
 
 ChartJS.register(
   CategoryScale,
@@ -25,11 +26,12 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-// --- ¡Fin de la solución! ---
 
-export const PriceChart = () => {
+
+export const PriceChart = ({id}:{ id: string}) => {
   const [timeRange, setTimeRange] = useState(1);
   const selectedCoin = useCoinMarketStore((state) => state.selectedCoin);
+  const removeWidget = useWidgetsStore(state => state.removeWidget)
 
   const {
     data: coinHistory,
@@ -58,10 +60,22 @@ export const PriceChart = () => {
       </div>
     );
 
+    const handleClick = async  () => {
+      const response = await DeleteWidget({id})
+      
+      if(!response.success){
+        toast.error("Failed in deleted widget", response?.message)
+      }
+
+      toast.success("Deleted widget")
+    }
+
+
   return (
     <article className="bg-gray-800 p-6 rounded-xl mb-8">
       <section className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">{selectedCoin} Price Chart</h2>
+        
         <div className="flex gap-2">
           {[1, 7, 30, 90, 365].map((range) => (
             <button
@@ -75,6 +89,8 @@ export const PriceChart = () => {
             </button>
           ))}
         </div>
+        <button onClick={handleClick} className="hover:bg-red-400 p-px cursor-pointer transition-colors rounded"><X /> </button>
+
       </section>
       <div className="h-84">
         <Line
@@ -107,15 +123,11 @@ export const PriceChart = () => {
             },
             scales: {
               x: {
-                // Asegúrate de que el tipo de escala sea reconocido
-                // Chart.js por defecto usa 'category' si no se especifica y los labels son strings
-                // O puedes especificarlo explícitamente: type: 'category',
                 grid: { color: "#374151" },
                 ticks: { color: "#9CA3AF" },
               },
               y: {
-                // También es buena práctica especificar el tipo si no es el por defecto
-                type: "linear", // O 'logarithmic' si tus datos varían mucho en magnitud
+                type: "linear", 
                 grid: { color: "#374151" },
                 ticks: { color: "#9CA3AF" },
               },
