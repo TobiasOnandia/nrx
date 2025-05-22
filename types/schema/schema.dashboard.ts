@@ -6,10 +6,26 @@ export const DashboardSchema = z.object({
     .min(2, { message: "Name must be at least 2 characters long" }),
 });
 
+export const WidgetDeleteSchema = z.object({
+  id: z.string().uuid()
+})
+
+export type ResponseDeleteWidget = {
+  success: boolean;
+  message: string;
+  dashboard?: CreatedDashboard;
+  errors?: z.ZodError<
+    z.infer<typeof WidgetDeleteSchema>
+  >["formErrors"]["fieldErrors"];
+};
+
+
 export const DashboardWidgetSchema = z.object({
   dashboardId: z.string(),
   widgetId: z.string(),
 });
+
+
 
 export type CreatedDashboard = {
   id: string;
