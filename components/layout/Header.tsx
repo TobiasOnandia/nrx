@@ -1,8 +1,8 @@
 "use client";
 import { Search } from "lucide-react";
-import { ProfileDropdown } from "@/components/auh/ProfileDropwon";
 import { useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
+import { Session } from "../auth/Session";
 export const Header = () => {
   const searchParams = new URLSearchParams();
   const router = useRouter();
@@ -26,7 +26,7 @@ export const Header = () => {
           href="/"
           className="text-gray-300 hover:text-emerald-500 transition-colors"
         >
-          Portfolio
+          Home
         </a>
       </nav>
       <a href="/dashboard">Dashboard</a>
@@ -41,8 +41,9 @@ export const Header = () => {
         />
         <Search className="absolute left-2 top-1.5 text-gray-400" />
       </label>
-
-      <ProfileDropdown />
+      <div>
+        <Session />
+      </div>
     </header>
   );
 };
