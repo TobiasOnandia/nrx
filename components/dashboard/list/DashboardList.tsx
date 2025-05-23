@@ -1,6 +1,6 @@
 "use client";
 import { Check, Edit2, Plus, Trash } from "lucide-react";
-import { createDashboard } from "@/app/actions/dashboard";
+import { createDashboard, deleteDashboard } from "@/app/actions/dashboard";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Dashboard, DashboardWidget } from "@/app/generated/prisma";
@@ -33,6 +33,19 @@ export const DashboardList = ({
 
     router.push(`/dashboard/create/${response.dashboard.id}`);
     toast.success("Dashboard created successfully");
+  };
+
+  const handleDeleteDashboard = async (dashboardId: string) => {
+    const response = await deleteDashboard({ id: dashboardId });
+    console.log(dashboardId);
+    if (!response.success) {
+      console.error("Failed to delete dashboard: ", response.message);
+      toast.error(response.message);
+      return;
+    }
+
+    toast.success("Dashboard deleted successfully");
+    router.refresh();
   };
 
   return (
@@ -105,6 +118,7 @@ export const DashboardList = ({
                 <Check className="w-4 h-4" />
               </button>
               <button
+                onClick={() => handleDeleteDashboard(dashboard.id)}
                 className="p-2 cursor-pointer bg-red-600 hover:bg-red-500 rounded-lg"
                 title="Delete"
                 aria-label={`Delete dashboard ${dashboard.name}`}

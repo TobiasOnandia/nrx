@@ -57,9 +57,9 @@ model Dashboard {
 model DashboardWidget {
   id             String    @id @default(uuid())
   dashboardId    String
-  dashboard      Dashboard @relation(fields: [dashboardId], references: [id])
+  dashboard      Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
   widgetId       String
-  widget         Widget    @relation(fields: [widgetId], references: [id])
+  widget         Widget    @relation(fields: [widgetId], references: [id], onDelete: Cascade)
   x              Int
   y              Int
   w              Int

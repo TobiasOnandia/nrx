@@ -171,3 +171,56 @@ export async function DeleteWidget(
     };
   }
 }
+
+export async function deleteDashboard(request: { id: string }) {
+  const validationResult = validateAndExtract(WidgetDeleteSchema, request);
+
+  if (!validationResult.success) {
+    return {
+      success: false,
+      message: validationResult.message,
+      errors: validationResult.errors,
+    };
+  }
+
+  const { id: dashboardId } = validationResult.data;
+
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return {
+      success: false,
+      message: "User not found",
+    };
+  }
+
+  const userId = currentUser.id;
+
+  const isOwner = await verifyDashboardOwnership(dashboardId, userId);
+  if (!isOwner) {
+    return {
+      success: false,
+      message: "Dashboard not found or not owned by user",
+    };
+  }
+
+  try {
+    await prisma.dashboard.delete({
+      where: { id: dashboardId },
+    });
+
+    revalidatePath(`/dashboard/${dashboardId}`);
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      message: "Dashboard deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting dashboard: ", error);
+    return {
+      success: false,
+      message: "An error occurred while deleting dashboard",
+    };
+  }
+}
