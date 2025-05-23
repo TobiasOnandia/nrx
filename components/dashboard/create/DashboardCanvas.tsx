@@ -5,9 +5,9 @@ import { VolumeChart } from "@/components/graphics/VolumeChart";
 import { MetricCard } from "@/components/MetricCard";
 import { TopCoins } from "@/components/tables/TopCoins";
 import { useWidgetsStore } from "@/store/widgets.store";
-import type { DashboardWidgetData } from "@/store/widgets.store"; 
+import type { DashboardWidgetData } from "@/store/widgets.store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useRef } from "react"; 
+import { useEffect, useRef } from "react";
 import { WidthProvider } from "react-grid-layout";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
@@ -17,22 +17,19 @@ const GRID_COLS = 12;
 const ROW_HEIGHT_PX = 30;
 
 const ResponsiveGridLayout = WidthProvider(GridLayout);
+const clientQuery = new QueryClient();
 
 export const DashboardCanvas = ({
   initialWidgets,
 }: {
-  initialWidgets?: DashboardWidgetData[]; 
+  initialWidgets?: DashboardWidgetData[];
 }) => {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const widgets = useWidgetsStore((state) => state.widgets);
-  const setWidgets = useWidgetsStore((state) => state.setWidgets); 
-  const clientQuery = new QueryClient();
+  const setWidgets = useWidgetsStore((state) => state.setWidgets);
   const updateWidgetsLayout = useWidgetsStore(
     (state) => state.updateWidgetsLayout
   );
-
-
-  console.log(initialWidgets)
 
   useEffect(() => {
     if (initialWidgets && initialWidgets.length > 0 && widgets.length === 0) {
@@ -120,9 +117,7 @@ export const DashboardCanvas = ({
                     }}
                     className="relative w-full h-full"
                   >
-                    <WidgetComponent
-                      id={widgetInstance.id}
-                    />
+                    <WidgetComponent id={widgetInstance.id} />
                   </div>
                 );
               })}

@@ -3,14 +3,14 @@ import { Bar } from "react-chartjs-2";
 import {
   TooltipItem,
   ScriptableContext,
-   CategoryScale,
+  CategoryScale,
   LinearScale,
   BarElement,
   Title,
   Tooltip,
   Legend,
   TimeScale,
-  Chart
+  Chart,
 } from "chart.js";
 import { useQuery } from "@tanstack/react-query";
 import { useCoinMarketStore } from "@/store/coinmarket.store";
@@ -35,24 +35,26 @@ const TIME_FRAME_OPTIONS = [
   { label: "1Y", days: 365 },
 ] as const;
 
-type TimeFrameLabel = typeof TIME_FRAME_OPTIONS[number]['label'];
+type TimeFrameLabel = (typeof TIME_FRAME_OPTIONS)[number]["label"];
 
 interface VolumeChartConfig {
   timeFrame: TimeFrameLabel;
   cryptocurrencies: string[];
 }
 
-
-
 const getDaysFromLabel = (label: TimeFrameLabel): number => {
-  return TIME_FRAME_OPTIONS.find(opt => opt.label === label)?.days || 1;
+  return TIME_FRAME_OPTIONS.find((opt) => opt.label === label)?.days || 1;
 };
 
-export const VolumeChart = ({id}: {id: string}) => {
+export const VolumeChart = ({ id }: { id: string }) => {
   const [timeRange, setTimeRange] = useState(() => getDaysFromLabel("1M"));
   const selectedCoin = useCoinMarketStore((state) => state.selectedCoin);
-  const removeWidget = useWidgetsStore(state => state.removeWidget)
-  const { data: coinVolume, isLoading, error } = useQuery({
+  const removeWidget = useWidgetsStore((state) => state.removeWidget);
+  const {
+    data: coinVolume,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["volume-coin", timeRange, selectedCoin],
     queryFn: () => coinMarketHistory(timeRange, selectedCoin),
     enabled: !!selectedCoin,
@@ -62,7 +64,9 @@ export const VolumeChart = ({id}: {id: string}) => {
     if (!selectedCoin) {
       return (
         <div className="flex items-center justify-center h-full">
-          <p className="text-gray-400">Selecciona una moneda para ver el volumen.</p>
+          <p className="text-gray-400">
+            Selecciona una moneda para ver el volumen.
+          </p>
         </div>
       );
     }
@@ -76,21 +80,27 @@ export const VolumeChart = ({id}: {id: string}) => {
     }
 
     if (error || !coinVolume?.success) {
-      const apiErrorMessage = (coinVolume as any)?.message; 
-      const errorMessage = (error as Error)?.message || apiErrorMessage || "Error al cargar datos históricos.";
+      const apiErrorMessage = (coinVolume as any)?.message;
+      const errorMessage =
+        (error as Error)?.message ||
+        apiErrorMessage ||
+        "Error al cargar datos históricos.";
       return (
         <div className="flex items-center justify-center h-full">
           <p className="text-red-500">{errorMessage}</p>
         </div>
       );
     }
-    
+
     const chartDataPoints = coinVolume.data?.total_volumes;
 
     if (!chartDataPoints || chartDataPoints.length === 0) {
       return (
         <div className="flex items-center justify-center h-full">
-          <span className="text-gray-400">No hay datos de volumen disponibles para el período y moneda seleccionados.</span>
+          <span className="text-gray-400">
+            No hay datos de volumen disponibles para el período y moneda
+            seleccionados.
+          </span>
         </div>
       );
     }
@@ -100,7 +110,7 @@ export const VolumeChart = ({id}: {id: string}) => {
         new Date(d[0]).toLocaleDateString("es-ES", {
           day: "numeric",
           month: "short",
-          ...(timeRange === 1 && { hour: "2-digit" }), 
+          ...(timeRange === 1 && { hour: "2-digit" }),
         })
       ),
       datasets: [
@@ -109,7 +119,12 @@ export const VolumeChart = ({id}: {id: string}) => {
           data: chartDataPoints.map((d: [number, number]) => d[1]),
           backgroundColor: (context: ScriptableContext<"bar">) => {
             const ctx = context.chart.ctx;
-            const gradient = ctx.createLinearGradient(0, 0, 0, context.chart.height || 400); // Use chart height
+            const gradient = ctx.createLinearGradient(
+              0,
+              0,
+              0,
+              context.chart.height || 400
+            ); // Use chart height
             gradient.addColorStop(0, "rgba(124, 58, 237, 0.8)");
             gradient.addColorStop(1, "rgba(124, 58, 237, 0.2)");
             return gradient;
@@ -130,15 +145,16 @@ export const VolumeChart = ({id}: {id: string}) => {
           display: false,
         },
         tooltip: {
-          backgroundColor: "#1F2937", 
-          titleColor: "#E5E7EB",    
-          bodyColor: "#D1D5DB",     
-          borderColor: "#374151",   
+          backgroundColor: "#1F2937",
+          titleColor: "#E5E7EB",
+          bodyColor: "#D1D5DB",
+          borderColor: "#374151",
           borderWidth: 1,
           callbacks: {
             title: (tooltipItems: TooltipItem<"bar">[]) => {
               const item = tooltipItems[0];
-              if (!chartDataPoints || !chartDataPoints[item.dataIndex]) return '';
+              if (!chartDataPoints || !chartDataPoints[item.dataIndex])
+                return "";
               const date = new Date(chartDataPoints[item.dataIndex][0]);
               return date.toLocaleString("es-ES", {
                 weekday: "long",
@@ -160,10 +176,10 @@ export const VolumeChart = ({id}: {id: string}) => {
             display: false,
           },
           ticks: {
-            color: "#9CA3AF", 
+            color: "#9CA3AF",
             maxRotation: 0,
             autoSkip: true,
-            maxTicksLimit: timeRange === 1 ? 12 : 7, 
+            maxTicksLimit: timeRange === 1 ? 12 : 7,
           },
         },
         y: {
@@ -172,26 +188,32 @@ export const VolumeChart = ({id}: {id: string}) => {
           },
           ticks: {
             color: "#9CA3AF",
-            callback: (value: string | number) => `$${(Number(value) / 1000).toFixed(0)}K`,
+            callback: (value: string | number) =>
+              `$${(Number(value) / 1000).toFixed(0)}K`,
           },
         },
       },
     };
 
     return (
-      <div className="relative h-64">
-        <Bar data={dataForChart} options={optionsForChart as any} /> 
+      <div className="relative h-full flex-grow">
+        <Bar data={dataForChart} options={optionsForChart as any} />
       </div>
     );
   };
 
   return (
-    <article className="h-full p-4 bg-gray-800 rounded-lg flex flex-col text-white">
+    <article className="h-full  p-4 bg-gray-800 rounded-xl flex flex-col text-white">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
         <h5 className="text-xl font-bold text-purple-300 mb-2 sm:mb-0">
-          Volumen de Mercado {selectedCoin ? `(${selectedCoin.charAt(0).toUpperCase() + selectedCoin.slice(1)})` : ''}
+          Volumen de Mercado{" "}
+          {selectedCoin
+            ? `(${
+                selectedCoin.charAt(0).toUpperCase() + selectedCoin.slice(1)
+              })`
+            : ""}
         </h5>
-        <button onClick={() => removeWidget(id)}><X /> </button>
+
         <div className="flex space-x-1 sm:space-x-2">
           {TIME_FRAME_OPTIONS.map((option) => (
             <button
@@ -207,12 +229,11 @@ export const VolumeChart = ({id}: {id: string}) => {
             </button>
           ))}
         </div>
+        <button onClick={() => removeWidget(id)}>
+          <X />
+        </button>
       </header>
-      <div className="flex-grow min-h-0"> {/* Ensure this container can shrink and grow */}
-        {renderContent()}
-      </div>
+      <div className="flex-grow h-full">{renderContent()}</div>
     </article>
   );
 };
-
-
