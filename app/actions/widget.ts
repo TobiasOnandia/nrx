@@ -48,19 +48,17 @@ export async function saveDashboardLayout(
     };
   }
 
-  let existingWidgetIdsInDashboardWidget: string[] = [];
+  let existingDashboardWidgets: Array<{ id: string; widgetId: string }> = [];
   try {
-    existingWidgetIdsInDashboardWidget = (
-      await prisma.dashboardWidget.findMany({
-        where: { dashboardId },
-        select: { widgetId: true },
-      })
-    ).map((w) => w.widgetId);
+    existingDashboardWidgets = await prisma.dashboardWidget.findMany({
+      where: { dashboardId },
+      select: { id: true, widgetId: true },
+    });
   } catch (error) {
-    console.error("Error fetching existing DashboardWidget IDs:", error);
+    console.error("Error fetching existing DashboardWidgets:", error);
     return {
       success: false,
-      message: "Failed to fetch existing DashboardWidget IDs",
+      message: "Failed to fetch existing dashboard widgets",
     };
   }
 
@@ -71,20 +69,34 @@ export async function saveDashboardLayout(
     return { success: false, message: widgetProcessError };
   }
 
-  const incomingDashboardWidgetData = widgets.map((w) => ({
-    widgetId: templateIdToWidgetIdMap.get(w.id)!,
-    dashboardId: dashboardId,
-    x: w.x,
-    y: w.y,
-    w: w.w,
-    h: w.h,
-    instanceConfig: w.config,
-  }));
+  const incomingDashboardWidgetData = [];
+  for (const widget of widgets) {
+    const mappedWidgetId = templateIdToWidgetIdMap.get(widget.id);
+    if (!mappedWidgetId) {
+      console.error(
+        `No se encontró widgetId para el widget con id ${widget.id}`
+      );
+      return {
+        success: false,
+        message: `Error al procesar widget: no se pudo encontrar o crear el widget correspondiente`,
+      };
+    }
+
+    incomingDashboardWidgetData.push({
+      widgetId: mappedWidgetId,
+      dashboardId: dashboardId,
+      x: widget.x,
+      y: widget.y,
+      w: widget.w,
+      h: widget.h,
+      instanceConfig: widget.config,
+    });
+  }
 
   const operations = prepareDashboardWidgetOperations(
     dashboardId,
     incomingDashboardWidgetData,
-    existingWidgetIdsInDashboardWidget
+    existingDashboardWidgets
   );
 
   try {

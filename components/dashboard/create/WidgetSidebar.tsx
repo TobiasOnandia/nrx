@@ -13,18 +13,23 @@ export function WidgetsSidebar({
 }) {
   const addWidget = useWidgetsStore((state) => state.addWidget);
   const handleAddWidget = (widget: WidgetTemplate) => {
-    console.log(widget.id);
+    console.log("Añadiendo widget de plantilla:", widget.id);
     let newX = 0;
     let newY = 0;
 
+    // Generar un ID único para este widget del dashboard
+    const dashboardWidgetId = crypto.randomUUID();
+
     addWidget({
-      id: widget.id,
+      id: dashboardWidgetId,
+      widgetId: "",
+      widgetTemplateId: widget.id,
       types: [widget.types?.[0] as string],
       x: newX,
       y: newY,
       w: DEFAULT_WIDGET_GRID_W,
       h: DEFAULT_WIDGET_GRID_H,
-      config: {
+      instanceConfig: {
         chartType: "Lineal",
         coinId: "bitcoin",
         timeRange: "24h",

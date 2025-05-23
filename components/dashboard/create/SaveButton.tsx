@@ -21,6 +21,8 @@ export const SaveButton = () => {
     const widgetsToSave = widgets.map((widget) => {
       return {
         id: widget.id,
+        widgetId: widget.widgetId,
+        widgetTemplateId: widget.widgetTemplateId,
         x: widget.x,
         y: widget.y,
         w: widget.w,

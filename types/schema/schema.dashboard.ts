@@ -58,6 +58,8 @@ export type ResponseDashboardWidget = {
 
 export const WidgetDataSchema = z.object({
   id: z.string().uuid(),
+  widgetId: z.string().optional(),
+  widgetTemplateId: z.string().optional(),
   x: z.number().int().min(0),
   y: z.number().int().min(0),
   w: z.number().int().min(1),
