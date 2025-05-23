@@ -5,10 +5,13 @@ import prisma from "@/lib/prisma";
 import {
   DashboardSchema,
   ResponseCreateDashboard,
+  ResponseDeleteWidget,
   SaveDashboardLayoutRequestSchema,
+  WidgetDeleteSchema,
 } from "@/types/schema/schema.dashboard";
 import { verifyDashboardOwnership } from "@/utils/dashboardUtils";
 import { validateAndExtract } from "@/utils/validationUtils";
+import { revalidatePath } from "next/cache";
 
 export async function createDashboard(request: {
   name: string;
@@ -93,6 +96,78 @@ export async function addWidgetToDashboard(request: {
     return {
       success: false,
       message: "Dashboard not found or not owned by user",
+    };
+  }
+}
+
+export async function DeleteWidget(
+  request: { id: string } // id debe ser el ID de la instancia de DashboardWidget
+): Promise<ResponseDeleteWidget> {
+  const validationResult = validateAndExtract(WidgetDeleteSchema, request);
+
+  if (!validationResult.success) {
+    return {
+      success: false,
+      message: validationResult.message,
+      errors: validationResult.errors,
+    };
+  }
+
+  const dashboardWidgetInstanceId = validationResult.data.id;
+
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return {
+      success: false,
+      message: "Autenticación requerida. Usuario no encontrado.",
+    };
+  }
+  const userId = currentUser.id;
+
+  try {
+    const dashboardWidgetToDelete = await prisma.dashboardWidget.findUnique({
+      where: { id: dashboardWidgetInstanceId },
+      select: { dashboardId: true, widgetId: true },
+    });
+
+    if (!dashboardWidgetToDelete) {
+      return {
+        success: false,
+        message:
+          "El widget especificado no se encontró en el layout del dashboard.",
+      };
+    }
+
+    const isOwnerOfDashboard = await verifyDashboardOwnership(
+      dashboardWidgetToDelete.dashboardId,
+      userId
+    );
+
+    if (!isOwnerOfDashboard) {
+      return {
+        success: false,
+        message:
+          "No autorizado: Dashboard no encontrado o no pertenece al usuario.",
+      };
+    }
+
+    await prisma.dashboardWidget.delete({
+      where: { id: dashboardWidgetInstanceId },
+    });
+
+    revalidatePath(`/dashboard/${dashboardWidgetToDelete.dashboardId}`);
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      message: "Widget removido del dashboard exitosamente.",
+    };
+  } catch (error: any) {
+    console.error("Error al remover widget del dashboard: ", error);
+    return {
+      success: false,
+      message: "Ocurrió un error al remover el widget del dashboard.",
     };
   }
 }
