@@ -73,12 +73,10 @@ export async function saveDashboardLayout(
   for (const widget of widgets) {
     const mappedWidgetId = templateIdToWidgetIdMap.get(widget.id);
     if (!mappedWidgetId) {
-      console.error(
-        `No se encontró widgetId para el widget con id ${widget.id}`
-      );
+      console.error(`Not found widgetId for widget with id ${widget.id}`);
       return {
         success: false,
-        message: `Error al procesar widget: no se pudo encontrar o crear el widget correspondiente`,
+        message: `Error processing widget: could not find or create the corresponding widget`,
       };
     }
 

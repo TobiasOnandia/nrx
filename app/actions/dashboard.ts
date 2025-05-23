@@ -100,9 +100,9 @@ export async function addWidgetToDashboard(request: {
   }
 }
 
-export async function DeleteWidget(
-  request: { id: string } // id debe ser el ID de la instancia de DashboardWidget
-): Promise<ResponseDeleteWidget> {
+export async function DeleteWidget(request: {
+  id: string;
+}): Promise<ResponseDeleteWidget> {
   const validationResult = validateAndExtract(WidgetDeleteSchema, request);
 
   if (!validationResult.success) {

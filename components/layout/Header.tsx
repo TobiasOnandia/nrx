@@ -29,7 +29,7 @@ export const Header = () => {
           Portfolio
         </a>
       </nav>
-      <a href="/dashboard">Create Dashboard</a>
+      <a href="/dashboard">Dashboard</a>
       <label className="relative">
         <input
           type="search"
