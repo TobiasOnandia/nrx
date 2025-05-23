@@ -72,7 +72,7 @@ export const PriceChart = ({ id }: { id: string }) => {
   };
 
   return (
-    <article className="bg-gray-800 p-6 flex flex-col h-full min-h-[650px]  rounded-xl mb-8">
+    <article className="bg-gray-800 p-6 flex flex-col h-full   rounded-xl mb-8">
       <section className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">{selectedCoin} Price Chart</h2>
 
