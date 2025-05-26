@@ -94,9 +94,9 @@ export const CryptoDashboard = () => {
           icon={<Star className="text-3xl text-emerald-500" />}
         />
       </section>
-      <PriceChart />
+      <PriceChart id="price-chart"/>
 
-      <TopCoins />
+      <TopCoins id="top-coins"/>
     </main>
   );
 };
