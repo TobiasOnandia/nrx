@@ -1,7 +1,7 @@
-import { DashboardCanvas } from "@/components/dashboard/create/DashboardCanvas";
-import { WidgetsSidebar } from "@/components/dashboard/create/WidgetSidebar";
-import { SaveButton } from "@/components/dashboard/create/SaveButton";
-import prisma from "@/lib/prisma";
+import { DashboardCanvas } from '@/components/dashboard/create/DashboardCanvas';
+import { WidgetsSidebar } from '@/components/dashboard/create/WidgetSidebar';
+import { SaveButton } from '@/components/dashboard/create/SaveButton';
+import prisma from '@/lib/prisma';
 
 export default async function DashboardCustomizerPage() {
   const availableWidgets = await prisma.widgetTemplates.findMany();
