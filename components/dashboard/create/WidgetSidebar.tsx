@@ -1,6 +1,6 @@
-"use client";
-import { WidgetTemplateData } from "@/types/widgets/widgets.types";
-import { useWidgetsStore } from "@/store/widgets.store";
+'use client';
+import { WidgetTemplateData } from '@/types/widgets/widgets.types';
+import { useWidgetsStore } from '@/store/widgets.store';
 
 const DEFAULT_WIDGET_GRID_W = 4;
 const DEFAULT_WIDGET_GRID_H = 6;
@@ -12,7 +12,7 @@ export function WidgetsSidebar({
 }) {
   const addWidget = useWidgetsStore((state) => state.addWidget);
   const handleAddWidget = (widget: WidgetTemplateData) => {
-    console.log("Añadiendo widget de plantilla:", widget.id);
+    console.log('Añadiendo widget de plantilla:', widget.id);
     const newX = 0;
     const newY = 0;
 
@@ -20,7 +20,7 @@ export function WidgetsSidebar({
 
     addWidget({
       id: dashboardWidgetId,
-      widgetId: "",
+      widgetId: '',
       widgetTemplateId: widget.id,
       types: [widget.types?.[0] as string],
       x: newX,
@@ -28,9 +28,9 @@ export function WidgetsSidebar({
       w: DEFAULT_WIDGET_GRID_W,
       h: DEFAULT_WIDGET_GRID_H,
       instanceConfig: {
-        chartType: "Lineal",
-        coinId: "bitcoin",
-        timeRange: "24h",
+        chartType: 'Lineal',
+        coinId: 'bitcoin',
+        timeRange: '24h',
         showGrid: true,
         showLegend: false,
       },

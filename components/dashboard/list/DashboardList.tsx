@@ -1,10 +1,10 @@
-"use client";
-import { Edit2, Plus } from "lucide-react";
-import { Dashboard, DashboardWidget } from "@/app/generated/prisma";
-import { ButtonDelete } from "@/components/dashboard-actions/ButtonDelete";
-import { ButtonUse } from "@/components/dashboard-actions/ButtonUse";
-import { ButtonCreate } from "@/components/dashboard-actions/ButtonCreate";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+'use client';
+import { Edit2, Plus } from 'lucide-react';
+import { Dashboard, DashboardWidget } from '@/app/generated/prisma';
+import { ButtonDelete } from '@/components/dashboard-actions/ButtonDelete';
+import { ButtonUse } from '@/components/dashboard-actions/ButtonUse';
+import { ButtonCreate } from '@/components/dashboard-actions/ButtonCreate';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type DashboardWithWidgets = Dashboard & {
   dashboardWidgets: DashboardWidget[];
@@ -41,7 +41,7 @@ export const DashboardList = ({
           {dashboards.map((dashboard) => (
             <article
               key={dashboard.id}
-              className="bg-gray-800 rounded-xl p-6 border-2 border-gray-700 hover:border-emerald-500/30 transition-colors h-64 relative group"
+              className={`bg-gray-800 ${dashboard.isDefault ? 'border-emerald-500/70' : ' border-gray-700'} rounded-xl p-6 border-2 hover:border-emerald-500/30 transition-colors h-64 relative group`}
             >
               <header className="flex justify-between items-start mb-4">
                 <div>
@@ -50,7 +50,7 @@ export const DashboardList = ({
                   </h3>
                   <p className="text-sm text-gray-400">
                     Last updated:
-                    {dashboard.updateAt.toISOString().split("T")[0]}
+                    {dashboard.updateAt.toISOString().split('T')[0]}
                   </p>
                 </div>
                 <span className="text-xs bg-gray-700 px-2 py-1 rounded-full">
