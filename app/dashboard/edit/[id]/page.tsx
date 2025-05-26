@@ -73,7 +73,7 @@ export default async function DashboardEditPage({
           y: dw.y,
           w: dw.w,
           h: dw.h,
-          instanceConfig: dw.instanceConfig as Record<string, any>, // Casteo a Record<string, any> para Json
+          instanceConfig: dw.instanceConfig as Record<string, string>, // Casteo a Record<string, any> para Json
           widgetTemplateId: dw.widget.widgetTemplate.id, // Puedes añadir esto si lo necesitas en el frontend
         };
       })
