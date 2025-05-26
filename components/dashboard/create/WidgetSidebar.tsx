@@ -80,8 +80,6 @@ export function WidgetsSidebar({
           ))}
         </ul>
       </section>
-
-      <AddCoin />
     </aside>
   );
 }
