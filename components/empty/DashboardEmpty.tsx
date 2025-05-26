@@ -10,11 +10,11 @@ export const DashboardEmpty = () => {
 
       <div className="space-y-3 mb-6">
         <h3 className="text-2xl font-semibold text-gray-100 group-hover:text-white transition-colors">
-          ¡Tu espacio de análisis está listo!
+          Your analysis space is ready!
         </h3>
         <p className="text-gray-400/90 max-w-md mx-auto text-sm leading-relaxed">
-          Comienza construyendo tu panel personalizado con los indicadores y
-          gráficos más relevantes del mercado crypto.
+          Start building your personalized panel with the most relevant crypto
+          indicators and charts.
         </p>
       </div>
 
@@ -23,7 +23,7 @@ export const DashboardEmpty = () => {
         className="inline-flex items-center justify-center space-x-2 px-6 py-3 bg-emerald-600/80 hover:bg-emerald-500 text-white rounded-lg transform group-hover:-translate-y-1 transition-all shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20"
       >
         <Plus className="w-5 h-5 text-white/80 group-hover:text-white transition-colors" />
-        <span className="font-medium">Crear primer dashboard</span>
+        <span className="font-medium">Add first dashboard</span>
       </Link>
 
       <div className="absolute inset-0 pointer-events-none">

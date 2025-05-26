@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Save } from "lucide-react";
-import { useWidgetsStore } from "@/store/widgets.store";
-import { useParams, useRouter } from "next/navigation";
-import { saveDashboardLayout } from "@/app/actions/widget";
-import { toast } from "sonner";
+import { Save } from 'lucide-react';
+import { useWidgetsStore } from '@/store/widgets.store';
+import { useParams, useRouter } from 'next/navigation';
+import { saveDashboardLayout } from '@/app/actions/widget';
+import { toast } from 'sonner';
 
 export const SaveButton = () => {
   const { id } = useParams();
@@ -13,7 +13,7 @@ export const SaveButton = () => {
 
   const handleSave = async () => {
     if (!id) {
-      console.error("Dashboard ID is missing for saving.");
+      console.error('Dashboard ID is missing for saving.');
       return;
     }
 
@@ -37,14 +37,14 @@ export const SaveButton = () => {
 
     if (!response.success) {
       console.error(
-        "Failed to save dashboard:",
+        'Failed to save dashboard:',
         response.message,
-        response.errors
+        response.errors,
       );
     }
 
-    toast.success("Dashboard saved");
-    router.push("/dashboard");
+    toast.success('Dashboard saved');
+    router.push('/dashboard');
   };
 
   return (
@@ -57,7 +57,7 @@ export const SaveButton = () => {
       aria-label="Save dashboard"
     >
       <Save className="w-5 h-5 inline-block mr-2" />
-      <span>Guardar Cambios</span>
+      <span>Save Changes</span>
     </button>
   );
 };

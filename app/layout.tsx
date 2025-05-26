@@ -25,7 +25,7 @@ export default async function RootLayout({
   console.log(currentUser);
 
   return (
-    <html lang="es">
+    <html lang="en">
       <body
         className={`${satoshi.className} antialiased min-h-screen bg-gray-900`}
       >

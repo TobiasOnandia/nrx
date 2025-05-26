@@ -42,10 +42,8 @@ export function WidgetsSidebar({
       aria-label="Barra lateral de widgets y monedas"
     >
       <header className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Widgets Disponibles</h2>
-        <p className="text-sm text-gray-400">
-          Haz clic para añadir a tu dashboard
-        </p>
+        <h2 className="text-xl font-semibold mb-2">Widgets available</h2>
+        <p className="text-sm text-gray-400">Click to add to your dashboard</p>
       </header>
 
       <section aria-labelledby="widgets-list">
@@ -56,7 +54,7 @@ export function WidgetsSidebar({
                 type="button"
                 className="group w-full text-left  p-4 bg-gray-750 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors border border-gray-700 hover:border-gray-600"
                 onClick={() => handleAddWidget(widget)}
-                aria-label={`Añadir widget ${widget.title}`}
+                aria-label={`Add widget ${widget.title}`}
               >
                 <h3 className="font-medium group-hover:text-white transition-colors">
                   {widget.title}

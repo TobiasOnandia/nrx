@@ -1,9 +1,9 @@
-"use client";
-import { X } from "lucide-react";
-import { useState } from "react";
+'use client';
+import { X } from 'lucide-react';
+import { useState } from 'react';
 
 export const AddCoin = () => {
-  const [favoriteCoins] = useState(["BTC", "ETH", "SOL", "ADA"]);
+  const [favoriteCoins] = useState(['BTC', 'ETH', 'SOL', 'ADA']);
 
   return (
     <section
@@ -12,14 +12,14 @@ export const AddCoin = () => {
     >
       <header className="flex justify-between items-center mb-3">
         <h3 id="coins-section" className="font-medium">
-          Tus Monedas
+          Your Coins
         </h3>
         <button
           type="button"
           className="text-emerald-500 hover:text-emerald-400 text-sm"
-          aria-label="Añadir nueva moneda"
+          aria-label="Add new coin"
         >
-          + Añadir
+          + Add
         </button>
       </header>
       <ul role="list" className="space-y-2">
@@ -32,7 +32,7 @@ export const AddCoin = () => {
               <button
                 type="button"
                 className="text-gray-400 hover:text-white"
-                aria-label={`Eliminar ${coin} de favoritos`}
+                aria-label={`Remove ${coin} from favorites`}
               >
                 <X />
               </button>
