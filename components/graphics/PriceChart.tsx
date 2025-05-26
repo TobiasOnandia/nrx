@@ -112,7 +112,7 @@ export const PriceChart = ({ id }: { id: string }) => {
               {
                 label: selectedCoin,
                 data:
-                  coinHistory?.data?.prices?.map(([_, price]) => price) || [],
+                  coinHistory?.data?.prices?.map(([, price]) => price) || [],
                 borderColor: "#10B981",
                 tension: 0.4,
                 fill: false,

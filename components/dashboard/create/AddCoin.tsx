@@ -3,12 +3,7 @@ import { X } from "lucide-react";
 import { useState } from "react";
 
 export const AddCoin = () => {
-  const [favoriteCoins, setFavoriteCoins] = useState([
-    "BTC",
-    "ETH",
-    "SOL",
-    "ADA",
-  ]);
+  const [favoriteCoins] = useState(["BTC", "ETH", "SOL", "ADA"]);
 
   return (
     <section

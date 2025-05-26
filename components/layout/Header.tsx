@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Session } from "../auth/Session";
+import Link from "next/link";
 export const Header = () => {
   const searchParams = new URLSearchParams();
   const router = useRouter();
@@ -22,14 +23,14 @@ export const Header = () => {
   return (
     <header className="bg-gray-900 max-w-7xl mx-auto px-4 flex items-center justify-between h-16 sm:px-6 lg:px-8 ">
       <nav className="hidden md:flex gap-6">
-        <a
+        <Link
           href="/"
           className="text-gray-300 hover:text-emerald-500 transition-colors"
         >
           Home
-        </a>
+        </Link>
       </nav>
-      <a href="/dashboard">Dashboard</a>
+      <Link href="/dashboard">Dashboard</Link>
       <label className="relative">
         <input
           type="search"

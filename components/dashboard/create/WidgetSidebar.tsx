@@ -14,8 +14,8 @@ export function WidgetsSidebar({
   const addWidget = useWidgetsStore((state) => state.addWidget);
   const handleAddWidget = (widget: WidgetTemplate) => {
     console.log("Añadiendo widget de plantilla:", widget.id);
-    let newX = 0;
-    let newY = 0;
+    const newX = 0;
+    const newY = 0;
 
     // Generar un ID único para este widget del dashboard
     const dashboardWidgetId = crypto.randomUUID();

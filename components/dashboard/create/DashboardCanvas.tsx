@@ -2,7 +2,6 @@
 import { EmptyWidget } from "@/components/empty/WidgetEmpty";
 import { PriceChart } from "@/components/graphics/PriceChart";
 import { VolumeChart } from "@/components/graphics/VolumeChart";
-import { MetricCard } from "@/components/MetricCard";
 import { TopCoins } from "@/components/tables/TopCoins";
 import { useWidgetsStore } from "@/store/widgets.store";
 import type { DashboardWidgetData } from "@/store/widgets.store";
@@ -12,9 +11,28 @@ import { WidthProvider } from "react-grid-layout";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
+import { Layout } from "react-grid-layout";
 
 const GRID_COLS = 12;
 const ROW_HEIGHT_PX = 30;
+
+// Extend the Layout type from react-grid-layout to include all possible properties
+interface LayoutItem extends Layout {
+  i: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  minW?: number;
+  minH?: number;
+  maxW?: number;
+  maxH?: number;
+  static?: boolean;
+  isDraggable?: boolean;
+  isResizable?: boolean;
+  resizeHandles?: Array<'s' | 'w' | 'e' | 'n' | 'sw' | 'nw' | 'se' | 'ne'>;
+  isBounded?: boolean;
+}
 
 const ResponsiveGridLayout = WidthProvider(GridLayout);
 const clientQuery = new QueryClient();
@@ -43,8 +61,8 @@ export const DashboardCanvas = ({
     }
   }, [initialWidgets, setWidgets, widgets.length]);
 
-  const handleLayoutChange = (newLayout: any[]) => {
-    const updatedWidgets: DashboardWidgetData[] = newLayout.map((item: any) => {
+  const handleLayoutChange = (newLayout: LayoutItem[]) => {
+    const updatedWidgets: DashboardWidgetData[] = newLayout.map((item) => {
       const originalWidget = widgets.find((w) => w.id === item.i);
       return {
         ...originalWidget,

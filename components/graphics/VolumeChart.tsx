@@ -80,11 +80,8 @@ export const VolumeChart = ({ id }: { id: string }) => {
     }
 
     if (error || !coinVolume?.success) {
-      const apiErrorMessage = (coinVolume as any)?.message;
       const errorMessage =
-        (error as Error)?.message ||
-        apiErrorMessage ||
-        "Error al cargar datos históricos.";
+        (error as Error)?.message || "Error al cargar datos históricos.";
       return (
         <div className="flex items-center justify-center h-full">
           <p className="text-red-500">{errorMessage}</p>
@@ -197,7 +194,7 @@ export const VolumeChart = ({ id }: { id: string }) => {
 
     return (
       <div className="relative h-full flex-grow">
-        <Bar data={dataForChart} options={optionsForChart as any} />
+        <Bar data={dataForChart} options={optionsForChart} />
       </div>
     );
   };
