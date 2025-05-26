@@ -32,7 +32,7 @@ export async function coinMarket(): Promise<CoinMarketResponse> {
           );
           await redis.del(cacheKey);
         }
-      } catch (parseError: any) {
+      } catch (parseError) {
         console.error(
           `Failed to parse cached data for ${cacheKey}. Data might be corrupt or malformed JSON.`,
           parseError
@@ -82,7 +82,7 @@ export async function coinMarket(): Promise<CoinMarketResponse> {
       success: true,
       data: validationResult.data,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error(
       "Error in coinMarket Server Action (network or Redis client error):",
       error
@@ -90,7 +90,7 @@ export async function coinMarket(): Promise<CoinMarketResponse> {
     return {
       success: false,
       message: `An unexpected error occurred in coinMarket: ${
-        error.message || "Unknown error"
+        error || "Unknown error"
       }`,
     };
   }
@@ -177,7 +177,7 @@ export async function coinMarketHistory(
       success: true,
       data: validationResult.data,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error(
       "Error in coinMarketHistory Server Action (network or Redis client error):",
       error
@@ -185,7 +185,7 @@ export async function coinMarketHistory(
     return {
       success: false,
       message: `An unexpected error occurred in coinMarketHistory: ${
-        error.message || "Unknown error"
+        error || "Unknown error"
       }`,
     };
   }
