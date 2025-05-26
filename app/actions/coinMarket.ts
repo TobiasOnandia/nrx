@@ -122,7 +122,7 @@ export async function coinMarketHistory(
           );
           await redis.del(cacheKey);
         }
-      } catch (parseError: any) {
+      } catch (parseError) {
         console.error(
           `Failed to parse cached data for ${cacheKey}. Data might be corrupt or malformed JSON.`,
           parseError
