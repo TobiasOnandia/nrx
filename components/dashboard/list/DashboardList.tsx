@@ -3,7 +3,6 @@ import { Edit2, Plus } from 'lucide-react';
 import { Dashboard, DashboardWidget } from '@/app/generated/prisma';
 import { ButtonDelete } from '@/components/dashboard-actions/ButtonDelete';
 import { ButtonUse } from '@/components/dashboard-actions/ButtonUse';
-import { ButtonCreate } from '@/components/dashboard-actions/ButtonCreate';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { CreateDashboardDialog } from '@/components/dialog/CreateDashboardDialog';
 
