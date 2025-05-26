@@ -1,9 +1,10 @@
-import { DashboardCanvas } from "@/components/dashboard/create/DashboardCanvas";
-import prisma from "@/lib/prisma";
+import { DashboardCanvas } from '@/components/dashboard/create/DashboardCanvas';
+import { DashboardEmpty } from '@/components/empty/DashboardEmpty';
+import prisma from '@/lib/prisma';
 import {
   DashboardWidgetWithRelations,
   processDashboardWidgets,
-} from "@/utils/dashboardUtils";
+} from '@/utils/dashboardUtils';
 
 export default async function Home() {
   const defaultDashboard = await prisma.dashboard.findFirst({
@@ -24,8 +25,13 @@ export default async function Home() {
   });
 
   const initialDashboardWidgets = processDashboardWidgets(
-    (defaultDashboard?.dashboardWidgets as DashboardWidgetWithRelations[]) ?? []
+    (defaultDashboard?.dashboardWidgets as DashboardWidgetWithRelations[]) ??
+      [],
   );
+
+  if (initialDashboardWidgets.length === 0) {
+    return <DashboardEmpty />;
+  }
 
   return <DashboardCanvas initialWidgets={initialDashboardWidgets} />;
 }
