@@ -1,6 +1,10 @@
 "use client";
 import { Check, Edit2, Plus, Trash } from "lucide-react";
-import { createDashboard, deleteDashboard } from "@/app/actions/dashboard";
+import {
+  createDashboard,
+  deleteDashboard,
+  setDefaultDashboard,
+} from "@/app/actions/dashboard";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Dashboard, DashboardWidget } from "@/app/generated/prisma";
@@ -45,6 +49,19 @@ export const DashboardList = ({
     }
 
     toast.success("Dashboard deleted successfully");
+    router.refresh();
+  };
+
+  const handleSetDefaultDashboard = async (dashboardId: string) => {
+    const response = await setDefaultDashboard({ id: dashboardId });
+    console.log(dashboardId);
+    if (!response.success) {
+      console.error("Failed to set default dashboard: ", response.message);
+      toast.error(response.message);
+      return;
+    }
+
+    toast.success("Dashboard set as default successfully");
     router.refresh();
   };
 
@@ -113,6 +130,7 @@ export const DashboardList = ({
               <button
                 className="p-2 cursor-pointer bg-emerald-600 hover:bg-emerald-500 rounded-lg"
                 title="Use"
+                onClick={() => handleSetDefaultDashboard(dashboard.id)}
                 aria-label={`Use dashboard ${dashboard.name}`}
               >
                 <Check className="w-4 h-4" />

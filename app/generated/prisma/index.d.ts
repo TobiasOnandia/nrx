@@ -4740,6 +4740,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     userId: string | null
+    isDefault: boolean | null
     createAt: Date | null
     updateAt: Date | null
   }
@@ -4748,6 +4749,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     userId: string | null
+    isDefault: boolean | null
     createAt: Date | null
     updateAt: Date | null
   }
@@ -4756,6 +4758,7 @@ export namespace Prisma {
     id: number
     name: number
     userId: number
+    isDefault: number
     createAt: number
     updateAt: number
     _all: number
@@ -4766,6 +4769,7 @@ export namespace Prisma {
     id?: true
     name?: true
     userId?: true
+    isDefault?: true
     createAt?: true
     updateAt?: true
   }
@@ -4774,6 +4778,7 @@ export namespace Prisma {
     id?: true
     name?: true
     userId?: true
+    isDefault?: true
     createAt?: true
     updateAt?: true
   }
@@ -4782,6 +4787,7 @@ export namespace Prisma {
     id?: true
     name?: true
     userId?: true
+    isDefault?: true
     createAt?: true
     updateAt?: true
     _all?: true
@@ -4863,6 +4869,7 @@ export namespace Prisma {
     id: string
     name: string
     userId: string
+    isDefault: boolean
     createAt: Date
     updateAt: Date
     _count: DashboardCountAggregateOutputType | null
@@ -4888,6 +4895,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     userId?: boolean
+    isDefault?: boolean
     createAt?: boolean
     updateAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4899,6 +4907,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     userId?: boolean
+    isDefault?: boolean
     createAt?: boolean
     updateAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4908,6 +4917,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     userId?: boolean
+    isDefault?: boolean
     createAt?: boolean
     updateAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4917,11 +4927,12 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     userId?: boolean
+    isDefault?: boolean
     createAt?: boolean
     updateAt?: boolean
   }
 
-  export type DashboardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "userId" | "createAt" | "updateAt", ExtArgs["result"]["dashboard"]>
+  export type DashboardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "userId" | "isDefault" | "createAt" | "updateAt", ExtArgs["result"]["dashboard"]>
   export type DashboardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     dashboardWidgets?: boolean | Dashboard$dashboardWidgetsArgs<ExtArgs>
@@ -4944,6 +4955,7 @@ export namespace Prisma {
       id: string
       name: string
       userId: string
+      isDefault: boolean
       createAt: Date
       updateAt: Date
     }, ExtArgs["result"]["dashboard"]>
@@ -5374,6 +5386,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Dashboard", 'String'>
     readonly name: FieldRef<"Dashboard", 'String'>
     readonly userId: FieldRef<"Dashboard", 'String'>
+    readonly isDefault: FieldRef<"Dashboard", 'Boolean'>
     readonly createAt: FieldRef<"Dashboard", 'DateTime'>
     readonly updateAt: FieldRef<"Dashboard", 'DateTime'>
   }
@@ -7044,6 +7057,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     userId: 'userId',
+    isDefault: 'isDefault',
     createAt: 'createAt',
     updateAt: 'updateAt'
   };
@@ -7138,6 +7152,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -7397,6 +7418,7 @@ export namespace Prisma {
     id?: StringFilter<"Dashboard"> | string
     name?: StringFilter<"Dashboard"> | string
     userId?: StringFilter<"Dashboard"> | string
+    isDefault?: BoolFilter<"Dashboard"> | boolean
     createAt?: DateTimeFilter<"Dashboard"> | Date | string
     updateAt?: DateTimeFilter<"Dashboard"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -7407,6 +7429,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     userId?: SortOrder
+    isDefault?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -7420,6 +7443,7 @@ export namespace Prisma {
     NOT?: DashboardWhereInput | DashboardWhereInput[]
     name?: StringFilter<"Dashboard"> | string
     userId?: StringFilter<"Dashboard"> | string
+    isDefault?: BoolFilter<"Dashboard"> | boolean
     createAt?: DateTimeFilter<"Dashboard"> | Date | string
     updateAt?: DateTimeFilter<"Dashboard"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -7430,6 +7454,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     userId?: SortOrder
+    isDefault?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
     _count?: DashboardCountOrderByAggregateInput
@@ -7444,6 +7469,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Dashboard"> | string
     name?: StringWithAggregatesFilter<"Dashboard"> | string
     userId?: StringWithAggregatesFilter<"Dashboard"> | string
+    isDefault?: BoolWithAggregatesFilter<"Dashboard"> | boolean
     createAt?: DateTimeWithAggregatesFilter<"Dashboard"> | Date | string
     updateAt?: DateTimeWithAggregatesFilter<"Dashboard"> | Date | string
   }
@@ -7761,6 +7787,7 @@ export namespace Prisma {
   export type DashboardCreateInput = {
     id?: string
     name: string
+    isDefault?: boolean
     createAt?: Date | string
     updateAt?: Date | string
     user: UserCreateNestedOneWithoutDashboardsInput
@@ -7771,6 +7798,7 @@ export namespace Prisma {
     id?: string
     name: string
     userId: string
+    isDefault?: boolean
     createAt?: Date | string
     updateAt?: Date | string
     dashboardWidgets?: DashboardWidgetUncheckedCreateNestedManyWithoutDashboardInput
@@ -7779,6 +7807,7 @@ export namespace Prisma {
   export type DashboardUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDashboardsNestedInput
@@ -7789,6 +7818,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dashboardWidgets?: DashboardWidgetUncheckedUpdateManyWithoutDashboardNestedInput
@@ -7798,6 +7828,7 @@ export namespace Prisma {
     id?: string
     name: string
     userId: string
+    isDefault?: boolean
     createAt?: Date | string
     updateAt?: Date | string
   }
@@ -7805,6 +7836,7 @@ export namespace Prisma {
   export type DashboardUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7813,6 +7845,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8138,10 +8171,16 @@ export namespace Prisma {
     createAt?: SortOrder
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DashboardCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     userId?: SortOrder
+    isDefault?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
   }
@@ -8150,6 +8189,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     userId?: SortOrder
+    isDefault?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
   }
@@ -8158,8 +8198,17 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     userId?: SortOrder
+    isDefault?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -8543,6 +8592,10 @@ export namespace Prisma {
     connect?: DashboardWidgetWhereUniqueInput | DashboardWidgetWhereUniqueInput[]
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type UserUpdateOneRequiredWithoutDashboardsNestedInput = {
     create?: XOR<UserCreateWithoutDashboardsInput, UserUncheckedCreateWithoutDashboardsInput>
     connectOrCreate?: UserCreateOrConnectWithoutDashboardsInput
@@ -8724,6 +8777,19 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -8777,6 +8843,7 @@ export namespace Prisma {
   export type DashboardCreateWithoutUserInput = {
     id?: string
     name: string
+    isDefault?: boolean
     createAt?: Date | string
     updateAt?: Date | string
     dashboardWidgets?: DashboardWidgetCreateNestedManyWithoutDashboardInput
@@ -8785,6 +8852,7 @@ export namespace Prisma {
   export type DashboardUncheckedCreateWithoutUserInput = {
     id?: string
     name: string
+    isDefault?: boolean
     createAt?: Date | string
     updateAt?: Date | string
     dashboardWidgets?: DashboardWidgetUncheckedCreateNestedManyWithoutDashboardInput
@@ -8855,6 +8923,7 @@ export namespace Prisma {
     id?: StringFilter<"Dashboard"> | string
     name?: StringFilter<"Dashboard"> | string
     userId?: StringFilter<"Dashboard"> | string
+    isDefault?: BoolFilter<"Dashboard"> | boolean
     createAt?: DateTimeFilter<"Dashboard"> | Date | string
     updateAt?: DateTimeFilter<"Dashboard"> | Date | string
   }
@@ -9224,6 +9293,7 @@ export namespace Prisma {
   export type DashboardCreateWithoutDashboardWidgetsInput = {
     id?: string
     name: string
+    isDefault?: boolean
     createAt?: Date | string
     updateAt?: Date | string
     user: UserCreateNestedOneWithoutDashboardsInput
@@ -9233,6 +9303,7 @@ export namespace Prisma {
     id?: string
     name: string
     userId: string
+    isDefault?: boolean
     createAt?: Date | string
     updateAt?: Date | string
   }
@@ -9283,6 +9354,7 @@ export namespace Prisma {
   export type DashboardUpdateWithoutDashboardWidgetsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDashboardsNestedInput
@@ -9292,6 +9364,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9332,6 +9405,7 @@ export namespace Prisma {
   export type DashboardCreateManyUserInput = {
     id?: string
     name: string
+    isDefault?: boolean
     createAt?: Date | string
     updateAt?: Date | string
   }
@@ -9349,6 +9423,7 @@ export namespace Prisma {
   export type DashboardUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dashboardWidgets?: DashboardWidgetUpdateManyWithoutDashboardNestedInput
@@ -9357,6 +9432,7 @@ export namespace Prisma {
   export type DashboardUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dashboardWidgets?: DashboardWidgetUncheckedUpdateManyWithoutDashboardNestedInput
@@ -9365,6 +9441,7 @@ export namespace Prisma {
   export type DashboardUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    isDefault?: BoolFieldUpdateOperationsInput | boolean
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

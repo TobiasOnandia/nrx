@@ -2,6 +2,7 @@
 
 import { getCurrentUser } from "@/helper/getCurrentUser";
 import prisma from "@/lib/prisma";
+import { DashboardWidgetData } from "@/store/widgets.store";
 import {
   DashboardSchema,
   ResponseCreateDashboard,
@@ -221,6 +222,141 @@ export async function deleteDashboard(request: { id: string }) {
     return {
       success: false,
       message: "An error occurred while deleting dashboard",
+    };
+  }
+}
+
+export async function setDefaultDashboard(request: { id: string }) {
+  const validationResult = validateAndExtract(WidgetDeleteSchema, request);
+
+  if (!validationResult.success) {
+    return {
+      success: false,
+      message: validationResult.message,
+      errors: validationResult.errors,
+    };
+  }
+
+  const { id: dashboardId } = validationResult.data;
+
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return {
+      success: false,
+      message: "User not found",
+    };
+  }
+
+  const userId = currentUser.id;
+
+  const isOwner = await verifyDashboardOwnership(dashboardId, userId);
+  if (!isOwner) {
+    return {
+      success: false,
+      message: "Dashboard not found or not owned by user",
+    };
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.dashboard.updateMany({
+        where: { userId, id: dashboardId },
+        data: { isDefault: false },
+      });
+
+      await tx.dashboard.update({
+        where: { userId, id: dashboardId },
+        data: { isDefault: true },
+      });
+    });
+
+    revalidatePath(`/dashboard/${dashboardId}`);
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      message: "Dashboard set as default successfully",
+    };
+  } catch (error) {
+    console.error("Error setting default dashboard: ", error);
+    return {
+      success: false,
+      message: "An error occurred while setting default dashboard",
+    };
+  }
+}
+
+export async function getDashboardForUser() {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return {
+      success: false,
+      message: "User not found",
+    };
+  }
+
+  const userId = currentUser.id;
+
+  try {
+    let dashboard = await prisma.dashboard.findFirst({
+      where: {
+        userId,
+        isDefault: true,
+      },
+      include: {
+        dashboardWidgets: {
+          include: {
+            widget: {
+              include: {
+                widgetTemplate: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!dashboard) {
+      dashboard = await prisma.dashboard.findFirst({
+        where: {
+          userId: userId,
+        },
+        include: {
+          dashboardWidgets: {
+            include: {
+              widget: {
+                include: {
+                  widgetTemplate: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          createAt: "asc",
+        },
+      });
+    }
+
+    if (!dashboard) {
+      return {
+        success: false,
+        message: "Dashboard not found",
+      };
+    }
+
+    return {
+      success: true,
+      dashboard: dashboard,
+      message: "Dashboard retrieved successfully",
+    };
+  } catch (error) {
+    console.error("Error retrieving dashboard: ", error);
+    return {
+      success: false,
+      message: "An error occurred while retrieving dashboard",
     };
   }
 }

@@ -17,7 +17,6 @@ export function WidgetsSidebar({
     const newX = 0;
     const newY = 0;
 
-    // Generar un ID único para este widget del dashboard
     const dashboardWidgetId = crypto.randomUUID();
 
     addWidget({

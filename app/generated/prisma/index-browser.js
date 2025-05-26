@@ -154,6 +154,7 @@ exports.Prisma.DashboardScalarFieldEnum = {
   id: 'id',
   name: 'name',
   userId: 'userId',
+  isDefault: 'isDefault',
   createAt: 'createAt',
   updateAt: 'updateAt'
 };

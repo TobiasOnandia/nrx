@@ -50,6 +50,7 @@ model Dashboard {
   name             String
   userId           String
   user             User              @relation(fields: [userId], references: [id])
+  isDefault        Boolean           @default(false)
   createAt         DateTime          @default(now())
   updateAt         DateTime          @default(now())
   dashboardWidgets DashboardWidget[]
