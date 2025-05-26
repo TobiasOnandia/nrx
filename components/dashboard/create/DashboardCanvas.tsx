@@ -16,7 +16,6 @@ import { Layout } from "react-grid-layout";
 const GRID_COLS = 12;
 const ROW_HEIGHT_PX = 30;
 
-// Extend the Layout type from react-grid-layout to include all possible properties
 interface LayoutItem extends Layout {
   i: string;
   x: number;
@@ -30,7 +29,7 @@ interface LayoutItem extends Layout {
   static?: boolean;
   isDraggable?: boolean;
   isResizable?: boolean;
-  resizeHandles?: Array<'s' | 'w' | 'e' | 'n' | 'sw' | 'nw' | 'se' | 'ne'>;
+  resizeHandles?: Array<"s" | "w" | "e" | "n" | "sw" | "nw" | "se" | "ne">;
   isBounded?: boolean;
 }
 
@@ -115,12 +114,14 @@ export const DashboardCanvas = ({
                 } else if (widgetInstance.types.includes("top-coins")) {
                   WidgetComponent = TopCoins;
                 } else {
-                  WidgetComponent = () => (
-                    <div className="flex justify-center items-center h-full text-red-400">
-                      Tipo de widget desconocido o no soportado:{" "}
-                      {widgetInstance.types.join(", ")}
-                    </div>
-                  );
+                  WidgetComponent = function UnknownWidget() {
+                    return (
+                      <div className="flex justify-center items-center h-full text-red-400">
+                        Tipo de widget desconocido o no soportado:{" "}
+                        {widgetInstance.types.join(", ")}
+                      </div>
+                    );
+                  };
                 }
 
                 return (

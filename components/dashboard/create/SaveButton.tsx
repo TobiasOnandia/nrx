@@ -1,7 +1,6 @@
 "use client";
 
 import { Save } from "lucide-react";
-import { useCallback } from "react";
 import { useWidgetsStore } from "@/store/widgets.store";
 import { useParams, useRouter } from "next/navigation";
 import { saveDashboardLayout } from "@/app/actions/widget";
@@ -10,9 +9,9 @@ import { toast } from "sonner";
 export const SaveButton = () => {
   const { id } = useParams();
   const widgets = useWidgetsStore((state) => state.widgets);
-  const router = useRouter()
+  const router = useRouter();
 
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     if (!id) {
       console.error("Dashboard ID is missing for saving.");
       return;
@@ -44,9 +43,9 @@ export const SaveButton = () => {
       );
     }
 
-    toast.success("Dashboard saved")
-    router.push("/dashboard")
-  }, [id, widgets]);
+    toast.success("Dashboard saved");
+    router.push("/dashboard");
+  };
 
   return (
     <button

@@ -37,11 +37,6 @@ const TIME_FRAME_OPTIONS = [
 
 type TimeFrameLabel = (typeof TIME_FRAME_OPTIONS)[number]["label"];
 
-interface VolumeChartConfig {
-  timeFrame: TimeFrameLabel;
-  cryptocurrencies: string[];
-}
-
 const getDaysFromLabel = (label: TimeFrameLabel): number => {
   return TIME_FRAME_OPTIONS.find((opt) => opt.label === label)?.days || 1;
 };
