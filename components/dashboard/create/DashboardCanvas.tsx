@@ -1,18 +1,18 @@
-"use client";
-import { EmptyWidget } from "@/components/empty/WidgetEmpty";
-import { PriceChart } from "@/components/graphics/PriceChart";
-import { VolumeChart } from "@/components/graphics/VolumeChart";
-import { TopCoins } from "@/components/tables/TopCoins";
-import { useWidgetsStore } from "@/store/widgets.store";
-import type { DashboardWidgetData } from "@/store/widgets.store";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
-import { WidthProvider } from "react-grid-layout";
-import GridLayout from "react-grid-layout";
-import "react-grid-layout/css/styles.css";
-import "react-resizable/css/styles.css";
-import { Layout } from "react-grid-layout";
-import { WidgetComponentType } from "@/types/widgets/widgets.types";
+'use client';
+import { EmptyWidget } from '@/components/empty/WidgetEmpty';
+import { PriceChart } from '@/components/graphics/PriceChart';
+import { VolumeChart } from '@/components/graphics/VolumeChart';
+import { TopCoins } from '@/components/tables/TopCoins';
+import { useWidgetsStore } from '@/store/widgets.store';
+import type { DashboardWidgetData } from '@/store/widgets.store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
+import { WidthProvider } from 'react-grid-layout';
+import GridLayout from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+import { Layout } from 'react-grid-layout';
+import { WidgetComponentType } from '@/types/widgets/widgets.types';
 
 const GRID_COLS = 12;
 const ROW_HEIGHT_PX = 30;
@@ -30,14 +30,14 @@ interface LayoutItem extends Layout {
   static?: boolean;
   isDraggable?: boolean;
   isResizable?: boolean;
-  resizeHandles?: Array<"s" | "w" | "e" | "n" | "sw" | "nw" | "se" | "ne">;
+  resizeHandles?: Array<'s' | 'w' | 'e' | 'n' | 'sw' | 'nw' | 'se' | 'ne'>;
   isBounded?: boolean;
 }
 
 const WIDGET_COMPONENTS: Record<string, WidgetComponentType> = {
-  "price-chart": PriceChart,
-  "volume-chart": VolumeChart,
-  "top-coins": TopCoins,
+  'price-chart': PriceChart,
+  'volume-chart': VolumeChart,
+  'top-coins': TopCoins,
 };
 
 const UnknownWidgetComponent: WidgetComponentType = ({ id }) => (
@@ -58,11 +58,15 @@ export const DashboardCanvas = ({
   const widgets = useWidgetsStore((state) => state.widgets);
   const setWidgets = useWidgetsStore((state) => state.setWidgets);
   const updateWidgetsLayout = useWidgetsStore(
-    (state) => state.updateWidgetsLayout
+    (state) => state.updateWidgetsLayout,
   );
 
   useEffect(() => {
-    if (initialWidgets && initialWidgets.length > 0 && widgets.length === 0) {
+    if (
+      initialWidgets &&
+      initialWidgets.length > 0 &&
+      (widgets.length === 0 || initialWidgets[0].id !== widgets[0]?.id)
+    ) {
       setWidgets(initialWidgets);
     } else if (
       initialWidgets &&
@@ -71,7 +75,7 @@ export const DashboardCanvas = ({
     ) {
       setWidgets([]);
     }
-  }, [initialWidgets, setWidgets, widgets.length]);
+  }, [initialWidgets, setWidgets]);
 
   const handleLayoutChange = (newLayout: LayoutItem[]) => {
     const updatedWidgets: DashboardWidgetData[] = newLayout.map((item) => {

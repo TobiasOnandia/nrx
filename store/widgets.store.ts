@@ -15,6 +15,7 @@ export interface DashboardWidgetData {
 interface WidgetsStore {
   widgets: DashboardWidgetData[];
   hasUnsavedChanges: boolean;
+  isNew?: boolean;
   addWidget: (widget: DashboardWidgetData) => void;
   updateWidgetsLayout: (newLayout: DashboardWidgetData[]) => void;
   removeWidget: (dashboardWidgetId: string) => void;
@@ -25,10 +26,12 @@ interface WidgetsStore {
 export const useWidgetsStore = create<WidgetsStore>((set) => ({
   widgets: [],
   hasUnsavedChanges: false,
+  isNew: false,
   addWidget: (widget) =>
     set((state) => ({
       widgets: [...state.widgets, widget],
       hasUnsavedChanges: true,
+      isNew: true,
     })),
   updateWidgetsLayout: (newLayout) =>
     set(() => ({
@@ -41,6 +44,6 @@ export const useWidgetsStore = create<WidgetsStore>((set) => ({
       hasUnsavedChanges: true,
     })),
   setWidgets: (newWidgets) =>
-    set({ widgets: newWidgets, hasUnsavedChanges: false }),
+    set({ widgets: newWidgets, hasUnsavedChanges: false, isNew: false }),
   setHasUnsavedChanges: (hasChanges) => set({ hasUnsavedChanges: hasChanges }),
 }));

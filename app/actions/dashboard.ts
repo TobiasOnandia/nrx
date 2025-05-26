@@ -1,17 +1,17 @@
-"use server";
+'use server';
 
-import { getCurrentUser } from "@/helper/getCurrentUser";
-import prisma from "@/lib/prisma";
+import { getCurrentUser } from '@/helper/getCurrentUser';
+import prisma from '@/lib/prisma';
 import {
   DashboardSchema,
   ResponseCreateDashboard,
   ResponseDeleteWidget,
   SaveDashboardLayoutRequestSchema,
   WidgetDeleteSchema,
-} from "@/types/schema/schema.dashboard";
-import { verifyDashboardOwnership } from "@/utils/dashboardUtils";
-import { validateAndExtract } from "@/utils/validationUtils";
-import { revalidatePath } from "next/cache";
+} from '@/types/schema/schema.dashboard';
+import { verifyDashboardOwnership } from '@/utils/dashboardUtils';
+import { validateAndExtract } from '@/utils/validationUtils';
+import { revalidatePath } from 'next/cache';
 
 export async function createDashboard(request: {
   name: string;
@@ -34,7 +34,7 @@ export async function createDashboard(request: {
   if (!currentUser) {
     return {
       success: false,
-      message: "User not found",
+      message: 'User not found',
     };
   }
 
@@ -50,13 +50,13 @@ export async function createDashboard(request: {
     return {
       success: true,
       dashboard: dashboard,
-      message: "Dashboard created successfully",
+      message: 'Dashboard created successfully',
     };
   } catch (error) {
-    console.error("Error creating dashboard: ", error);
+    console.error('Error creating dashboard: ', error);
     return {
       success: false,
-      message: "An error occurred while creating dashboard",
+      message: 'An error occurred while creating dashboard',
     };
   }
 }
@@ -67,7 +67,7 @@ export async function addWidgetToDashboard(request: {
 }) {
   const validationResult = validateAndExtract(
     SaveDashboardLayoutRequestSchema,
-    request
+    request,
   );
 
   if (!validationResult.success) {
@@ -85,7 +85,7 @@ export async function addWidgetToDashboard(request: {
   if (!currentUser) {
     return {
       success: false,
-      message: "User not found",
+      message: 'User not found',
     };
   }
 
@@ -95,7 +95,7 @@ export async function addWidgetToDashboard(request: {
   if (!isOwner) {
     return {
       success: false,
-      message: "Dashboard not found or not owned by user",
+      message: 'Dashboard not found or not owned by user',
     };
   }
 }
@@ -120,7 +120,7 @@ export async function DeleteWidget(request: {
   if (!currentUser) {
     return {
       success: false,
-      message: "Autenticación requerida. Usuario no encontrado.",
+      message: 'Autenticación requerida. Usuario no encontrado.',
     };
   }
   const userId = currentUser.id;
@@ -135,20 +135,19 @@ export async function DeleteWidget(request: {
       return {
         success: false,
         message:
-          "El widget especificado no se encontró en el layout del dashboard.",
+          'El widget especificado no se encontró en el layout del dashboard.',
       };
     }
 
     const isOwnerOfDashboard = await verifyDashboardOwnership(
       dashboardWidgetToDelete.dashboardId,
-      userId
+      userId,
     );
 
     if (!isOwnerOfDashboard) {
       return {
         success: false,
-        message:
-          "No autorizado: Dashboard no encontrado o no pertenece al usuario.",
+        message: 'Not authorized: Dashboard not found or not owned by user.',
       };
     }
 
@@ -157,17 +156,17 @@ export async function DeleteWidget(request: {
     });
 
     revalidatePath(`/dashboard/${dashboardWidgetToDelete.dashboardId}`);
-    revalidatePath("/dashboard");
+    revalidatePath('/dashboard');
 
     return {
       success: true,
-      message: "Widget removido del dashboard exitosamente.",
+      message: 'Widget removido del dashboard exitosamente.',
     };
   } catch (error) {
-    console.error("Error al remover widget del dashboard: ", error);
+    console.error('Error al remover widget del dashboard: ', error);
     return {
       success: false,
-      message: "Ocurrió un error al remover el widget del dashboard.",
+      message: 'Ocurrió un error al remover el widget del dashboard.',
     };
   }
 }
@@ -190,7 +189,7 @@ export async function deleteDashboard(request: { id: string }) {
   if (!currentUser) {
     return {
       success: false,
-      message: "User not found",
+      message: 'User not found',
     };
   }
 
@@ -200,7 +199,7 @@ export async function deleteDashboard(request: { id: string }) {
   if (!isOwner) {
     return {
       success: false,
-      message: "Dashboard not found or not owned by user",
+      message: 'Dashboard not found or not owned by user',
     };
   }
 
@@ -210,17 +209,17 @@ export async function deleteDashboard(request: { id: string }) {
     });
 
     revalidatePath(`/dashboard/${dashboardId}`);
-    revalidatePath("/dashboard");
+    revalidatePath('/dashboard');
 
     return {
       success: true,
-      message: "Dashboard deleted successfully",
+      message: 'Dashboard deleted successfully',
     };
   } catch (error) {
-    console.error("Error deleting dashboard: ", error);
+    console.error('Error deleting dashboard: ', error);
     return {
       success: false,
-      message: "An error occurred while deleting dashboard",
+      message: 'An error occurred while deleting dashboard',
     };
   }
 }
@@ -243,7 +242,7 @@ export async function setDefaultDashboard(request: { id: string }) {
   if (!currentUser) {
     return {
       success: false,
-      message: "User not found",
+      message: 'User not found',
     };
   }
 
@@ -253,7 +252,7 @@ export async function setDefaultDashboard(request: { id: string }) {
   if (!isOwner) {
     return {
       success: false,
-      message: "Dashboard not found or not owned by user",
+      message: 'Dashboard not found or not owned by user',
     };
   }
 
@@ -281,18 +280,18 @@ export async function setDefaultDashboard(request: { id: string }) {
     });
 
     revalidatePath(`/dashboard/${dashboardId}`);
-    revalidatePath("/dashboard");
-    revalidatePath("/");
+    revalidatePath('/dashboard');
+    revalidatePath('/');
 
     return {
       success: true,
-      message: "Dashboard set as default successfully",
+      message: 'Dashboard set as default successfully',
     };
   } catch (error) {
-    console.error("Error setting default dashboard: ", error);
+    console.error('Error setting default dashboard: ', error);
     return {
       success: false,
-      message: "An error occurred while setting default dashboard",
+      message: 'An error occurred while setting default dashboard',
     };
   }
 }
@@ -303,7 +302,7 @@ export async function getDashboardForUser() {
   if (!currentUser) {
     return {
       success: false,
-      message: "User not found",
+      message: 'User not found',
     };
   }
 
@@ -345,7 +344,7 @@ export async function getDashboardForUser() {
           },
         },
         orderBy: {
-          createAt: "asc",
+          createAt: 'asc',
         },
       });
     }
@@ -353,20 +352,20 @@ export async function getDashboardForUser() {
     if (!dashboard) {
       return {
         success: false,
-        message: "Dashboard not found",
+        message: 'Dashboard not found',
       };
     }
 
     return {
       success: true,
       dashboard: dashboard,
-      message: "Dashboard retrieved successfully",
+      message: 'Dashboard retrieved successfully',
     };
   } catch (error) {
-    console.error("Error retrieving dashboard: ", error);
+    console.error('Error retrieving dashboard: ', error);
     return {
       success: false,
-      message: "An error occurred while retrieving dashboard",
+      message: 'An error occurred while retrieving dashboard',
     };
   }
 }
