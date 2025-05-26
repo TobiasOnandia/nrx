@@ -1,6 +1,5 @@
 "use client";
 import { WidgetTemplateData } from "@/types/widgets/widgets.types";
-import { AddCoin } from "./AddCoin";
 import { useWidgetsStore } from "@/store/widgets.store";
 
 const DEFAULT_WIDGET_GRID_W = 4;

@@ -2,7 +2,6 @@ import { Check } from "lucide-react";
 import { setDefaultDashboard } from "@/app/actions/dashboard";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Dashboard } from "@/app/generated/prisma";
 
 export const ButtonUse = ({ id }: { id: string }) => {
   const router = useRouter();
