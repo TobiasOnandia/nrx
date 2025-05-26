@@ -1,6 +1,5 @@
 import { DashboardCanvas } from "@/components/dashboard/create/DashboardCanvas";
 import prisma from "@/lib/prisma";
-import { DashboardWidgetData } from "@/store/widgets.store";
 import {
   DashboardWidgetWithRelations,
   processDashboardWidgets,
@@ -25,7 +24,7 @@ export default async function Home() {
   });
 
   const initialDashboardWidgets = processDashboardWidgets(
-    defaultDashboard?.dashboardWidgets as DashboardWidgetWithRelations[]
+    (defaultDashboard?.dashboardWidgets as DashboardWidgetWithRelations[]) ?? []
   );
 
   return <DashboardCanvas initialWidgets={initialDashboardWidgets} />;

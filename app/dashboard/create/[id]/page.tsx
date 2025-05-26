@@ -3,14 +3,6 @@ import { WidgetsSidebar } from "@/components/dashboard/create/WidgetSidebar";
 import { SaveButton } from "@/components/dashboard/create/SaveButton";
 import prisma from "@/lib/prisma";
 
-export interface WidgetTemplate {
-  id: string;
-  title: string;
-  description: string;
-  types?: string[];
-  defaultConfig: string;
-}
-
 export default async function DashboardCustomizerPage() {
   const availableWidgets = await prisma.widgetTemplates.findMany();
 

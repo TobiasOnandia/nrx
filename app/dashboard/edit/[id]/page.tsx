@@ -7,15 +7,7 @@ import {
   DashboardWidgetWithRelations,
   processDashboardWidgets,
 } from "@/utils/dashboardUtils";
-
-export interface WidgetTemplateData {
-  id: string;
-  title: string;
-  description: string;
-  types: string[];
-  defaultConfig: string;
-  defaultLayout: string;
-}
+import { WidgetTemplateData } from "@/types/widgets/widgets.types";
 
 export default async function DashboardEditPage({
   params,

@@ -1,12 +1,12 @@
-import { WidgetTemplate } from "@/app/dashboard/create/[id]/page";
 import { DashboardWidget, Widget } from "@/app/generated/prisma";
 import prisma from "@/lib/prisma";
 import { DashboardWidgetData } from "@/store/widgets.store";
+import type { WidgetTemplateData } from "@/types/widgets/widgets.types";
 
 export type DashboardWidgetWithRelations = DashboardWidget & {
   widget:
     | (Widget & {
-        widgetTemplate: WidgetTemplate;
+        widgetTemplate: WidgetTemplateData;
       })
     | null;
 };

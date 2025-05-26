@@ -12,6 +12,7 @@ import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import { Layout } from "react-grid-layout";
+import { WidgetComponentType } from "@/types/widgets/widgets.types";
 
 const GRID_COLS = 12;
 const ROW_HEIGHT_PX = 30;
@@ -32,6 +33,18 @@ interface LayoutItem extends Layout {
   resizeHandles?: Array<"s" | "w" | "e" | "n" | "sw" | "nw" | "se" | "ne">;
   isBounded?: boolean;
 }
+
+const WIDGET_COMPONENTS: Record<string, WidgetComponentType> = {
+  "price-chart": PriceChart,
+  "volume-chart": VolumeChart,
+  "top-coins": TopCoins,
+};
+
+const UnknownWidgetComponent: WidgetComponentType = ({ id }) => (
+  <div className="flex justify-center items-center h-full text-red-400">
+    Tipo de widget desconocido o no soportado para ID: {id}
+  </div>
+);
 
 const ResponsiveGridLayout = WidthProvider(GridLayout);
 const clientQuery = new QueryClient();
@@ -105,24 +118,9 @@ export const DashboardCanvas = ({
               onLayoutChange={handleLayoutChange}
             >
               {widgets.map((widgetInstance) => {
-                let WidgetComponent;
-                // Ahora usas widgetInstance.types para el renderizado
-                if (widgetInstance.types.includes("price-chart")) {
-                  WidgetComponent = PriceChart;
-                } else if (widgetInstance.types.includes("volume-chart")) {
-                  WidgetComponent = VolumeChart;
-                } else if (widgetInstance.types.includes("top-coins")) {
-                  WidgetComponent = TopCoins;
-                } else {
-                  WidgetComponent = function UnknownWidget() {
-                    return (
-                      <div className="flex justify-center items-center h-full text-red-400">
-                        Tipo de widget desconocido o no soportado:{" "}
-                        {widgetInstance.types.join(", ")}
-                      </div>
-                    );
-                  };
-                }
+                const WidgetComponent =
+                  WIDGET_COMPONENTS[widgetInstance.types[0]!] ||
+                  UnknownWidgetComponent;
 
                 return (
                   <div

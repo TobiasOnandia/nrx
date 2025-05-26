@@ -1,7 +1,7 @@
 "use client";
+import { WidgetTemplateData } from "@/types/widgets/widgets.types";
 import { AddCoin } from "./AddCoin";
 import { useWidgetsStore } from "@/store/widgets.store";
-import { WidgetTemplate } from "@/app/dashboard/create/[id]/page";
 
 const DEFAULT_WIDGET_GRID_W = 4;
 const DEFAULT_WIDGET_GRID_H = 6;
@@ -9,10 +9,10 @@ const DEFAULT_WIDGET_GRID_H = 6;
 export function WidgetsSidebar({
   availableWidgets,
 }: {
-  availableWidgets: WidgetTemplate[];
+  availableWidgets: WidgetTemplateData[];
 }) {
   const addWidget = useWidgetsStore((state) => state.addWidget);
-  const handleAddWidget = (widget: WidgetTemplate) => {
+  const handleAddWidget = (widget: WidgetTemplateData) => {
     console.log("Añadiendo widget de plantilla:", widget.id);
     const newX = 0;
     const newY = 0;

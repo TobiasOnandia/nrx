@@ -92,10 +92,9 @@ export async function saveDashboardLayout(
   }
 
   const operations = prepareDashboardWidgetOperations(
-    dashboardId,
     incomingDashboardWidgetData,
     existingDashboardWidgets
-  );
+  )
 
   try {
     await prisma.$transaction(operations);
