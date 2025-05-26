@@ -1,4 +1,3 @@
-// components/tables/TopCoins.tsx
 "use client";
 import { ArrowDown, ArrowUp, Eye, EyeOff, X } from "lucide-react";
 import { useCoinMarketStore } from "@/store/coinmarket.store";

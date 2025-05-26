@@ -1,4 +1,15 @@
+import { WidgetTemplate } from "@/app/dashboard/create/[id]/page";
+import { DashboardWidget, Widget } from "@/app/generated/prisma";
 import prisma from "@/lib/prisma";
+import { DashboardWidgetData } from "@/store/widgets.store";
+
+export type DashboardWidgetWithRelations = DashboardWidget & {
+  widget:
+    | (Widget & {
+        widgetTemplate: WidgetTemplate;
+      })
+    | null;
+};
 
 export async function verifyDashboardOwnership(
   dashboardId: string,
@@ -145,7 +156,6 @@ export async function processIncomingWidgets(
 }
 
 export function prepareDashboardWidgetOperations(
-  dashboardId: string,
   incomingDashboardWidgetData: Array<any>,
   existingDashboardWidgets: Array<{ id: string; widgetId: string }>
 ) {
@@ -214,4 +224,33 @@ export function prepareDashboardWidgetOperations(
   }
 
   return operations;
+}
+
+export function processDashboardWidgets(
+  prismaDashboardWidgets: DashboardWidgetWithRelations[]
+): DashboardWidgetData[] {
+  return prismaDashboardWidgets
+    .map((dw) => {
+      if (!dw.widget || !dw.widget.widgetTemplate) {
+        console.warn(
+          `DashboardWidget con ID ${dw.id} o su Widget/WidgetTemplate asociado falta o es inválido. Se omitirá.`
+        );
+        return null;
+      }
+
+      return {
+        id: dw.id,
+        widgetId: dw.widgetId,
+        types: dw.widget.widgetTemplate.types,
+        x: dw.x,
+        y: dw.y,
+        w: dw.w,
+        h: dw.h,
+        instanceConfig: dw.instanceConfig
+          ? (dw.instanceConfig as Record<string, string>)
+          : {},
+        widgetTemplateId: dw.widget.widgetTemplate.id,
+      };
+    })
+    .filter(Boolean) as DashboardWidgetData[];
 }

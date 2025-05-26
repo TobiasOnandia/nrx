@@ -2,7 +2,6 @@
 
 import { getCurrentUser } from "@/helper/getCurrentUser";
 import prisma from "@/lib/prisma";
-import { DashboardWidgetData } from "@/store/widgets.store";
 import {
   DashboardSchema,
   ResponseCreateDashboard,
@@ -261,18 +260,29 @@ export async function setDefaultDashboard(request: { id: string }) {
   try {
     await prisma.$transaction(async (tx) => {
       await tx.dashboard.updateMany({
-        where: { userId, id: dashboardId },
-        data: { isDefault: false },
+        where: {
+          userId: userId,
+          isDefault: true,
+        },
+        data: {
+          isDefault: false,
+        },
       });
 
       await tx.dashboard.update({
-        where: { userId, id: dashboardId },
-        data: { isDefault: true },
+        where: {
+          id: dashboardId,
+          userId: userId,
+        },
+        data: {
+          isDefault: true,
+        },
       });
     });
 
     revalidatePath(`/dashboard/${dashboardId}`);
     revalidatePath("/dashboard");
+    revalidatePath("/");
 
     return {
       success: true,
@@ -302,7 +312,7 @@ export async function getDashboardForUser() {
   try {
     let dashboard = await prisma.dashboard.findFirst({
       where: {
-        userId,
+        userId: userId,
         isDefault: true,
       },
       include: {

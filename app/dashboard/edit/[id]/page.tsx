@@ -1,19 +1,20 @@
-// app/dashboard/[id]/edit/page.tsx
 import { DashboardCanvas } from "@/components/dashboard/create/DashboardCanvas";
 import { WidgetsSidebar } from "@/components/dashboard/create/WidgetSidebar";
-import { SaveButton } from "@/components/dashboard/create/SaveButton"; // Asegúrate de tener este componente
+import { SaveButton } from "@/components/dashboard/create/SaveButton";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import type { DashboardWidgetData } from "@/store/widgets.store"; // Importa la interfaz del store
+import {
+  DashboardWidgetWithRelations,
+  processDashboardWidgets,
+} from "@/utils/dashboardUtils";
 
-// Interfaz para los templates de widgets disponibles
 export interface WidgetTemplateData {
   id: string;
   title: string;
   description: string;
-  types: string[]; // Asegúrate de que esto sea un array de strings
-  defaultConfig: string; // JSON string
-  defaultLayout: string; // JSON string
+  types: string[];
+  defaultConfig: string;
+  defaultLayout: string;
 }
 
 export default async function DashboardEditPage({
@@ -47,29 +48,9 @@ export default async function DashboardEditPage({
     redirect("/dashboard");
   }
 
-  const initialDashboardWidgets: DashboardWidgetData[] =
-    dashboard.dashboardWidgets
-      .map((dw) => {
-        if (!dw.widget || !dw.widget.widgetTemplate) {
-          console.warn(
-            `DashboardWidget ${dw.id} missing linked Widget or WidgetTemplate.`
-          );
-          return null;
-        }
-
-        return {
-          id: dw.id,
-          widgetId: dw.widgetId,
-          types: dw.widget.widgetTemplate.types,
-          x: dw.x,
-          y: dw.y,
-          w: dw.w,
-          h: dw.h,
-          instanceConfig: dw.instanceConfig as Record<string, string>,
-          widgetTemplateId: dw.widget.widgetTemplate.id,
-        };
-      })
-      .filter(Boolean) as DashboardWidgetData[];
+  const initialDashboardWidgets = processDashboardWidgets(
+    dashboard.dashboardWidgets as DashboardWidgetWithRelations[]
+  );
 
   return (
     <main className="min-h-screen flex mx-auto bg-gray-900 text-gray-100 p-6 relative">
