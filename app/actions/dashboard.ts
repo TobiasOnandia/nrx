@@ -163,7 +163,7 @@ export async function DeleteWidget(request: {
       success: true,
       message: "Widget removido del dashboard exitosamente.",
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error al remover widget del dashboard: ", error);
     return {
       success: false,
