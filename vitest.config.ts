@@ -1,15 +1,14 @@
 /** @type {import('vite').UserConfig} */
 
-import { resolve } from 'path';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default {
   test: {
     globals: true,
-  },
-  environment: 'jsdom',
-  resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
+      '@/': './*',
     },
   },
+  plugins: [tsconfigPaths()],
+  environment: 'jsdom',
 };

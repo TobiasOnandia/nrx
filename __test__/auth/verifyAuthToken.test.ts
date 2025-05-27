@@ -1,4 +1,4 @@
-import { verifyAuthToken } from '../utils/verifyAuthToken';
+import { verifyAuthToken } from '@/utils/verifyAuthToken';
 import { SignJWT } from 'jose';
 import { describe, it, expect, vi } from 'vitest';
 
