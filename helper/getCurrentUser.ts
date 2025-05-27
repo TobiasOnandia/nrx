@@ -1,18 +1,25 @@
-import { cookies } from "next/headers";
-import { jwtVerify } from "jose";
-import { isTokenBlocked } from "@/utils/blocklist";
+import { cookies } from 'next/headers';
+import { jwtVerify } from 'jose';
+import { isTokenBlocked } from '@/utils/blocklist';
 
 const AUTH_TOKEN_COOKIE_NAME = process.env.AUTH_TOKEN_COOKIE_NAME!;
 
-export async function getCurrentUser(): Promise<{
-  id: string;
-  email: string;
-} | null> {
+export async function getCurrentUser(): Promise<
+  | {
+      success: true;
+      id: string;
+      email: string;
+    }
+  | { success: false; message: string }
+> {
   const cookiesStore = await cookies();
   const authToken = cookiesStore.get(AUTH_TOKEN_COOKIE_NAME);
 
   if (!authToken) {
-    return null;
+    return {
+      success: false,
+      message: 'Authentication token missing',
+    };
   }
 
   try {
@@ -20,13 +27,21 @@ export async function getCurrentUser(): Promise<{
     const { payload } = await jwtVerify(authToken.value, secret);
 
     if (payload.jti && (await isTokenBlocked(payload.jti))) {
-      console.warn("Token blocked");
-      return null;
+      return {
+        success: false,
+        message: 'Token blocked',
+      };
     }
 
-    return { id: payload.userId as string, email: payload.email as string };
+    return {
+      success: true,
+      id: payload.userId as string,
+      email: payload.email as string,
+    };
   } catch (error) {
-    console.error(error);
-    return null;
+    return {
+      success: false,
+      message: 'An error occurred while getting the current user',
+    };
   }
 }

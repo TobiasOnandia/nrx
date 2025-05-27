@@ -1,25 +1,25 @@
-"use server";
+'use server';
 
-import { getCurrentUser } from "@/helper/getCurrentUser";
+import { getCurrentUser } from '@/helper/getCurrentUser';
 import {
   SaveDashboardLayoutRequestSchema,
   SaveDashboardLayoutResponse,
-} from "@/types/schema/schema.dashboard";
+} from '@/types/schema/schema.dashboard';
 import {
   verifyDashboardOwnership,
   processIncomingWidgets,
   prepareDashboardWidgetOperations,
-} from "@/utils/dashboardUtils";
-import prisma from "@/lib/prisma";
-import { z } from "zod";
-import { validateAndExtract } from "@/utils/validationUtils";
+} from '@/utils/dashboardUtils';
+import prisma from '@/lib/prisma';
+import { z } from 'zod';
+import { validateAndExtract } from '@/utils/validationUtils';
 
 export async function saveDashboardLayout(
-  request: z.infer<typeof SaveDashboardLayoutRequestSchema>
+  request: z.infer<typeof SaveDashboardLayoutRequestSchema>,
 ): Promise<SaveDashboardLayoutResponse> {
   const validationResult = validateAndExtract(
     SaveDashboardLayoutRequestSchema,
-    request
+    request,
   );
   if (!validationResult.success) {
     return {
@@ -32,10 +32,10 @@ export async function saveDashboardLayout(
   const { widgets, dashboardId } = validationResult.data;
 
   const currentUser = await getCurrentUser();
-  if (!currentUser) {
+  if (!currentUser.success) {
     return {
       success: false,
-      message: "User not authenticated",
+      message: currentUser.message,
     };
   }
   const userId = currentUser.id;
@@ -44,7 +44,7 @@ export async function saveDashboardLayout(
   if (!isOwner) {
     return {
       success: false,
-      message: "Dashboard not found or not owned by user",
+      message: 'Dashboard not found or not owned by user',
     };
   }
 
@@ -55,10 +55,10 @@ export async function saveDashboardLayout(
       select: { id: true, widgetId: true },
     });
   } catch (error) {
-    console.error("Error fetching existing DashboardWidgets:", error);
+    console.error('Error fetching existing DashboardWidgets:', error);
     return {
       success: false,
-      message: "Failed to fetch existing dashboard widgets",
+      message: 'Failed to fetch existing dashboard widgets',
     };
   }
 
@@ -93,21 +93,21 @@ export async function saveDashboardLayout(
 
   const operations = prepareDashboardWidgetOperations(
     incomingDashboardWidgetData,
-    existingDashboardWidgets
-  )
+    existingDashboardWidgets,
+  );
 
   try {
     await prisma.$transaction(operations);
     return {
       success: true,
-      message: "Dashboard layout saved successfully",
+      message: 'Dashboard layout saved successfully',
       data: { widgets, dashboardId },
     };
   } catch (error) {
-    console.error("Error saving dashboard layout:", error);
+    console.error('Error saving dashboard layout:', error);
     return {
       success: false,
-      message: "Failed to save dashboard layout",
+      message: 'Failed to save dashboard layout',
     };
   }
 }

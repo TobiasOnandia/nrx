@@ -31,10 +31,10 @@ export async function createDashboard(request: {
 
   const currentUser = await getCurrentUser();
 
-  if (!currentUser) {
+  if (!currentUser.success) {
     return {
       success: false,
-      message: 'User not found',
+      message: currentUser.message,
     };
   }
 
@@ -82,10 +82,10 @@ export async function addWidgetToDashboard(request: {
 
   const currentUser = await getCurrentUser();
 
-  if (!currentUser) {
+  if (!currentUser.success) {
     return {
       success: false,
-      message: 'User not found',
+      message: currentUser.message,
     };
   }
 
@@ -117,10 +117,10 @@ export async function DeleteWidget(request: {
 
   const currentUser = await getCurrentUser();
 
-  if (!currentUser) {
+  if (!currentUser.success) {
     return {
       success: false,
-      message: 'Autenticación requerida. Usuario no encontrado.',
+      message: currentUser.message,
     };
   }
   const userId = currentUser.id;
@@ -186,10 +186,10 @@ export async function deleteDashboard(request: { id: string }) {
 
   const currentUser = await getCurrentUser();
 
-  if (!currentUser) {
+  if (!currentUser.success) {
     return {
       success: false,
-      message: 'User not found',
+      message: currentUser.message,
     };
   }
 
@@ -239,10 +239,10 @@ export async function setDefaultDashboard(request: { id: string }) {
 
   const currentUser = await getCurrentUser();
 
-  if (!currentUser) {
+  if (!currentUser.success) {
     return {
       success: false,
-      message: 'User not found',
+      message: currentUser.message,
     };
   }
 
@@ -299,10 +299,10 @@ export async function setDefaultDashboard(request: { id: string }) {
 export async function getDashboardForUser() {
   const currentUser = await getCurrentUser();
 
-  if (!currentUser) {
+  if (!currentUser.success) {
     return {
       success: false,
-      message: 'User not found',
+      message: currentUser.message,
     };
   }
 

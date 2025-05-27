@@ -22,15 +22,13 @@ export default async function RootLayout({
 }>) {
   const currentUser = await getCurrentUser();
 
-  console.log(currentUser);
-
   return (
     <html lang="en">
       <body
         className={`${satoshi.className} antialiased min-h-screen bg-gray-900`}
       >
         <Toaster position="top-right" richColors closeButton />
-        <AuthProvider user={currentUser}>
+        <AuthProvider user={currentUser.success ? currentUser : null}>
           <Header />
           {children}
         </AuthProvider>
