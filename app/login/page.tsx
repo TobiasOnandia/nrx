@@ -1,9 +1,9 @@
-"use client";
-import { loginAction } from "@/app/actions/auth";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useActionState } from "react";
-import { toast } from "sonner";
+'use client';
+import { loginAction } from '@/app/actions/auth';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { useActionState } from 'react';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
   const [, formAction, isLoading] = useActionState(
@@ -14,24 +14,22 @@ export default function LoginPage() {
       };
 
       if (!email || !password) {
-        toast.error("Email and password are required");
+        toast.error('Email and password are required');
         return;
       }
 
       const response = await loginAction({ email, password });
 
       if (!response.success) {
-        toast.error("Login failed");
-        console.error("Login failed", response.message);
+        toast.error('Login failed');
+        console.error('Login failed', response.message);
         return;
       }
 
-      console.log(response.user?.id);
-
-      toast.success("Login successful");
-      redirect("/");
+      toast.success('Login successful');
+      redirect('/');
     },
-    null
+    null,
   );
 
   return (
@@ -80,25 +78,8 @@ export default function LoginPage() {
           type="submit"
           className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition-colors relative"
         >
-          {isLoading ? "Logging in..." : "Sign In"}
+          {isLoading ? 'Logging in...' : 'Sign In'}
         </button>
-
-        <div className="relative flex items-center py-2">
-          <div className="flex-grow border-t border-gray-600"></div>
-          <span className="flex-shrink mx-4 text-gray-400 text-sm">
-            Or continue with
-          </span>
-          <div className="flex-grow border-t border-gray-600"></div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <button className="w-full flex items-center justify-center space-x-2 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-            <span>Google</span>
-          </button>
-          <button className="w-full flex items-center justify-center space-x-2 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-            <span>GitHub</span>
-          </button>
-        </div>
 
         <p className="text-center text-gray-400 text-sm">
           New to CryptoVision?
