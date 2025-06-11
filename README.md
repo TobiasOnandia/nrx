@@ -1,7 +1,3 @@
-Aquí tienes la descripción del proyecto formateada para un README de GitHub, lista para usar en un archivo Markdown:
-
----
-
 # 📊 Creador de Paneles de Criptomonedas
 
 El Creador de Paneles de Criptomonedas es una aplicación web moderna construida con **Next.js** que permite a los usuarios crear y personalizar paneles interactivos para visualizar datos de criptomonedas. Los usuarios pueden añadir, mover, redimensionar y guardar widgets de forma persistente y segura.
